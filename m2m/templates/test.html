@@ -1,0 +1,24 @@
+<html>
+        <head>
+                <title> Tests, monkeybutter</title>
+                <link rel="stylesheet" type="text/css" ref="/media/styles/blue.css"/>
+                <link rel="stylesheet" media="screen" href="/media/styles/styles.css" />
+
+        </head>
+        <body>
+
+Addr: {{ipaddr}} VS Forwarded Addr: {{forwardaddr}}
+<br>
+{% for thing in debug %}
+{{ thing }} <br>
+{%endfor%}
+<div class='tablewrap'>
+<table><tbody>
+        <tr class='darkrow'><td>
+                <img id="link" src="/media/images/arrowBlueDown.png" style="height:20px;filter:gray;vertical-align:middle;"/> <img src="/media/images/online.gif" style="vertical-align:middle;"/>
+</td> </tr>
+</tbody></table>
+</div>
+
+</body>
+</html>

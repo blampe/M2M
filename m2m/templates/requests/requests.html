@@ -1,0 +1,175 @@
+{% extends "base_page.html" %}
+{% load request_extras %}
+{% block title %} M2M -{% if closedReq %} Completed{%endif%}{%if delReq%} Deleted{%endif%} Requests{%endblock%}
+{%block stylin %} <link rel="stylesheet" type="text/css" media="screen" href="/media/styles/requests.css" /> {% endblock %}
+
+
+
+{% block content %}
+
+<section>
+<div style="text-align:center;">
+    There {{setLen|pluralize:"is,are"}} {{setLen|default:0}}
+    {% if openReq %}open{% endif %}{% if closedReq %}completed{%endif%}{% if delReq %} deleted {% endif %}
+    request{{setLen|pluralize}}.
+</div><br />
+</section>
+
+<span class="error">{{error}}</span>
+
+
+{% if displaySet %}
+
+<div style="position:relative;"><strong>Page:
+    {% for number in linkPages %}{%spaceless%}
+        {% if number == page %}
+            {{number|default:'1'}}
+        {% else %}
+            {%if openReq %}<a href="{% url requests.views.open number%}">{{number}}</a>{%endif%}
+            {%if closedReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%}
+            {%if delReq%}<a href="{% url requests.views.deleted number%}">{{number}}</a>{%endif%}
+        {% endif %}
+    {%endspaceless%}
+    {% endfor %}</strong>
+    </div>
+
+
+    <div class="tablewrap">
+        <table>
+        {% for entry in displaySet %}
+            <tr class="{% cycle 'darkrow' '' %}" style="font-size:12px;line-height:18px;height:24px;">
+                <td>
+                    <span style="filter:alpha(opacity=50);-moz-opacity:.50;opacity:.50;">{%if entry.server%}
+                        <a href="{% url browseNet.views.deepBrowse 'H' entry.server|hid %}"><strong>\\{{entry.server}}</strong></a>
+                    {%endif%}
+                    {% if entry.server and entry.name%}
+                        {%if entry.name != 'Anonymous' %}
+                            <strong> - {{entry.name}}</strong>
+                        {%endif%}
+                    {%else%}
+                        {% if entry.name != 'Anonymous' and entry.name != ''%}
+                            <strong>{{entry.name}}</strong>
+                        {%else%}
+                            Anonymous
+                        {%endif%}
+                    {%endif%}
+                    {% if entry.completed == 1 %}
+                        {% if entry.completingName != 'Anonymous' and entry.completingName != None and entry.completingName != ''%}
+                            - completed by {{entry.completingName}} (<a href="{% url browseNet.views.deepBrowse 'H' entry.completingServer|hid %}"><strong>\\{% firstof entry.completingServer %}</strong></a>)
+                        {%else%}
+                            - completed by <a href="{% url browseNet.views.deepBrowse 'H' entry.completingServer|hid %}"><strong>\\{{entry.completingServer}}</strong></a>
+                        {%endif%}
+                    {%endif%}
+                    </span>
+                </td>
+                <td align="right">
+                    <span style="filter:alpha(opacity=50);-moz-opacity:.50;opacity:.50;">
+                    {%if closedReq%}Completed:{{entry.completedTime|dateSlice}}, Requested:{%endif%}
+                    {%if delReq%}Requested:{%endif%}
+                        {{entry.requestTime|dateSlice}}
+                    {%if openReq%}
+                        <strong>
+                            <a  href="/requests/edit/{{entry.CID}}">Edit</a>
+                            <a  href="/requests/complete/{{entry.CID}}">Complete</a>
+                            <a href="/requests/delete/{{entry.CID}}">Delete</a>
+                        </strong>
+                    {% endif %}
+                    </span>
+                </td>
+            </tr>
+            <tr class="{% cycle 'darkrow' '' %}" style="font-size:12px;line-height:18px;height:24px;">
+                <td class="commentCell" colspan="2"><p>{{entry.request|toHTML}}</p>
+                {%if closedReq and entry.completerComment %}
+                    <strong>{{entry.completingServer|default:"Completer"}}'s Comment:</strong><br />
+                    <p>{{entry.completerComment|toHTML}}</p>
+                {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+    
+<div style="position:relative;"><strong>Page:
+    {% for number in linkPages %}
+        {% if number == page %}
+            {{number|default:'1'}}
+        {% else %}
+            {%if openReq %}<a href="{% url requests.views.open number%}">{{number}}</a>{%endif%}
+            {%if closedReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%}
+            {%if delReq%}<a href="{% url requests.views.deleted number%}">{{number}}</a>{%endif%}
+            
+        {% endif %}
+    {% endfor %}
+    </strong>
+    </div>
+{% endif %}
+
+{% endblock %}
+
+{% block extraContent %}
+
+{% if openReq %}
+    <script>
+        $(function(){
+            
+            $("#requester :input[title]").tooltip({
+                position:"center",
+                offset: [-2,10],
+                effect: "fade",
+                opacity: 0.7
+            });
+        });
+        
+    </script>
+    
+    <br />
+    <div id="requestForm" class="tablewrap">
+        <form id="requester" action='{% url requests.views.open %}' method="POST">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <table>
+            <tr>
+                <td rowspan="4">
+                    <label>Your comment/request/idea:<br />
+                    {{form.request}}
+                    </label>
+                    <br />
+                    {% if form.request.errors %}
+                    <span class="error">
+                        {% for error in form.request.errors %}
+                            {{ error|escape}}<br/>
+                            {%endfor%}
+                    </span>
+                    {%endif%}
+                </td>
+                <td>
+                    <label>Your name: <br />
+                    {{ form.name }}
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Your server (optional):<br />
+                    {{form.server}}
+                    
+                    </label>
+                </td>
+            </tr>
+                <td>
+                    <label>Your email (optional):<br />
+                    {{form.email}}
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input  type="submit" />
+                </td>
+            </tr>
+            </table>
+        </form>
+    </div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,40 @@
+a:link, a:visited {
+	color: #ca5170;
+}
+
+a:hover,
+a:active,
+.movie-background {
+	color: #fff;
+	background-color: #ca5170;
+}
+
+#pageHeader {
+	background: url(/media/images/header_pink.png) repeat;
+}
+
+#pageHeader h2,
+.photo-caption {
+	color: #f192ac;
+}
+
+#navcontainer #current,
+#navcontainer .currentAncestor,
+#navcontainer a:hover,
+.photo-navigation a:hover {
+	border-bottom-color: #8f2d4a;
+	color: #8f2d4a;
+}
+
+#navcontainer ul ul li a:link {
+	color: #8f2d4a;
+}
+
+#navcontainer ul ul li a:hover {
+	color: #ca5170;
+}
+
+.photo-navigation {
+	background: url(/media/images/header_pink.png) repeat-x;
+	color: #de456e;
+}

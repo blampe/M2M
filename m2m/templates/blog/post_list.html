@@ -1,0 +1,68 @@
+{% extends "base_page.html" %}
+{% load blog %}
+{% load comments %}
+
+{%block title%} M2M - News {%endblock%}
+{% block stylin %} <link rel="stylesheet" type="text/css" href="/media/styles/news.css" /> {% endblock %}
+{%block scriptin%}
+<script type="text/javascript">
+
+function dispToggle(id){
+    teaser = document.getElementById(id+'t');
+    body = document.getElementById(id);
+    hider = document.getElementById(id+'h');
+    
+    if(body.style.display == "none"){
+        teaser.style.display = 'none';
+        body.style.display = 'block';
+        hider.style.display = 'block';
+    } else {
+        body.style.display = 'none';
+        hider.style.display = 'none';
+        teaser.style.display = 'block';
+    }
+}
+
+</script>
+{%endblock%}
+
+{%block news%}current{%endblock%}
+
+{%block content%}
+<div id="posts">
+{% for post in object_list %}
+{% if post.status == 2 %}
+<div class="postWrap"><article>
+    <header>
+        <div class="postDate">
+            <time datetime="{{post.publish|timeTag}}" pubdate>{{post.publish}}</time><br />{{post.author}}
+        </div>
+        <h1><div class="postTitle"><a href="{{post.get_absolute_url}}">{{post.title}}</a></div></h1>
+    </header>
+    {% if post.body|length > 5000 %}
+    <h3 class="postgSlug"><a class="togglebot" id="{{post.id}}t"onclick="dispToggle('{{post.id}}');">
+        {{post.tease}}</a></h3>
+    <div style="display:none;" class="postBody" id="{{post.id}}">{{post.body|formatBody}}</div>
+    <div class="postHider"><a class="togglebot" id="{{post.id}}h" onclick="dispToggle('{{post.id}}');" style="display:none;">
+        close this post</a></div>
+    
+    {% else %}
+        <div class="postBody">{{post.body|formatBody}}</div>
+    {%endif%}
+    {% get_comment_count for post as comment_count %}
+    <div class="postCommentCount">
+        <p>
+            <a href="{{post.get_absolute_url}}">{{comment_count}} comment{{comment_count|pluralize}}</a>
+            <!-- h{{comment_count|pluralize:"as,ave"}} been posted-->
+        </p>
+    </div>
+</article></div>
+{%endif%}
+{%endfor%}
+</div>
+{%endblock%}
+
+{%block extraContent%}
+
+{%endblock%}
+

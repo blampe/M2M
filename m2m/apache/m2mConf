@@ -1,0 +1,19 @@
+<VirtualHost *:8080>
+	ServerAdmin hsaxberg@hmc.edu
+	AddHandler wsgi-script .wsgi
+	AddDefaultCharset UTF-8
+	<Directory /home/haak/django_projects/m2m/apache/>
+		Order deny,allow
+		Allow from all
+	</Directory>
+
+	LogLevel warn
+	ErrorLog /home/haak/django_projects/m2m/logs/apache_error.log
+	CustomLog /home/haak/django_projects/m2m/logs/apache_access.log combined
+	
+	WSGIDaemonProcess m2m user=www-data group=www-data threads=25
+	WSGIProcessGroup m2m
+
+	WSGIScriptAlias / /home/haak/django_projects/m2m/apache/m2m.wsgi
+
+</VirtualHost>

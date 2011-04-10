@@ -1,0 +1,12 @@
+.togglebot:visited{
+    color:#4f6696;
+    text-decoration:none;
+}
+
+.togglebot{
+    color: #4f6696;
+}
+
+.togglebot:hover{
+    cursor:pointer;
+}

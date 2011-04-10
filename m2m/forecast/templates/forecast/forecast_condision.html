@@ -1,0 +1,12 @@
+<p>{{ rt.location }}</p>
+<p>
+	<strong>Last update:</strong> {{ rt.time }} <br/>
+	<strong>Description: </strong>{{ rt.description }}<br/>
+	<strong>Temperature: </strong> {{ rt.temp }} Grad Celsius<br/>
+	<strong>Feels like:</strong> {{ rt.flik }} Grad Celsius<br/>
+	<strong>Wind:</strong> {{ rt.wind }} km/h<br/>
+	<strong>UV index:</strong> {{ rt.uv_index }} ({{ rt.uv_description }})<br/>
+</p>
+<p style="text-align: center;"><a><img src="{{media_url}}{{rt.icon}}"/></a></p>
+<p><a>provided by: </a><a target="_blank" href="http://www.weather.com/outlook/travel/businesstraveler/local/SZXX0006?lswe=bern%20switzerland&from=searchbox_localwx"><img src="{{media_url}}weather.com/logos/TWClogo_31px.png"/></a></p>
+<p><a>Cached: {{cached}} </a></p>

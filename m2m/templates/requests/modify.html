@@ -1,0 +1,129 @@
+{% extends "base_page.html" %}
+{% load request_extras %}
+{%block stylin %} <link rel="stylesheet" type="text/css" media="screen" href="/media/styles/requests.css" /> {% endblock %}
+{%block scriptin%} 
+<script>
+$(function(){
+	$("#modifier :input[title]").tooltip({
+                position:"center",
+                offset: [-2,10],
+                effect: "fade",
+                opacity: 0.7
+            });
+        });        
+</script>
+{% endblock%}
+
+{%block content %}
+<div class="tablewrap">
+    <table>
+        <tr class="{% cycle 'darkrow' '' %}" style="font-size:12px;line-height:18px;height:24px;">
+                <td style="filter:alpha(opacity=50);-moz-opacity:.50;opacity:.50;">
+                    {%if entry.server%}
+			<a href="{% url browseNet.views.deepBrowse 'H' entry.server|hid %}">
+                        <strong>\\{{entry.server}}</strong></a>
+		    {% endif %}
+		    {% if entry.server and entry.name %}
+			{%if entry.name != 'Anonymous' %}
+			    <strong> - {{entry.name}}</strong>
+			{% endif %}
+                    {%else%}
+                        {%if entry.name != 'Anonymous' and entry.name != ''%}
+                            <strong> {{entry.name}} </strong>
+                        {%else%}
+			    Anonymous
+                        {%endif%}
+                    {%endif%}
+                </td>
+                <td style="filter:alpha(opacity=50);-moz-opacity:.50;opacity:.50;" align="right">
+                    {{entry.requestTime|dateSlice}}
+                
+                    <strong>
+                        {%if complete or delete%}<a  href="{% url requests.views.edit entry.CID %}">Edit</a>{%endif%}
+                        {% if edit or delete %}<a  href="{% url requests.views.complete entry.CID %}">Complete</a>{%endif%}
+                        {% if complete or edit%}<a href="{% url requests.views.delete entry.CID %}">Delete</a>{%endif%}
+                    </strong>
+                    
+                </td>
+            </tr>
+            <tr class="{% cycle 'darkrow' '' %}" style="font-size:12px;line-height:18px;height:24px;">
+                <td class="commentCell" colspan="2"><p>{{entry.request|toHTML}}</p></td>
+            </tr>
+    </table>
+</div>
+{%endblock%}
+{{test}}
+{% block extraContent %}
+<div id="requestForm" class="tablewrap">
+    <form id="modifier" action='' method="POST">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <table>
+                {% if edit %}
+                <input type="hidden" name="completingServer" value="none" id="id_completingServer" />
+            <tr><td rowspan="4" class="required">
+                        <label>Your correction/addition/notation:<br />
+                        {{ form.request }}
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    <label>Your name: <br />
+                    {{ form.name }}
+                    <!--<input  type="text" value="{{entry.name|default:''}}" name="name" size="20" placeholder="Anonymous" pattern="([a-zA-Z])*" required="false" />-->
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Your server (optional):<br />
+                    {{form.server}}
+                    <!--<input  type="text" name="email" value="{{entry.email|default:''}}" size="20" placeholder="LABRYCE" pattern="([a-zA-Z0-9])*" required="false"/>-->
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Your email (optional):<br />
+                    {{form.email}}
+                    <!--<input  type="email" name="contact" value="{{entry.contact|default:''}}" placeholder="your_name@hmc.edu" pattern="([a-zA-Z0-9])*@hmc.edu" required="false"
+                            title="You'll get an email when the request is completed."/>-->
+                    </label>
+                </td>
+            </tr>
+        {%else%}
+            <div style="display:none;">
+                {{form.request}}
+            </div>
+            <tr>
+                <td rowspan='3'>
+                    <label>Your comment:<br />
+                    {{ form.completerComment }}
+                    </label>
+                </td>
+                <td>
+                    <label>Your name (optional): <br />
+                    {{ form.completingName }}
+                    <!--<input  type="text" value="{{entry.name|default:''}}" name="name" size="20" placeholder="Anonymous" pattern="([a-zA-Z])*" required="false" />-->
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="required">
+                    <label>Your server:<br />
+                    {{form.completingServer}}
+                    <!--<input  type="text" name="email" value="{{entry.email|default:''}}" size="20" placeholder="LABRYCE" pattern="([a-zA-Z0-9])*" required="false"/>-->
+                    </label>
+                </td>
+            </tr>
+        {%endif%}
+            <tr>
+                <td><input type="submit" /></td>
+            </tr>
+        </table>
+    </form>
+    {% if form.errors %}
+        {{form.errors}}
+    {%endif%}
+</div>
+{% endblock %}

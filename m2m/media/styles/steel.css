@@ -1,0 +1,104 @@
+body {
+    background: #E0ECF2; /*e0f2f2*/
+}
+
+a:link {
+	color: #4F6696;
+	text-decoration: none;
+}
+
+#koi {
+    background-image: url(/media/images/koi_dark.gif);
+    height: 70px;
+    width: 32px;
+}
+
+#footer {
+    background-image:url(/media/images/bottom_grad_dark.png);
+}
+
+#info {
+    background-image:url(/media/images/table_grad_dark.png);
+}
+
+#footer a:link {
+    color:#FFF;
+}
+
+#footer a:hover, a:active {
+	color: #2F3D5A;
+	text-decoration: underline;
+}
+
+a:visited {
+	color: #4F6696;
+	text-decoration: none;
+}
+
+a:hover, a:active {
+	color: #2F2F5A; /*#2F3D5A*/
+	text-decoration: underline;
+}
+
+#container {
+    border-right: 8px solid #90C6F6; /*90E6F6*/
+	border-left: 8px solid #90C6F6;
+	border-bottom: 8px solid #90C6F6;
+}
+
+.movie-background {
+	color: #fff;
+	background-color: #6fc6ea;
+}
+
+#tablewrap {
+    border-color: #7792A1;
+}
+
+#pageHeader {
+	background: url(/media/images/header_blue_dark.png) repeat;
+	border-bottom: 8px solid #90C6F6;
+}
+
+#pageHeader h2,
+.photo-caption {
+	color: #b3ecfd;
+}
+
+#navcontainer #current {
+    color: #3c6184;
+}
+
+#navcontainer .currentAncestor,
+#navcontainer a:hover,
+.photo-navigation a:hover {
+	border-bottom-color: #3c6184;
+	color: #3c6184;
+}
+
+#navcontainer ul ul li a:link,
+#navcontainer ul ul li a:visited {
+	color: #3c6184;
+}
+
+#navcontainer ul ul li a:hover {
+/*	color: #8ce5f6;*/
+	border-bottom: 2px solid #3c6184;
+}
+
+#navcontainer ul ul #current,
+#navcontainer ul ul .currentAncestor {
+	border-bottom: 2px solid #3c6184;
+}
+
+.blog-entry-title, 
+.blog-archive-month,
+h1, h2, h3, h4 {
+    color:#3c6184;
+}
+
+
+.photo-navigation {
+	background: url(/media/images/header_blue_dark.png) repeat-x;
+	color: #59bbe5;
+}

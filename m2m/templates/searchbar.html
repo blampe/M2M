@@ -1,0 +1,50 @@
+<form action="/results/" method="GET" charset="UTF-8">
+<div class="tablewrap" style="margin-left:25px;margin-right:25px">
+    <div class = "info" style="padding:5px;width:auto" style="border:1px solid">
+    <div id="searchbarActual" style="">
+        <input type="text" name="q"
+               style=""
+               value="{{q|default:""}}"
+               onFocus=""
+               size="40"
+               TABINDEX = 1
+               autofocus="true" />
+        <input type="submit" style="" value="Search">&nbsp;&nbsp;&nbsp;
+        <input type="hidden" id="optionUp" name="optionsUp" value={{optionsUp|default:"0"}}>
+        <span class="togglebot" onClick="javascript:visToggle('options','searchParams',['Close','Options']);bitFlip('optionUp');" id="options">Options</span>
+    </div>
+    </div>
+</div>
+<div style="{% if optionsUp == "1" %} visibility:visible;{%else%}visibility:hidden;{%endif%}margin-top:5px;" id="searchParams">
+    <select name="type" TABINDEX = 2>
+        <option value="message" disabled="1">Type...</option>
+        <option value="none" {% if params.type != '' and params.type != 'none'%}{%else%}selected="selected"{%endif%}>All</option>
+        <option value="video" {% if params.type == 'video'%}selected="selected"{%endif%}>Video</option>
+        <option  value="audio" {% if params.type == 'audio'%}selected="selected"{%endif%}>Audio</option>
+        <option  value="software" {% if params.type == 'software'%}selected="selected"{%endif%}>Software</option>
+        <option value="text" {% if params.type == 'text'%}selected="selected"{%endif%}>Text</option>
+        <option  value="images" {% if params.type == 'images'%}selected="selected"{%endif%}>Images</option>
+    </select>
+
+    <select name="mode" TABINDEX = 3>
+        <option value="message" disabled="1">Search in...</option>
+        <option value="filesdirsSubstr" {% if params.mode != 'filesdirsSubstr' %}{%else%}selected="selected"{%endif%}>Files + Dirs</option>
+        <option value="filesSubstr" {% if params.mode == 'filesSubstr'%}selected="selected"{%endif%}>Files</option>
+        <option value="dirsSubstr" {% if params.mode == 'dirsSubstr'%}selected="selected"{%endif%}>Directories</option>
+    </select>
+
+    <select name="order" TABINDEX = 4>
+        <option value="message" disabled="1">Sort by...</option>
+        <option value="none" {% if params.order != 'none'%}{%else%}selected="selected"{%endif%}>No sorting</option>
+        <option  value="-FileSize" {% if params.order == '-FileSize'%}selected="selected"{%endif%}>Size (D)</option>
+        <option  value="FileSize" {% if params.order == 'FileSize'%}selected="selected"{%endif%}>Size (A)</option>
+        <option  value="-DateAdded" {% if params.order == '-DateAdded'%}selected="selected"{%endif%}>Date (D)</option>
+        <option  value="DateAdded" {% if params.order == 'DateAdded'%}selected="selected"{%endif%}>Date (A)</option>
+        <option  value="Name" {% if params.order == 'Name'%}selected="selected"{%endif%}>Name (A)</option>
+        <option  value="-Name" {% if params.order == '-Name'%}selected="selected"{%endif%}>Name (D)</option>
+        <option  value="HostName" {% if params.order == 'HostName'%}selected="selected"{%endif%}>Host (A)</option>
+        <option  value="-HostName" {% if params.order == '-HostName'%}selected="selected"{%endif%}>Host (D)</option>
+    </select>
+    &nbsp;&nbsp;&nbsp;<br /> <br /> <br />
+</div>
+</form>

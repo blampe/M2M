@@ -1,0 +1,31 @@
+
+<form id="errorForm" action="{%comment_form_target %}" method="post">
+            {% csrf_token %}
+            <input type = "hidden" name="url" id="id_url" value="labryce.st.hmc.edu" />
+            <input type="hidden" name="next" id="id_next" value="{{comment.get_absolute_url}}" />
+            <input type= "hidden" name="email" id="id_email" value="anon@hmc.edu" />
+            {{form.content_type}}
+            {{form.object_pk}}
+            {{form.timestamp}}
+            {{form.security_hash}}
+        <table>
+            <tr><td></td><td>{{form.errors.name}}</td></tr>
+            <tr><label> <td>
+                <span style="display:none;"><label> Honeypot(Entering text here will flag your comment as spam):
+                {{ form.honeypot }}</label></span>
+            Name:</td><td> {{ form.name }}</label>
+            </tr>
+            <!--<tr>
+                <label><td>Email:</td><td>{{ form.email}}
+            </td></label></tr>-->
+            <tr> <td></td><td colspan=2>{{form.errors.comment}}</td></tr>
+            <tr>
+                <label><td valign="top" >Comment:</td><td colspan=2>{{form.comment}}
+            </td></label></tr>
+            <!--<tr><td> {{form}} </td></tr>-->
+            <tr><td>
+        <input type="submit" name="submit" class="submit-post" value="Post" />
+        </td></tr>
+        
+        </table>
+

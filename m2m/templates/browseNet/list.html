@@ -1,0 +1,118 @@
+{%extends "base_page.html"%}
+{% load browseNet_extras %}
+{% block title %} M2M - Servers {%endblock%}
+
+{% block stylin%}
+    <link rel="stylesheet" type="text/css" media="screen" href="/media/styles/servers.css" />
+    
+{%endblock%}
+{% block scriptin %}
+<script type="text/javascript" src="/media/scripts/servers.js"></script>
+{%endblock%}
+
+{% block content %}
+
+{% if serverListing %}
+
+
+    {% if linkPages %}
+        <strong> Servers:
+        {% for number in linkPages %}
+            {% if number == page %}
+                {{number}}
+            {%else%}
+                <a href="{% url browseNet.views.listAll number%}?order={{ordering}}">{{number}}</a>
+            {%endif%}
+        {%endfor%}
+        </strong>
+    {% endif %}
+<div class="tablewrap">
+    <table>
+        <tr>
+            <td class="info">{# column for isOnline gif #}</td>
+            <td class="info">
+                {% if ordering != 'hostname'%}<a href="{% url browseNet.views.listAll 1%}?order=hostname">{%endif%}
+                Host</a></td>
+            <td class="info">
+                {% if ordering != '-workgroup'%}<a href="{% url browseNet.views.listAll 1%}?order=-workgroup">{%endif%}
+                Workgroup</a></td>
+            <td class="info" align="">
+                {% if ordering != 'hid__totalfilesize'%}<a href="{% url browseNet.views.listAll 1%}?order=hid__totalfilesize">{%endif%}
+                Size</a></td>
+            <td class="info" align="center">
+                {% if ordering != '-hid__lastscan'%}<a href="{% url browseNet.views.listAll 1%}?order=-hid__lastscan">{%endif%}
+                Last Crawl</a></td>
+            <td class="info" align="center">
+                Action</td>
+            <td class="info">
+                Share</td>
+            <td class="info" align="right">
+                Size</td>
+        </tr>
+        
+        {% for server in serverListing %}
+        <tr class="{%cycle '' 'darkrow'%}">
+            <td valign="top"><img src="/media/images/{%if server.hid.flags == 24%}online{%else%}offline{%endif%}.gif"/></td>
+            <td valign="top">
+                <a href="{% url browseNet.views.deepBrowse 'H' server.hid.hid|default:-1%}">{{server}}</a><br/>
+                {{server.hid.ip}}
+            </td>
+            <td valign="top">{{server.workgroup}}</td>
+            <td valign="top">{{server.hid|sizeToReadable}}</td>
+            <td valign="top" align="center">{{server.hid.lastscan|dateForm}}</td>
+            <td></td>
+            <td valign="top">
+                {%for share in server.hid.share_set|all%}
+                    <a href="{% url browseNet.views.deepBrowse 'S' share.shareid|default:-1%}">{{share.sharename|nameControl}}</a><br />
+                    {% if forloop.counter == 5%}
+                        <span style="display:none;" id="{{server.hid.hid}}">
+                    {%endif%}
+                    {% if forloop.last and forloop.counter >= 5%}
+                        </span> <br /><a class="togglebot" id="{{server.hid.hid}}l" onclick="dispToggle('{{server.hid.hid}}')">More...</a><br />
+                         
+                    {%endif%}
+                {%endfor%}
+                <br />
+            </td>
+            <td valign="top" align="right">
+                {% for share in server.hid.share_set|all%}
+                    {{share|sizeToReadable}}<br />
+                    {% if forloop.counter == 5%}
+                        <span style="display:none;" id="{{server.hid.hid}}s">
+                    {%endif%}
+                    {% if forloop.last and forloop.counter >= 5%}
+                        </span>
+                    {%endif%}
+                {%endfor%}
+                <br />
+            </td>
+        </tr>
+        {%endfor%}
+        
+    </table>
+</div>
+        {% if linkPages %}
+        <strong> Servers:
+        {% for number in linkPages %}
+            {% if number == page %}
+                {{number}}
+            {%else%}
+                <a href="{% url browseNet.views.listAll number%}">{{number}}</a>
+            {%endif%}
+        {%endfor%}
+        </strong>
+    {% endif %}
+
+
+{% else %}
+
+No servers found!
+
+{%endif%}
+
+
+{%endblock%}
+
+{%block extraContent %}
+
+{%endblock%}

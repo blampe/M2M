@@ -1,0 +1,59 @@
+{% extends "base_page.html" %}
+{% load browseNet_extras %}
+{% block title%} M2M - Browsing {{host}}{% endblock%} 
+{%block content%}
+
+{% block stylin%}
+    <link rel="stylesheet" type="text/css" media="screen" href="/media/styles/servers.css" />
+    <script type="text/javascript" src="/media/scripts/servers.js"></script>
+{%endblock%}
+
+{% if folderList or fileList %}
+Browsing <strong><a href="{% url browseNet.views.deepBrowse 'H' host.hid%}">{{host}}</a></strong> (<a href="">what's new?</a>):<br />
+<img src="/media/images/{% if host.flags == 24 %}online.gif{%else%}offline.gif{%endif%}"/>
+    <strong><a href="smb://{{folder|pathLink}}">smb://{{folder|pathLink}}</a></strong>
+<div class="tablewrap">
+<table style="width:100%">
+    {%if folderList%}
+        <tr>
+            <td class="info" style="width:60%"> Directory Name </td>
+            <td class="info" style="text-align:right;"> Size </td>
+            <td class="info" style="text-align:right;"> File Date</td>
+        </tr>
+        {% for folder in folderList|all:ordering%}
+            <tr class="{%cycle '' 'darkrow'%}">
+                <td><a href="{% url browseNet.views.deepBrowse 'P' folder|findPID%}"> {{folder|getName}}</a></td>
+                <td style="text-align:right;">{{folder|sizeToReadable}}</td>
+                <td></td>
+            </tr>
+        {%endfor%}
+    {%endif%}
+
+    {%if fileList %}
+        <tr>
+            <td class="info" style="width:60%"> File Name </td>
+            <td class="info" style="text-align:right;"> Size </td>
+            <td class="info" style="text-align:right;"> File Date </td>
+        </tr>
+        {% for file in fileList|all:ordering %}
+            <tr class="{%cycle '' 'darkrow' %}">
+                <td><a {%if host.servesDirect%}
+                       href="{{file|linkit:"True"}}"
+                       title="serves me"
+                       {%else%}
+                       href="{{file|linkit}}"
+                       {%endif%}>{{file|escape}}</a></td>
+                <td style="text-align:right;">{{file|sizeToReadable}}</td>
+                <td style="text-align:right;">{{file.filedate|dateForm}}</td>
+            </tr>
+        {%endfor%}
+    {%endif%}
+
+</table>
+</div>
+{%endif%}
+{%endblock%}
+
+{%block extraContent %}
+
+{%endblock%}

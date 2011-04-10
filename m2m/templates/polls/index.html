@@ -1,0 +1,14 @@
+{% extends "base_page.html"%}
+
+{%block content %}
+{% if latest_poll_list %}
+    <ul>
+        {% for poll in latest_poll_list %}
+        <li><h2><a href='/polls/{{ poll.id}}/'>{{ poll.question }}</a></h2></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <h2> No polls are available. </h2>
+    <p> Check back later!</p>
+{% endif %}
+{%endblock%}

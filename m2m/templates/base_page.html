@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>{% block title %}{{title}}{%endblock%}</title>
+        
+        <!--[if lt IE9]>
+            <script src ="http://html5shim.googlecode.com/svn/trunk/html5.js">
+            </script>
+        <![endif]-->
+        <link rel="stylesheet" media="screen" href="/media/styles/styles.css" />
+        <link rel="stylesheet" media="screen" href="/media/styles/blue.css" />
+        <link rel="stylesheet" media="screen" href="/media/styles/845.css" />
+        {% block stylin %}{% endblock %}
+        
+        
+        <script type="text/javascript" src="/media/jquery-1.4.4.js"></script>
+        <script type="text/javascript" src="/media/styles/javascript.js"></script>
+        <script type="text/javascript" src="/media/scripts/jquery.tools.min.js"></script>
+        {%block scriptin %}{%endblock%}
+        
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="robots" content="all" />
+        
+        <link rel="icon" href="/media/favicon.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="/media/favicon.png" type="image/x-icon" />
+        
+    </head>
+    <body>
+        
+        <div id="container">
+            {% block navigator %}
+            <header id="pageHeader"><!-- Start page header -->
+                    <div id="logoContainer">
+                        <a href="/"><img src="/media/images/m2m.gif" /></a>
+                    </div>
+                    <div id="koi"></div>
+                    <nav id="navcontainer"><!-- Start Navigation -->
+                      <ul>
+                        <li><a href="{% url search.views.index %}" rel="self" id="{{search|default:""}}">SEARCH</a></li>
+                        <li><a href="{% url requests.views.open %}" rel="self" id="{{requests|default:""}}">REQUESTS</a></li>
+                        {% if requests %}
+                        <ul>
+                            <li><a href="{% url requests.views.open %}" rel="self" id="{{openReq|default:""}}">Open Requests</a></li>
+                            <li><a href="{% url requests.views.completed %}" rel="self" id="{{closedReq|default:""}}">Completed Requests</a></li>
+                            <li><a href="{% url requests.views.deleted %}" rel="self" id="{{delReq|default:""}}">Deleted Requests</a></li>
+                        </ul>
+                        {% endif %}
+                        <li><a href="{% url browseNet.views.listAll 1 %}" rel="self" id="{{servers|default:""}}">SERVERS</a></li>
+                        <!--<li><a href="/polls" rel="self" id="{{polls|default:""}}">POLLS</a></li>-->
+                        <li><a href="{% url basic.blog.views.post_list %}" rel="self" id="{%block news%}{%endblock%}">NEWS</a></li>
+                        <li><a href="{% url stats.views.display %}" rel="self" id="{{stats|default:""}}">STATISTICS</a></li>
+                        {% comment %}{% if stats %}
+                            <ul>
+                                <li><a href="" id="{{siteStat|default:""}}">Sitewide</a></li>
+                                <li><a href="" id="{{reqStat|default:""}}">Requests</a></li>
+                                <li><a href="" id="{{pollStat|default:""}}">Polls</a></li>
+                            </ul>
+                        {%endif%}{%endcomment%}
+                      </ul>
+                    </nav>
+                    <!-- End navigation --> 
+            </header><!-- End page header -->
+            {% endblock %}
+            <div id="contentContainer"><!-- Start main content wrapper -->
+                    <section id="content"><!-- Start content -->
+                        {% block content %}
+                            <div style="text-align:center;">
+                                
+                                {% include "searchbar.html" %}
+                                
+                                
+                            </div>
+                        {% endblock %}
+                        <br />
+                        <br />
+                        <section id="extraContent">
+                            {%block extraContent %}
+                                <div style='text-align:center;'>
+                                    Update your bookmarks! M2M is now <a href="http://m2m.st.hmc.edu">m2m.st.hmc.edu</a><br />
+                                    <br />
+                                    Servers: check out <a href="news/2011/feb/27/direct-serving/"> this page</a>.
+                                    <br />
+                                    <br />
+                                    Also see <a href="http://allegro.st.hmc.edu/"> M2M Movies</a>, if you're looking for some more detailed movie results.
+                                    <br />
+                                    <br />
+                                    <p>M2M - Because We're Family&trade;</p>
+                                    <br />
+                                    <br />
+                                    <script type=\"text/javascript\">
+                                        if(navigator.appName.match(/Microsoft/)){
+                                            document.write(\"I see you're using IE. Let me
+                                            <a href='http://tinyurl.com/ca653h'>help you with that.</a><br />\");
+                                            }
+                                    </script>
+                                    <noscript>
+                                    You really ought to have javascript turned on.
+                                    </noscript>
+                                </div>
+                            {%endblock%}
+                        </section>
+                    </section> <!-- end content -->
+                    
+                    <section id="endContent">
+                    {% block endContent %}
+                    
+                    {%endblock%}
+                    </section>
+            </div><!-- end main content wrapper -->
+        
+        
+            <div class="clearer"></div>
+            
+            <div id="footer"><!-- Start Footer -->
+            <footer>
+            {% block footer %}
+                <div id="contact"><br/><br/><br/><br /> //<a href="mailto:hsaxberg@hmc.edu">Contact</a></span></div>
+            
+                <div id="breadcrumbcontainer"><!-- Start the breadcrumb wrapper -->
+                            
+                </div><!-- End breadcrumb -->
+            {% endblock %}
+            </footer>
+            </div><!-- End Footer -->
+        </div>
+    </body>
+</html>

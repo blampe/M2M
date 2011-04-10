@@ -1,0 +1,43 @@
+{% extends "base_page.html" %}
+{% block title %} M2M - Statistics {%endblock%}
+{%block content%}
+
+<h2>Statistics</h2><br/>
+<div align="right" style="">
+    <img runat='server' src="{{querySrc|cut:" "}}" /><!-- This comment is necessary for some formatting reason.
+    --><img runat='server' src="{{sizeSrc|cut:" "}}" />
+    {#<img runat='server' src="{{barsizeSrc|cut:" "}}" />#}
+</div>
+
+<div class="tablewrap">
+    <table>
+        <tr class="info">
+            <td class="info">Last Crawl</td>
+            <td class="info">Indexed Servers</td>
+            <td class="info">Directories</td>
+            <td class="info">Files</td>
+            <td class="info">Total Size</td>
+            <td class="info">Queries</td>
+        </tr>
+        <tr>
+            <td>{{lastCrawl}}</td>
+            <td>{{indexedServers}}(<img src="/media/images/online.gif" />{{onlineServers}})</td>
+            <td>{{dirCount}}</td>
+            <td>{{fileCount}}</td>
+            <td>{{netSize}}(<img src="/media/images/online.gif" />{{onlineSize}})</td>
+            <td>{{queryCount}}</td>
+        </tr>
+    </table>
+</div><br />
+<div style="text-align:center;">
+Latest activity on M2M:<br />
+{% for action in lastActions %}
+{{action}}<br />
+{%endfor%}
+</div>
+{%endblock%}
+
+
+{%block extraContent%}
+
+{%endblock%}

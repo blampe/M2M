@@ -1,0 +1,137 @@
+{% extends "base_page.html" %}
+{% load blog %}
+{% load comments %}
+{%block title%} M2M - News {%endblock%}
+{% block stylin %} <link rel="stylesheet" type="text/css" href="/media/styles/news.css" /> {% endblock %}
+
+{% block scriptin %}
+{%get_comment_form for object as form %}
+<script type="text/javascript">
+function bindPostCommentHandler(){
+    $('#commentForm form').submit(function(){
+       $.ajax({
+            type: "POST",
+            data: $('#commentForm form').serialize(),
+            url: "{%comment_form_target%}",
+            cache: false,
+            dataType: "html",
+            success: function(html, textStatus){
+                $('#commentForm form').replaceWith("Thanks for your comment!");
+                bindPostCommentHandler();
+                $('#commentContainer').load('{{object.get_absolute_url}} #commentLister')
+            },
+            error: function( XMLHttpRequest,textStatus,errorThrown){
+                if($('#commentForm form #id_comment').value == ''){
+                    $('#commentForm form #id_comment').value = "Please write a comment!";
+                }
+            }
+        });
+       return false;
+    });
+}
+
+var edited = false;
+    function toggleText(id){
+        if($(id)){
+            var $target = $(id);
+            if($target.attr('value') == "Anonymous" && edited == false){
+                $target.attr('value', "");
+            } else if(edited == false){
+                $target.attr('value',"Anonymous");
+            }
+        }
+    }
+
+$(document).ready(function(){
+    bindPostCommentHandler();
+});
+
+
+
+</script>
+
+{%endblock%}
+
+{%block news%}current{%endblock%}
+
+{%block content%}
+{%with object as post%}
+{% if post.status == 2 %}
+<section>
+<div class="postWrap"><article>
+    
+    <header>
+        <div class="postDate">
+            <time datetime="{{post.publish|timeTag}}" pubdate> {{post.publish}}</time><br />
+            {{post.author}}
+        </div>
+        <h1><div class="postTitle">{{post.title}}</div></h1>
+    </header>
+    
+    <div class="postBody">{{post.body|formatBody}}</div>
+</article></div>
+</section>
+
+<section>
+<div id="commentForm">
+    {%get_comment_form for post as form %}
+    <form action="{%comment_form_target%}" method="post">
+        {% csrf_token %}
+        <input type = "hidden" name="url" id="id_url" value="m2m.st.hmc.edu" />
+        <input type= "hidden" name="email" id="id_email" value="anon@hmc.edu" />
+        {{form.content_type}}
+        {{form.object_pk}}
+        {{form.timestamp}}
+        {{form.security_hash}}
+    <table>
+        <tr><label> <td>
+            <span style="display:none;"<label> Honeypot(Entering text here will flag your comment as spam):
+            {{ form.honeypot }}</label></span>
+        Name:</td><td> <input type="text" onfocus="toggleText('#id_name');"
+                              onblur="toggleText('#id_name');"
+                              name="name" id="id_name" value="Anonymous"
+                              onchange="if(this.value != ''){edited = true;}else{edited=false;}"/></td></label>
+        </tr>
+        <tr>
+            <label><td valign="top">Comment:</td><td>{{form.comment}}
+        </td></label></tr>
+        <tr><td></td><td align='right'>
+    <input type="submit" name="submit" class="submit-post" value="Post!" />
+    </td></tr>
+    
+    </table>
+    
+    </form>
+</div>
+</section>
+
+<section>
+<div id="commentContainer" class="comments">
+<div id='commentLister'>
+    {% get_comment_count for post as comment_count%}
+    {{comment_count}} comments have been posted.
+    {% get_comment_list for post as comment_list%}
+    {% for comment in comment_list %}
+        <div class="postCommentWrap" style="{% cycle 'background-color:#ECF3FE;' '' %}">
+            <a name="c{{comment.id}}"></a>
+            <div class="postCommentHead" ">
+            Posted by: {{ comment.user_name }} on {{comment.submit_date }}<br />
+            <!--{{comment.site}}--></div>
+            <div class="postComment"> {{comment.comment}}</div>
+        </div>
+    {%endfor%}
+</div>
+</div>
+</section>
+    
+
+{%endif%}
+{%endwith%}
+{%endblock%}
+
+{%block extraContent%}
+<section>
+    
+</section>
+{%endblock%}
+
