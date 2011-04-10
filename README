@@ -1,0 +1,17 @@
+Projects you need:
+	Put these on your python path:
+		basic
+		Markdown
+		tagging
+
+	You need django, obviously
+	Also djangosphinx, but only because it has the API we want.
+
+	You will also need nginx and apache2, unless you are doing development,
+    in which case the bundled django server does just fine.
+		config files should be in the repo; if they're not:
+			well, fuck. you're screwed.
+		nginx handles static media
+		apache does the python shit.
+
+
