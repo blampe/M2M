@@ -1,3 +1,7 @@
+M2M runs on python 2.6+, but not python 3+
+    at least not yet; we follow django's development requirements,
+    and support for 3.0 isn't there yet.
+
 Projects you need:
 	Put these on your python path:
 		basic
@@ -6,12 +10,45 @@ Projects you need:
 
 	You need django, obviously
 	Also djangosphinx, but only because it has the API we want.
+        You might not need this anymore. what you DO need, for now,
+        because i am lazy, is to have a folder called djangosphinx in your
+        dist-/site-packages folder.
 
 	You will also need nginx and apache2, unless you are doing development,
     in which case the bundled django server does just fine.
 		config files should be in the repo; if they're not:
 			well, fuck. you're screwed.
+            And, really, there are no config files that you need;
+            the django server is perfectly adequate. Don't fuck with it.
 		nginx handles static media
 		apache does the python shit.
 
+Happily, all of these things should be easy to take care of.
+You'll need both git and svn to satisfy all these requirements.
+to get the m2m core files:
 
+git remote add origin ssh://labrain.st.hmc.edu/home/haak/git/M2M.git
+git clone origin M2M-Development
+
+which will create a folder called M2M-Development with all the files in it.
+
+thenceforth, you can 'get fetch origin' to update your repository.
+If you think your changes are finished, run 'git push origin master'
+Eventually, the server will 'git pull' from its origin, which will include
+your changes if they're ok.
+Presumably, there is some sort of quality control going on.
+If this is not the case, then I am truly sorry; you are utterly alone.
+The good news in that situation is that you are in control of M2M
+the bad news is that it is entirely your fault when shit breaks.
+
+I've tried to make it so that M2M is
+1. easy to read
+2. easy to understand
+3. easy to modify without breaking shit
+4. easy to update without breaking shit
+
+I've even had people read the code for me, to make sure that thus is the
+case.
+
+Love and kisses,
+Haak
