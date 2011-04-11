@@ -440,6 +440,8 @@ def results(request,page='1'):
         cursor = connection.cursor()
         
         cursor.execute('LOCK TABLES log WRITE')
+        # Do not fuck with this;
+        # it will make you its bitch.
         cursor.execute(
             'INSERT INTO log (Time,Client,SearchString,Hits,Position,Mode,HostType,Flags,Duration,Found,Date,MinSize,MaxSize)\
             VALUES (%(time)d, "%(client)s", "%(search)s",%(hits)d,%(pos)d,%(mode)d,%(hostT)d,%(type)d,0,0,0,0,0)' % {
@@ -486,6 +488,8 @@ def results(request,page='1'):
                                 'mode': params['mode'],
                                 })    
     except Exception, e:
+        # you should know what's up by now.
+        # if not, 
         if client.GetLastError():
             error = "Query Failed: %(error)s"%{'error':client.GetLastError()}
         else:
@@ -502,4 +506,6 @@ def results(request,page='1'):
                                 'page': 'WTF',
                               },)
     
-    
+# are you in tears?
+# call me, that i might bathe in them.
+# 703 - 943 - 9385
