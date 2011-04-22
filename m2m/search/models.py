@@ -36,7 +36,7 @@ class File(models.Model):
         db_table = u'file'
         
 
-
+from themoviedb.tmdb import search, getMovieInfo, TmdHttpError
 class Movie(models.Model):
     from themoviedb.tmdb import search,getMovieInfo
     
@@ -82,7 +82,7 @@ class Movie(models.Model):
         
         dirExcludes = "pornography"
         
-        candidates = candidates.exclude(path__fulname__regex='(%s)' % dirExcludes)\
+        candidates = candidates.exclude(path__fullname__regex='(%s)' % dirExcludes)\
                                .filter(path__fullname__icontains='Movies')\
                                .exclude(filename__istartswith='.')\
                                .exclude(filename__istartswith='_')
@@ -131,12 +131,16 @@ class Movie(models.Model):
                     
             # find movies that match the title
             print "Querying TMDB... (%s) " % probablyTitle
-            movies = search("%s %s" % (probablyTitle, year))
-            
+            try:
+                movies = search("%s %s" % (probablyTitle, year))
+            except TmdHttpError, e:
+                    print "TMDB not available: \n\t%s" % e
+                    return
+                    
             if len(movies) > 0:
                 print "Found something!"
                                    
-            for movieresult in movies:
+            for movieresult in movies[:10]:
                 # now, get the info and put in the DB - if it's not already there.
                 try:
                     checker = Movie.objects.get(pk=int(movieresult['id']))
