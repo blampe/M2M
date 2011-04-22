@@ -38,6 +38,11 @@
                     <nav id="navcontainer"><!-- Start Navigation -->
                       <ul>
                         <li><a href="{% url search.views.index %}" rel="self" id="{{search|default:""}}">SEARCH</a></li>
+                          {% if search %}
+                            <ul>
+                                <li><a href="" rel="self" id="{{movies|default:""}}">Movies</a></li>
+                            </ul>
+                          {% endif %}
                         <li><a href="{% url requests.views.open %}" rel="self" id="{{requests|default:""}}">REQUESTS</a></li>
                         {% if requests %}
                         <ul>
