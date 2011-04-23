@@ -11,15 +11,64 @@
 {% block content %}
 <div class="faqWrap">
     <article>
-    <header>
-        <h1><div class="postTitle"><a href="">
-            So you want to be a wizard?
-        </a></div></h1>
-    </header>
-        <div class="postBody">
-            Well, that's nice, dear.
-        </div>
-        </article>
+		<header>
+			<h1>
+				What is "The Network"?
+			</h1>
+		</header>
+		<div class="faqResponse">
+			<p>The Network is the name given to the collective wealth comprised by Mudd's student
+			run servers. It may or may not be, strictly speaking, legal, but because of the
+			closed nature of Mudd's intranet, it is protected from outside scrutiny.</p>
+			<p>This means that once something is on the Network, it is safe to grab for yourself,
+			whatever it might be (disclaimer: this is a general rule. Rule #2: don't be dumb).</p>
+		</div>
+    </article>
+	<article>
+		<header>
+			<h1>
+				What is M2M?
+			</h1>
+		</header>
+		<div class="faqResponse">
+			<p> Short answer: <br />Your lord and savior, the gateway to paradise. </p>
+			<p> Long answer: <br/>
+			M2M is a search engine, which indexes the files hosted by the servers on the Network. You can search
+			for whatever you want, and if it's publically available, and older than about 23
+			hours, M2M will show you where it is. Sometimes you can directly download it from
+			the search results page, you lucky late-comers you.
+			</p>
+		</div>
+	</article>
+	<article>
+		<header>
+			<h1>
+				What is a server?
+			</h1>
+		</header>
+		<div class="faqResponse">
+			<p> Okay, so, I know they say there's no such thing as a dumb question, but if you're at
+			this school, and you need to ask this question, then...something might have gone wrong
+			with the admission process. I'm just saying. In any event, I'm sure there is someone within
+			20 feet of you who is not only able but willing to wax poetic about what it means to be a
+			'server' on the Network.</p>
+			<p>Briefly, a server is any computer that is configured to share things on the Mudd network.
+			At least, that's what I will mean by 'server' anytime you see it on this site, unless specifically
+			redifined elsewhere.</p>
+		</div>
+	</article>
+	<article>
+		<header>
+			<h1>
+				Can I run a server?
+			</h1>
+		</header>
+		<div class="faqResponse">
+			<p> No. A server runs you. Or maybe that's just M2M.</p>
+			<p> Seriously, though; see the <a href="{% url faq.views.servers %}">server FAQ</a> for more about
+			setting up and running your own server.</p>
+		</div>
+	</article>
 </div>
 {% endblock %}
 
