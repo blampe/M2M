@@ -34,6 +34,9 @@ urlpatterns = patterns('',
     (r'^stats', 'problems.views.stats'), # for maintenance, etc
     (r'^stats/', include('stats.urls')),
 
+	(r'^faq', 'faq.views.basic'),
+	(r'^faq/', include('faq.urls')),
+	
     # Uncomment the admin/doc line below to enable admin documentation:
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

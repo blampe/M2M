@@ -58,7 +58,7 @@
                             </ul>
                         {%endif%}{%endcomment%}
 						<div style="float:right;">
-							<li><a href="{% url faq.views.basic %}" id ="{{faq|default|""}}"> FAQ </a> </li>
+							<li><a href="{% url faq.views.basic %}" id ="{{faq|default:""}}"> FAQ </a> </li>
 						</div>
                       </ul>
                     </nav>
