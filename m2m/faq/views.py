@@ -7,6 +7,8 @@ def basic(request):
     return render_to_response('faq/basic.html',
 								{
 								'title': 'M2M - FAQ',
+								'faq': 'current',
+								'basic':'current',
 								})
 							  
 def servers(request):
@@ -14,4 +16,6 @@ def servers(request):
 	return render_to_response('faq/server.html',
 								{
 								'title': 'M2M - FAQ:Servers',
+								'faq':'current',
+								'server':'current',
 								})

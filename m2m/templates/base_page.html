@@ -58,7 +58,14 @@
                             </ul>
                         {%endif%}{%endcomment%}
 						<div style="float:right;">
-							<li><a href="{% url faq.views.basic %}" id ="{{faq|default:""}}"> FAQ </a> </li>
+							<li><a href="{% url faq.views.basic %}" id ="{{faq|default:""}}"> FAQ </a>
+								{% if faq %}
+								<ul style="left:auto;width:10em">
+									<li><a href="{%url faq.views.basic %}" id="{{basic|default:""}}">General</a></li>
+									<li><a href="{%url faq.views.servers%}" id="{{server|default:""}}">Server</a></li>
+								</ul>
+								{% endif %}
+							</li>
 						</div>
                       </ul>
                     </nav>
