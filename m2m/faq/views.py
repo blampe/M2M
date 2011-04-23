@@ -6,5 +6,5 @@ def basic(request):
     
     return render_to_response('faq/basic.html',
                               {
-                              'title': 'M2M  FAQ',
+                              'title': 'M2M - FAQ',
                               })
