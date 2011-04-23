@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <title>{% block title %}{{title}}{%endblock%}</title>
+        <title>{% block title %}{{title|default:"M2M"}}{%endblock%}</title>
         
         <!--[if lt IE9]>
             <script src ="http://html5shim.googlecode.com/svn/trunk/html5.js">
