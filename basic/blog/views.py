@@ -13,7 +13,7 @@ def post_list(request, page=0, **kwargs):
     return list_detail.object_list(
         request,
         queryset = Post.objects.published(),
-        paginate_by = 20,
+        paginate_by = 5,
         page = page,
         **kwargs
     )
