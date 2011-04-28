@@ -2,7 +2,7 @@
     width: 100%;
     margin-left:0px;
     margin-right:20px;
-
+	display:block;
     padding-left:5px;
     /*border-right: 1px solid;*/
     
@@ -10,7 +10,9 @@
 .postWrap{
     
     border-left: 3px groove;
-    margin-left:100px;
+
+    margin-left:80px;
+	max-width: 88%;
     margin-bottom:20px;
     padding-left:15px;
 }
@@ -51,14 +53,13 @@ h1 div.postTitle{
 }
 
 .comments{
-    
     margin-left:9%;
     width: 50%;
     display: inline-block;
 }
 .postCommentWrap{
     border-left: 3px outset;
-    margin-left:50px;
+    margin-left:auto;
     margin-top:5px;
 }
 .postCommentHead{
@@ -70,7 +71,8 @@ h1 div.postTitle{
 }
 
 #commentForm{
-    width: 49%;
+
+    max-width: 43%;
     vertical-align: top;
     float:left;
     
