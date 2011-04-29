@@ -58,7 +58,7 @@ $(document).ready(function(){
 {%with object as post%}
 {% if post.status == 2 %}
 <section>
-<div class="postWrap"><article>
+<div class="postWrap" style="border-bottom: 3px groove;"><article>
     
     <header>
         <div class="postDate">
@@ -71,7 +71,6 @@ $(document).ready(function(){
     <div class="postBody">{{post.body|formatBody}}</div>
 </article></div>
 </section>
-
 <section>
 <div id="commentForm">
     {%get_comment_form for post as form %}
@@ -84,21 +83,20 @@ $(document).ready(function(){
         {{form.timestamp}}
         {{form.security_hash}}
     <table>
-        <tr><label> <td>
-            <span style="display:none;"<label> Honeypot(Entering text here will flag your comment as spam):
+        <tr> <td>
+            <span style="display:none;"><label> Honeypot(Entering text here will flag your comment as spam):
             {{ form.honeypot }}</label></span>
-        Name:</td><td> <input type="text" onfocus="toggleText('#id_name');"
+        <label for=id_name>Name:</label> <div style='float:right;'><input type="text" onfocus="toggleText('#id_name');"
                               onblur="toggleText('#id_name');"
                               name="name" id="id_name" value="Anonymous"
-                              onchange="if(this.value != ''){edited = true;}else{edited=false;}"/></td></label>
+                              onchange="if(this.value != ''){edited = true;}else{edited=false;}"/></div></td>
         </tr>
         <tr>
-            <label><td valign="top">Comment:</td><td>{{form.comment}}
-        </td></label></tr>
-        <tr><td></td><td align='right'>
+            <td valign="top"><label for=id_comment>Comment:</label>{{form.comment}}
+        </td></tr>
+        <tr><td align='right'>
     <input type="submit" name="submit" class="submit-post" value="Post!" />
     </td></tr>
-    
     </table>
     
     </form>

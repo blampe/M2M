@@ -1,7 +1,7 @@
 # Django settings for m2m project.
 
  
-DEBUG = False
+DEBUG = False 
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -70,14 +70,14 @@ STATICFILES_ROOT = '/home/haak/django_projects/m2m/media/'
 # Example: "http://static.lawrence.com/", "http://example.com/static/"
 
 STATICFILES_URL = '/media/'
-
+STATIC_URL = '/media/'
 # URL prefix for admin media -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
 # Examples: "http://foo.com/static/admin/", "/static/admin/".
 ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 # A list of locations of additional static files
-STATICFILES_DIRS = ()
+STATICFILES_DIRS = ("C:/Users/haak/M2M/m2m/media/",)
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -124,6 +124,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     
     "/home/haak/django_projects/m2m/templates/",
+    "C:/Users/haak/M2M/m2m/templates/",
     
 )
 
@@ -155,7 +156,6 @@ INSTALLED_APPS = (
      'basic.blog',
      'basic.inlines',
      'tagging',
-     
 )
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
