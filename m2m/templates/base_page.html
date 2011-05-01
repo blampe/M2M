@@ -32,7 +32,7 @@
             {% block navigator %}
             <header id="pageHeader"><!-- Start page header -->
                     <div id="logoContainer">
-                        <a href="/"><img src="/media/images/m2m.gif" /></a>
+                        <a href="{% url search.views.index %}"><img src="/media/images/m2m.gif" alt="M2M - Search the Network"/></a>
                     </div>
                     <div id="koi"></div>
                     <nav id="navcontainer"><!-- Start Navigation -->
@@ -100,8 +100,7 @@
                                     <br />
                                     <script type=\"text/javascript\">
                                         if(navigator.appName.match(/Microsoft/)){
-                                            document.write(\"I see you're using IE. Let me
-                                            <a href='http://tinyurl.com/ca653h'>help you with that.</a><br />\");
+                                            document.write(\"I see you're using IE. Let me <a href='http://tinyurl.com/ca653h'>help you with that.</a><br />\");
                                             }
                                     </script>
                                     <noscript>
