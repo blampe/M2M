@@ -7,6 +7,9 @@ from django import forms
 # Create your views here.
 
 class FAQForm(forms.Form):
+	error_css_class='error'
+	required_css_class = 'required'
+	
 	question = forms.CharField(widget=forms.Textarea(attrs={
 					'rows':'9',
 					'cols':'50',
