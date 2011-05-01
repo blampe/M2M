@@ -168,6 +168,7 @@
 <h1> Still got questions? </h1>
 <form action="" method="POST">
 {% csrf_token %}
+<label for="id_question"> Hit me up. </label>
 {{form.question}}
 <input type=submit value="Ask M2M!"/>
 </form>
