@@ -37,24 +37,24 @@
                     <div id="koi"></div>
                     <nav id="navcontainer"><!-- Start Navigation -->
                       <ul>
-                        <li><a href="{% url search.views.index %}" rel="self" id="{{search|default:""}}">SEARCH</a></li>
-                        <li><a href="{% url requests.views.open %}" rel="self" id="{{requests|default:""}}">REQUESTS</a></li>
+                        <li><a href="{% url search.views.index %}" rel="self" class="{{search|default:""}}">SEARCH</a></li>
+                        <li><a href="{% url requests.views.open %}" rel="self" class="{{requests|default:""}}">REQUESTS</a></li>
                         {% if requests %}
                         <ul>
-                            <li><a href="{% url requests.views.open %}" rel="self" id="{{openReq|default:""}}">Open Requests</a></li>
-                            <li><a href="{% url requests.views.completed %}" rel="self" id="{{closedReq|default:""}}">Completed Requests</a></li>
-                            <li><a href="{% url requests.views.deleted %}" rel="self" id="{{delReq|default:""}}">Deleted Requests</a></li>
+                            <li><a href="{% url requests.views.open %}" rel="self" class="{{openReq|default:""}}">Open Requests</a></li>
+                            <li><a href="{% url requests.views.completed %}" rel="self" class="{{closedReq|default:""}}">Completed Requests</a></li>
+                            <li><a href="{% url requests.views.deleted %}" rel="self" class="{{delReq|default:""}}">Deleted Requests</a></li>
                         </ul>
                         {% endif %}
-                        <li><a href="{% url browseNet.views.listAll 1 %}" rel="self" id="{{servers|default:""}}">SERVERS</a></li>
+                        <li><a href="{% url browseNet.views.listAll 1 %}" rel="self" class="{{servers|default:""}}">SERVERS</a></li>
                         <!--<li><a href="/polls" rel="self" id="{{polls|default:""}}">POLLS</a></li>-->
-                        <li><a href="{% url basic.blog.views.post_list %}" rel="self" id="{%block news%}{%endblock%}">NEWS</a></li>
-                        <li><a href="{% url stats.views.display %}" rel="self" id="{{stats|default:""}}">STATISTICS</a></li>
+                        <li><a href="{% url basic.blog.views.post_list %}" rel="self" class="{%block news%}{%endblock%}">NEWS</a></li>
+                        <li><a href="{% url stats.views.display %}" rel="self" class="{{stats|default:""}}">STATISTICS</a></li>
                         {% comment %}{% if stats %}
                             <ul>
-                                <li><a href="" id="{{siteStat|default:""}}">Sitewide</a></li>
-                                <li><a href="" id="{{reqStat|default:""}}">Requests</a></li>
-                                <li><a href="" id="{{pollStat|default:""}}">Polls</a></li>
+                                <li><a href="" class="{{siteStat|default:""}}">Sitewide</a></li>
+                                <li><a href="" class="{{reqStat|default:""}}">Requests</a></li>
+                                <li><a href="" class="{{pollStat|default:""}}">Polls</a></li>
                             </ul>
                         {%endif%}{%endcomment%}
                       </ul>
