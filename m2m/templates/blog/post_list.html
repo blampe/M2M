@@ -29,6 +29,16 @@ function dispToggle(id){
 {%block news%}current{%endblock%}
 
 {%block content%}
+{% if is_paginated %}
+Page:
+{% for pager in paginator.page_range %}
+	{% if pager != page %}<a href="{% url basic.blog.views.post_list pager %}">{{pager}}</a>
+	{% else %} {{pager}}
+	{% endif %}
+{% endfor %}
+<br /><br />
+{% endif %}
+
 <div id="posts">
 {% for post in object_list %}
 {% if post.status == 2 %}
@@ -59,6 +69,14 @@ function dispToggle(id){
 </article></div>
 {%endif%}
 {%endfor%}
+{% if is_paginated %}
+Page:
+{% for pager in paginator.page_range %}
+	{% if pager != page %}<a href="{% url basic.blog.views.post_list pager %}">{{pager}}</a>
+	{% else %} {{pager}}
+	{% endif %}
+{% endfor %}
+{% endif %}
 </div>
 {%endblock%}
 

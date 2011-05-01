@@ -60,6 +60,12 @@ div.info {
     width:80px;
 }
 
+#options:active {
+	color: #000;
+    cursor: pointer;
+    width:80px;
+}
+
 
 a:visited {
 	color: #4F6696;
@@ -85,11 +91,48 @@ img.directLink{
 	color: #fff;
 	background-color: #6fc6ea;
 }
-
-div.tablewrap {
+/*
+################## TABLE WRAP STYLING ##############
+*/
+.tablewrap {
     border-color: #7792A1;
+	border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
 }
 
+.tablewrap > * {
+	border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
+}
+
+.tablewrap table tbody tr:first-of-type td:nth-of-type(1){
+	border-radius: 5px 0 0 0;
+	-webkit-border-radius: 5px 0 0 0;
+	-moz-border-radius: 5px 0 0 0;
+}
+
+.tablewrap table tbody tr:first-of-type td:nth-last-of-type(1){
+	border-radius: 0 5px 0 0;
+	-webkit-border-radius: 0 5px 0 0;
+	-moz-border-radius: 0 5px 0 0;
+}
+
+.tablewrap table tbody tr:last-of-type td:nth-of-type(1){
+	border-radius: 0 0 0 5px;
+	-webkit-border-radius: 0 0 0 5px;
+	-moz-border-radius: 0 0 0 5px;
+}
+
+.tablewrap table tbody tr:last-of-type td:nth-last-of-type(1){
+	border-radius: 0 0 5px 0;
+	-webkit-border-radius: 0 0 5px 0;
+	-moz-border-radius: 0 0 5px 0;
+}
+/*
+################################################################
+*/
 #pageHeader {
 	background: url(/media/images/header_blue.png) repeat;
 	border-bottom: 8px solid #90E6F6;
