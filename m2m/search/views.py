@@ -128,9 +128,9 @@ def results(request,page='1'):
                     '!':r'\!',
                     '<':r'\<',
                     '>':r'\>',
-                   # '(':r'\(',		# this is an operator for something
-                   # ')':r'\)',		# this is an operator for something
-                   # '@':r'\@',		# this is an operator for something
+                   # '(':r'\(',     # this is an operator for something
+                   # ')':r'\)',     # this is an operator for something
+                   # '@':r'\@',     # this is an operator for something
                     '~':r'\~',
                     "'":r'\'',
                     '"':r'\"',
@@ -139,9 +139,9 @@ def results(request,page='1'):
                     #'$':r'$',
                     '%':"",
                     '#':'',
-                    #'^':'%%5E', 	# this is an operator for something
-                    #'-':r'\-', 	# this is an operator for something
-                    #r'|':"%%7F", 	# this is an operator for something
+                    #'^':'%%5E',    # this is an operator for something
+                    #'-':r'\-',     # this is an operator for something
+                    #r'|':"%%7F",   # this is an operator for something
                     }
     try:
         q = request.GET['q']
