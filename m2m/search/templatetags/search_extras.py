@@ -121,4 +121,39 @@ def size(object):
         return object.pathsize
     except:
         return '??'
+
+        
+################################################################
+#  Handler for {% logo %} tag
+#
+import random
+class LogoNode(template.Node):
+    mChoices = ['Mmath'] * 10 # make it more likely to see the old M's
+    mChoices += ['Moldenglish',
+                'Mvivaldi',
+                'Mcurlz',
+                'Mmagneto']
+    arrows = ['Arrowmath'] * 10 # also the old arrow
     
+    def __init__(self):
+        self.left = random.choice(self.mChoices)
+        self.right = random.choice(self.mChoices)
+        self.arrow = random.choice(self.arrows)
+    def render(self, context):
+        return "<img id='leftlogo' src='/media/images/%(left)s.png'/>\
+                <img id='arrowlogo' src='/media/images/%(arrow)s.png'/>\
+                <img id='rightlogo' src='/media/images/%(right)s.png'/>" % {'left':self.left,
+                                                          'right':self.right,
+                                                          'arrow':self.arrow}
+    
+@register.tag(name="logo")
+def do_logo(parser,token):
+    try:
+        if len(token.split_contents()) > 1:
+            raise template.TemplateSyntaxError("%r tag takes no arguments" % token.split_contents()[0:])
+        tag_name = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError ("Something's up with the logo tag.")
+    return LogoNode()
+#
+################################################################
