@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+{% load search_extras %}
 <html>
     <head>
         <title>{% block title %}{{title|default:"M2M"}}{%endblock%}</title>
@@ -32,7 +32,7 @@
             {% block navigator %}
             <header id="pageHeader"><!-- Start page header -->
                     <div id="logoContainer">
-                        <a href="{% url search.views.index %}"><img src="/media/images/m2m.gif" alt="M2M - Search the Network"/></a>
+                        <a href="{% url search.views.index %}">{% logo %}</a>
                     </div>
                     <div id="koi"></div>
                     <nav id="navcontainer"><!-- Start Navigation -->
