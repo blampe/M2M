@@ -146,7 +146,7 @@ div.info {
 }
 
 #logoContainer {
-    background-image: url(/media/images/m2m.gif);
+    /*background-image: url(/media/images/m2m.gif);*/
     background-height: 80px;
     background-width: 423px;
     background-attachment: auto;
@@ -154,10 +154,20 @@ div.info {
     background-position: bottom left;
 
     height: 80px;
-    width: 423px;
+    width: 500px;
     margin-left:30px;
     padding-top:30px; /*55*/
 }
+
+#leftlogo{
+}
+#arrowlogo{
+    margin-left:30px;
+    margin-right:30px;
+    vertical-align:center;}
+#rightlogo{
+}
+
 
 #pageHeader h1 {
 	font-size: 2.5em;
