@@ -69,3 +69,22 @@ def servers(request):
                                 'section':'servers',
                                 'form': form,
                                 },context_instance=RequestContext(request))
+                                
+def about(request,typeof='m2m'):
+    ''' handles the about pages. This seemed like a good place to put them.'''
+    if typeof == 'm2m':
+        return render_to_response('faq/m2m.html',
+                                {
+                                'title': 'M2M - About: M2M',
+                                'about':'current',
+                                'section':'about',
+
+                                },context_instance=RequestContext(request))
+    
+    return render_to_response('faq/basic.html',
+                                {
+                                'title': 'M2M - About: M2M',
+                                'faq':'current',
+                                'section':'about',
+
+                                },context_instance=RequestContext(request))

@@ -1,0 +1,79 @@
+{% extends "faq/basic.html"%}
+
+{% block content %}
+<h1> A (Not-So) Brief History of M2M </h1>
+<p>So, you want to learn about M2M, do you? Well, we applaud your curiosity. The history of M2M is
+a murky thing, full of mystery and gaps; at its beginning, we think, nobody realized that it would
+eventually become such a general, school-wide resource. But, we digress. we shall allow one far more
+knowledgable than us to speak upon the history of this hallowed domain (his words used without permission):
+</p>
+<h2> Before SU2010 </h2>
+<blockquote><p>The earliest network existed largely through Samba Explorer and some primitive
+ and unreliable indexing software. A prolific pornography purveyor, let's call him D, 
+ necessitated the need for a better search engine; his excel spreadsheets left a lot 
+ to be desired. This led to M2M, which was probably in its second incarnation when I 
+ started school (I was actually interviewed by the person who made the original, original 
+ M2M - he instantly knew what my resume was hinting at). This M2M was painfully slow as it 
+ was just doing LIKE queries, and there was no additional functionality. I think it was using 
+ FemFind to do its crawling?</p>
+<p> For a networking class, a guy named F made a much faster but still suck-ass M2M, which he 
+called M2M2 and which co-existed with the other M2M for a brief period of time. After that 
+original M2M disappeared several smaller, less well-known M2Ms surfaced, most notably from W and 
+R -- who briefly gave West the ability to queue up music on the speakers from within M2M. M2M2 
+ultimately won the popularity race, however, and the school embraced it.</p>
+<p>Unsatisfied with the lack of color coordination and search granularity on M2M2, I decided to make 
+my own M2M instead of doing stems homework. (I wanted to be able to search directories for music 
+artists, mostly.) My M2M used a modified version of ffsearch for crawling and sphinx for search 
+indexing, and it made requests a little more possible. It originally ran on my 1st-gen Macbook 
+Pro (with corrupt RAM), and later on an iMac (donated to the school by R) with a corrupt graphics card.</p>
+<p>After I left, a spry frosh took the reigns and started chopping up M2M by porting it to Django.</p>
+<p>Despite the hazy ethics of M2M, the benefit it has provided to numerous Mudders who have all tried 
+to re-create it in their own special way is unquestionable. It's also been the watchdog of HMC's changing 
+interests and habits, and there's so much analysis you could do with its data... 
+(just a start: http://i.imgur.com/iOFz3.png).</p></blockquote>
+
+<p>Yea, you have just read the words of the Maestro, Bryce Lampe, who created the 'blue' look of 
+the page you are now upon. Much has changed since his graduation in 2010, and the passing of M2M
+into the hands of the next generation.</p>
+<h2> SU2010 - SU2013 </h2>
+<p> That spry frosh was Haak Saxberg, class of 2013, and the port to Django and Python has long since 
+been completed. Although Bryce originally intended to hand M2M to a committee of
+adminstrators, Haak became disillusioned with their lack of work and enthusiasm for the project.</p>
+<p> The other members of the committee were not consulted in the decision-making process after the 
+summer of 2010, and by the end of fall 2010, could safely be considered disbanded.</p>
+<p>As it was handed down to him, like Bryce said, it was hosted from a quite pathetically
+(but endearingly) disfunctional iMac, whose graphics card would only work in freezing temperatures or when
+booted into safe mode. The data, which is really the treasure trove of M2M, was hosted on a school server,
+for redundancy's sake. This was an important upgrade introduced by Bryce; before him, the iMac hosted 
+everything about the site. Since the iMac is, at best, unstable, this was a dangerous sitation. Every day,
+the risk was very real that not only the website but the file data would be lost. Moving the raw database
+to a separate, backed-up server removed this fear.</p>
+<p>However, the transfer of power was not as smooth as it could have been; some of the permissions
+necessary to deal with certain issues were never transferred to Haak after Bryce's graduation. This caused
+several service outages in the fall of 2010.</p>
+<p>Uncomfortable with relying on school resources for the running of the site for numerous reasons, 
+and fucking annoyed at not having the necessary permissions to fix serious issues, Haak 
+decided to do something about it. Investing his sweat, blood, and tear-drenched money into the project,
+he transferred all of M2M's mighty database into a more student-controlled medium.</p>
+<p>M2M is no longer hosted on that iMac, nor does it use the permanent student share on
+a school-owned server. It is a system of three computers: the web-crawler, which is still on that
+ancient iMac, the webserver, and its own, dedicated data server. Further differences that Haak
+implemented: whereas the elder version used Subversion as its version control system, M2M now uses
+Git, which is better in every way; unfortunately, this also meant that it no longer has a pretty,
+web-enabled repository browser. Subtle changes were also made to the styling of the page; rounded
+table borders, enhanced requests, nicer form layouts, the FAQ secion, this about section,and a 
+cleaner news page (with working comments!).</p>
+<p>In the fall of 2010, an...extension, if you will, to M2M was created by Marquis Wang. Called M2M Movies,
+it was a specialized version of M2M: tied into an external movie database, it provided metadata that the
+core M2M simply did not at the time, but it only searched movies. Marquis was also the source of the
+direct-serving idea, which was slow to catch on among servers but an important usability improvement.
+</p>
+<p> Inspired by the idea of meta-data enhanced searching, the core M2M undertook to integrate and improve
+on this idea. Over the spring, summer, and fall of 2011 work progressed on including Movie, Music, and TV Show
+metadata in search results, where applicable.
+</p>
+{% endblock %}
+
+{% block extraContent %}
+
+{% endblock %}
