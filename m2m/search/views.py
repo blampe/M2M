@@ -500,11 +500,14 @@ def results(request,page='1'):
     except Exception, e:
         # you should know what's up by now.
         # if not, 
-        if client.GetLastError():
-            error = "Query Failed: %(error)s"%{'error':client.GetLastError()}
-        else:
-            error = "Something went wrong; Please change your search terms! \
-                     %s" % e
+        try:
+            if client.GetLastError():
+                error = "Query Failed: %(error)s"%{'error':client.GetLastError()}
+            else:
+                error = "Something went wrong; Please change your search terms! \
+                        %s" % e
+        except AttributeError:
+            error = "Well, shit; I don't know. Probably we don't have %s" % q
         
         return render_to_response('search/results.html',
                               {
