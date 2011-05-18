@@ -15,6 +15,18 @@
 	line-height: 1.5em;
 }
 
+.poem:first-line{
+	margin-top: 2em;
+	padding-left: 0px;
+	line-height: 1.5em;
+}
+
+.poem:last-of-type{
+	margin-right: 0;
+}
+.poem:last-of-type em {
+	padding-left: 0px;
+}
 .poem:last-of-type{
 	margin-right: 0;
 }
