@@ -3,6 +3,7 @@ from django.template import RequestContext
 
 from django import forms
 
+import random
 
 # Create your views here.
 
@@ -10,11 +11,23 @@ class FAQForm(forms.Form):
     error_css_class='error'
     required_css_class = 'required'
     
-    question = forms.CharField(widget=forms.Textarea(attrs={
+    # just for fun, placeholder questions
+    questions = ['Why are you so handsome, M2M?', 
+                'Who\'s your daddy?', 
+                'How *you* doin\'?',
+				'Anyone for tea?',
+				'Fezzes are cool.',
+				'Are you sure about that?',]
+    
+    def __init__(self):
+        super(FAQForm,self).__init__()
+		
+        self.fields['question'] = forms.CharField(widget=forms.Textarea(attrs={
                     'rows':'9',
                     'cols':'50',
-                    'placeholder':'Why are you so handsome, M2M?'
+                    'placeholder':random.choice(self.questions),
                     }),required=True)
+        
     
 
 def basic(request):
@@ -59,7 +72,8 @@ def servers(request):
             q = form.cleaned_data['question']
             send_mail(subject,q,'faq@m2m.st.hmc.edu',recipients)
     else:
-        form = FAQForm()
+        random.seed()
+    form = FAQForm()
     
     return render_to_response('faq/server.html',
                                 {

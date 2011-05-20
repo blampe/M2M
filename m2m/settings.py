@@ -1,7 +1,7 @@
 # Django settings for m2m project.
 
  
-DEBUG = False 
+DEBUG = True 
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
