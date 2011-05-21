@@ -112,7 +112,7 @@ function likeHandler(){
                     <strong>{{entry.completingServer|default:"Completer"}}'s Comment:</strong><br />
                     <p>{{entry.completerComment|toHTML}}</p>
                 {% endif %}
-                {% if openReq or delReq %}
+                {% if openReq %}
 					<div class="likes">
 					
 					<form class="likeform" action="" id="{{entry.CID}}" method="POST">
