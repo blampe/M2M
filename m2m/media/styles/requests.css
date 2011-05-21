@@ -1,6 +1,37 @@
+.commentCell div.likes{
+	float:right;
+	margin-top: -1.5em;
+	filter:alpha(opacity=50);
+	-moz-opacity:.50;
+	opacity:.50;
+}
 .commentCell p{
     margin-left:15px;
+	max-width: 700px;
+	
 }
+
+button.as_link {
+	font-size: 100%
+	overflow: visible;
+	width:auto;
+	text-align: left;
+	background: none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+	-moz-user-select: text;
+	/* Match links */
+	color: #4F6696;
+	text-decoration: none;
+}
+
+button.as_link:hover{
+	text-decoration:underline;
+	color:#000;
+}
+
 div.tablewrap table tr td{
     padding-left: 5px;
     padding-right: 5px;

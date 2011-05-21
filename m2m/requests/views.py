@@ -287,3 +287,16 @@ def delete(request,id):
     except SyntaxError:
         
         return HttpResponseRedirect(reverse('requests.views.open',args=(2,),current_app='requests'))
+
+def like(request,id='q',page='q'):
+    try:
+        entry = Comment.objects.get(pk=id)
+        entry.Likes += 1
+        entry.save()
+        
+        return HttpResponseRedirect(reverse('requests.views.open',current_app='requests'))
+    except:
+        entry = None
+    finally:
+        return HttpResponseRedirect(reverse('requests.views.open',current_app='requests'))
+        

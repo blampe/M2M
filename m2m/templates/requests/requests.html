@@ -3,7 +3,36 @@
 {% block title %} M2M -{% if closedReq %} Completed{%endif%}{%if delReq%} Deleted{%endif%} Requests{%endblock%}
 {%block stylin %} <link rel="stylesheet" type="text/css" media="screen" href="/media/styles/requests.css" /> {% endblock %}
 
+{% block scriptin %}
 
+<script>
+
+$(document).ready(function(){ 
+	likeHandler();
+});
+function likeHandler(){
+	$('.likeform').submit(function(){
+		cid = $(this).attr('id');
+		$.ajax({
+			type: "POST",
+			data: $(this).serialize(),
+			url: "/requests/like/"+cid+"/{{page}}",
+			cache: false,
+			dataType:'html',
+			success: function(html,textStatus){
+				$('#'+cid+" em").load('{% url requests.views.open page%} #'+cid+' em');
+			},
+			error: function( XMLHttpRequest, textStatus, errorThrown){
+				$('#'+cid+" button").replaceWith("Sorry, no");
+			}
+		
+		});
+		return false;
+	});
+}
+</script>
+
+{% endblock %}
 
 {% block content %}
 
@@ -69,9 +98,9 @@
                         {{entry.requestTime|dateSlice}}
                     {%if openReq%}
                         <strong>
-                            <a  href="/requests/edit/{{entry.CID}}">Edit</a>
-                            <a  href="/requests/complete/{{entry.CID}}">Complete</a>
-                            <a href="/requests/delete/{{entry.CID}}">Delete</a>
+                            <a  href="{% url requests.views.edit entry.CID %}">Edit</a>
+                            <a  href="{% url requests.views.complete entry.CID %}">Complete</a>
+                            <a href="{% url requests.views.delete entry.CID %}">Delete</a>
                         </strong>
                     {% endif %}
                     </span>
@@ -83,7 +112,20 @@
                     <strong>{{entry.completingServer|default:"Completer"}}'s Comment:</strong><br />
                     <p>{{entry.completerComment|toHTML}}</p>
                 {% endif %}
-                </td>
+                {% if openReq or delReq %}
+					<div class="likes">
+					
+					<form class="likeform" action="" id="{{entry.CID}}" method="POST">
+						{% csrf_token %}
+						<input type=hidden name="id" value="{{entry.CID}}"/>
+						<input type=hidden name="page" value="{{page}}"/>
+						<em>{{entry.Likes}} like{{entry.Likes|pluralize}}</em>;
+						<button class="as_link" title="like this" type=" name="liker" onclick="doLike({{entry.CID}})"><strong><span>like this</span></strong></button>
+					</form>
+					
+					</div>
+				{% endif %}
+				</td>
             </tr>
         {% endfor %}
         </table>
@@ -95,7 +137,7 @@
             {{number|default:'1'}}
         {% else %}
             {%if openReq %}<a href="{% url requests.views.open number%}">{{number}}</a>{%endif%}
-            {%if closedReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%}
+            {%if closedReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%} {# this is bull #}
             {%if delReq%}<a href="{% url requests.views.deleted number%}">{{number}}</a>{%endif%}
             
         {% endif %}
