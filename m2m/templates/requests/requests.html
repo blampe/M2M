@@ -22,6 +22,7 @@ function likeHandler(){
             dataType:'html',
             success: function(html,textStatus){
                 $('#'+cid+" em").load('{% url requests.views.open page%} #'+cid+' em');
+				$('#'+cid+" button").replaceWith("Thanks!");
             },
             error: function( XMLHttpRequest, textStatus, errorThrown){
                 $('#'+cid+" button").replaceWith("Sorry, no");
@@ -38,7 +39,7 @@ function extraRequestHandler(){
 		$('#requestForm').slideToggle("slow");
     });
 	
-	// if the click out, get rid of it:
+	// if they click out, get rid of it:
 	$('#container').click(function(){
 		$('#extraForm').slideUp("slow");
 		$('#requestForm').slideDown("slow");
