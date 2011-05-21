@@ -8,30 +8,96 @@
 <script>
 
 $(document).ready(function(){ 
-	likeHandler();
+    likeHandler();
+    extraRequestHandler();
 });
 function likeHandler(){
-	$('.likeform').submit(function(){
-		cid = $(this).attr('id');
-		$.ajax({
-			type: "POST",
-			data: $(this).serialize(),
-			url: "/requests/like/"+cid+"/{{page}}",
-			cache: false,
-			dataType:'html',
-			success: function(html,textStatus){
-				$('#'+cid+" em").load('{% url requests.views.open page%} #'+cid+' em');
-			},
-			error: function( XMLHttpRequest, textStatus, errorThrown){
-				$('#'+cid+" button").replaceWith("Sorry, no");
-			}
-		
+    $('.likeform').submit(function(){
+        cid = $(this).attr('id');
+        $.ajax({
+            type: "POST",
+            data: $(this).serialize(),
+            url: "/requests/like/"+cid+"/{{page}}",
+            cache: false,
+            dataType:'html',
+            success: function(html,textStatus){
+                $('#'+cid+" em").load('{% url requests.views.open page%} #'+cid+' em');
+            },
+            error: function( XMLHttpRequest, textStatus, errorThrown){
+                $('#'+cid+" button").replaceWith("Sorry, no");
+            }
+        
+        });
+        return false;
+    });
+}
+
+function extraRequestHandler(){
+    $('#miniRequester').click(function(){
+        $('#extraForm').slideToggle("slow");
+		$('#requestForm').slideToggle("slow");
+    });
+	
+	// if the click out, get rid of it:
+	$('#container').click(function(){
+		$('#extraForm').slideUp("slow");
+		$('#requestForm').slideDown("slow");
 		});
-		return false;
-	});
 }
 </script>
 
+{% endblock %}
+
+{% block externalContent %}<div id='extraContainer'>
+<div id="extraForm" class="tablewrap">
+        <form id="extraRequester" action='{% url requests.views.open %}' method="POST">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <table>
+            <tr>
+                <td rowspan="4">
+                    <label>Your comment/request/idea:<br />
+                    {{form.request}}
+                    </label>
+                    <br />
+                    {% if form.request.errors %}
+                    <span class="error">
+                        {% for error in form.request.errors %}
+                            {{ error|escape}}<br/>
+                            {%endfor%}
+                    </span>
+                    {%endif%}
+                </td>
+                <td>
+                    <label>Your name: <br />
+                    {{ form.name }}
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Your server (optional):<br />
+                    {{form.server}}
+                    
+                    </label>
+                </td>
+            </tr>
+                <td>
+                    <label>Your email (optional):<br />
+                    {{form.email}}
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input  type="submit" />
+                </td>
+            </tr>
+            </table>
+        </form>
+</div>
+<div id="miniRequester">Request!</div>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -113,23 +179,25 @@ function likeHandler(){
                     <p>{{entry.completerComment|toHTML}}</p>
                 {% endif %}
                 {% if openReq %}
-					<div class="likes">
-					
-					<form class="likeform" action="" id="{{entry.CID}}" method="POST">
-						{% csrf_token %}
-						<input type=hidden name="id" value="{{entry.CID}}"/>
-						<input type=hidden name="page" value="{{page}}"/>
-						<em>{{entry.Likes}} like{{entry.Likes|pluralize}}</em>;
-						<button class="as_link" title="like this" type=" name="liker" onclick="doLike({{entry.CID}})"><strong><span>like this</span></strong></button>
-					</form>
-					
-					</div>
-				{% endif %}
-				</td>
+                    <div class="likes">
+                    
+                    <form class="likeform" action="" id="{{entry.CID}}" method="POST">
+                        {% csrf_token %}
+                        <input type=hidden name="id" value="{{entry.CID}}"/>
+                        <input type=hidden name="page" value="{{page}}"/>
+                        <em>{{entry.Likes}} like{{entry.Likes|pluralize}}</em>;
+                        <button class="as_link" title="like this" type=" name="liker" onclick="doLike({{entry.CID}})"><strong><span>like this</span></strong></button>
+                    </form>
+                    
+                    </div>
+                {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </table>
     </div>
+
+
     
 <div style="position:relative;"><strong>Page:
     {% for number in linkPages %}
@@ -166,7 +234,7 @@ function likeHandler(){
     
     <br />
     <div id="requestForm" class="tablewrap">
-        <form id="requester" action='{% url requests.views.open %}' method="POST">
+        <form id="requester" action='' method="POST">
             {% csrf_token %}
             {{ form.non_field_errors }}
             <table>
