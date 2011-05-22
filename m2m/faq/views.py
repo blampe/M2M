@@ -22,7 +22,7 @@ class FAQForm(forms.Form):
                 ]
     
     def __init__(self,*args,**kwargs):
-        super(self).__init__()
+        super(FAQForm).__init__()
         
         self.fields['question'] = forms.CharField(widget=forms.Textarea(attrs={
                     'rows':'9',
