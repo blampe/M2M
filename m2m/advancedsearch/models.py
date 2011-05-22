@@ -4,7 +4,7 @@ from themoviedb.tmdb import search, getMovieInfo, TmdHttpError
 # Create your models here.
 
 
-def getFromFiles(cls):
+def getMoviesFromFiles(cls):
         ''' Imports things that are recognized as Movies from File table'''
         
         # grab all video files from things with Movie in the path name,
@@ -108,6 +108,7 @@ def getFromFiles(cls):
                                 backdrop=
                                 runtime=
                                 goodfile=True)'''
+
 class Movie(models.Model):
     from themoviedb.tmdb import search,getMovieInfo
     
@@ -142,5 +143,28 @@ class Movie(models.Model):
     #endings = super.videoEndings
     
     
-            
+class Show(models.Model):
+    ''' an episode of a tv show!'''
+    ID = models.IntegerField(primary_key=True)
+    FID = models.ManyToOneRel(File, "id")
+    season = models.IntegerField()
+    episode = models.IntegerField()
+    showName = models.CharField(max_length=100)
+    episodeName = models.CharField(max_length=100)
+    
+    #endings = super.videoEndings
+    
+
+class Music(models.Model):
+    ''' Music file.'''
+    ID = models.IntegerField(primary_key=True)
+    FID = models.ManyToOneRel(File, "id")
+    artist = models.CharField(max_length=100)
+    album =  models.CharField(max_length=100)
+    trackName = models.CharField(max_length=100)
+    genre = models.CharField(max_length=100)
+    time = models.TimeField()
+    
+    #endings = super.audioEndings
+    
             
