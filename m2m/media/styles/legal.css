@@ -1,0 +1,51 @@
+li.serious {
+	text-transform: uppercase;
+}
+
+li:first-line {
+	font-weight: bold;
+}
+
+ol {
+	counter-reset: item;
+}
+
+ol li{
+	display: block;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+ol li:before {
+	content: counters(item, ".") ") ";
+	counter-increment: item;}
+}
+
+li ol li ol, li.serious ol li ol {
+	counter-reset: alpha;
+	list-style-type: upper-alpha;
+}
+
+li ol li ol li:before , li.serious ol li ol li:before{
+	content: counter(alpha, upper-alpha) ") ";
+}
+li ol li ol li, li.serious ol li ol li{
+	counter-increment: alpha;
+}
+
+li.serious ol li ol li ol {
+	counter-reset: roman;
+}
+li.serious ol li ol li ol li:before{
+	content: counter(roman, upper-roman) ") ";
+}
+li.serious ol li ol li ol li {
+	counter-increment: roman;
+}
+li.serious ol li ol li ol li{
+	list-style-type:upper-roman;
+}
+
+li > ol li:first-line{
+	font-weight: normal;
+	}
