@@ -157,6 +157,7 @@ INSTALLED_APPS = (
      'basic.blog',
      'basic.inlines',
      'tagging',
+     'movies',
 )
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
