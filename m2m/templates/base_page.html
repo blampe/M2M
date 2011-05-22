@@ -13,18 +13,6 @@
         <link rel="stylesheet" media="screen" href="/media/styles/845.css" />
         {% block stylin %}{% endblock %}
         
-        
-        <script type="text/javascript" src="/media/jquery-1.4.4.js"></script>
-        <script type="text/javascript" src="/media/styles/javascript.js"></script>
-        <script type="text/javascript" src="/media/scripts/jquery.tools.min.js"></script>
-        {%block scriptin %}{%endblock%}
-        
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="robots" content="all" />
-        
-        <link rel="icon" href="/media/favicon.png" type="image/x-icon" />
-        <link rel="shortcut icon" href="/media/favicon.png" type="image/x-icon" />
-        
         <script type="text/javascript">
 
           var _gaq = _gaq || [];
@@ -38,9 +26,18 @@
           })();
 
         </script>
+
+        
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="robots" content="all" />
+        
+        <link rel="icon" href="/media/favicon.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="/media/favicon.png" type="image/x-icon" />
+        
+
     </head>
     <body>
-        
+        {% block externalContent %} {% endblock %}
         <div id="container">
             {% block navigator %}
             <header id="pageHeader"><!-- Start page header -->
@@ -100,12 +97,6 @@
                         <section id="extraContent">
                             {%block extraContent %}
                                 <div style='text-align:center;'>
-									Ok, look; summer is experiment time, yes. That said: M2M is breaking because
-									of a DHCP issue, not a coding issue. There isn't a whole lot I can do about
-									key components of the site changing their IPs every few hours.<br />
-									But I'm doing my best, and I'm really really sorry that you guys have to wait
-									for functionality to come back. I wish I could do more.
-									<br />
 									<br />
                                     Servers: check out <a href="news/2011/feb/27/direct-serving/"> this page</a>.
                                     <br />
@@ -148,5 +139,12 @@
             </footer>
             </div><!-- End Footer -->
         </div>
+		
+		{# scripts at the end, just in case #}
+	    <script type="text/javascript" src="/media/jquery-1.4.4.js"></script>
+        <script type="text/javascript" src="/media/styles/javascript.js"></script>
+        <script type="text/javascript" src="/media/scripts/jquery.tools.min.js"></script>
+        {%block scriptin %}{%endblock%}
+
     </body>
 </html>

@@ -132,7 +132,7 @@ class Comment(models.Model):
     server = models.CharField(max_length=60, null=True,blank=True)
     requestIP = models.IPAddressField(max_length=64,null=True,blank=True)
     # ala facebook
-    Likes = models.IntegerField(default=1)
+    Likes = models.IntegerField(default=0)
     
     def __unicode__(self):
         return self.request
