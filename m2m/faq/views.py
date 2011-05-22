@@ -15,13 +15,13 @@ class FAQForm(forms.Form):
     questions = ['Why are you so handsome, M2M?', 
                 'Who\'s your daddy?', 
                 'How *you* doin\'?',
-				'Anyone for tea?',
-				'Fezzes are cool.',
-				'Are you sure about that?',]
+                'Anyone for tea?',
+                'Fezzes are cool.',
+                'Are you sure about that?',]
     
     def __init__(self):
         super(FAQForm,self).__init__()
-		
+        
         self.fields['question'] = forms.CharField(widget=forms.Textarea(attrs={
                     'rows':'9',
                     'cols':'50',
@@ -102,11 +102,17 @@ def about(request,typeof='m2m'):
                                 'section':'about',
 
                                 },context_instance=RequestContext(request))
-								
+                                
 
 def serviceTerms(request):
 
-	return render_to_response('faq/tos.html',
-							{
-							},
-							)
+    return render_to_response('faq/tos.html',
+                            {'title':'M2M - Terms of Service'},
+                            )
+							
+def dmca(request):
+	return render_to_response('404.html')
+	
+def privacy(request):
+
+	return render_to_response('404.html')
