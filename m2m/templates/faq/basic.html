@@ -173,8 +173,8 @@
 <h1> Still got questions? </h1>
 <form action="" method="POST">
 {% csrf_token %}
-<label for="id_question"> Hit me up. </label>
-{{form.question}}
+<label for="id_question"> <h2>Hit me up.</h2> </label><br/>
+{{form.question}}<br/>
 <input type=submit value="Ask M2M!"/>
 </form>
 </div>
