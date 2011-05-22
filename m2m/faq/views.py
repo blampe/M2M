@@ -21,7 +21,7 @@ class FAQForm(forms.Form):
                 'Are you sure about that?',
                 ]
     
-    def __init__(self):
+    def __init__(self,*args,**kwargs):
         super(self).__init__()
         
         self.fields['question'] = forms.CharField(widget=forms.Textarea(attrs={
