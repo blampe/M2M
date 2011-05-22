@@ -1,35 +1,13 @@
-function dispTogglejQ(id){
-    id = "#"+id;
-    var toggleID = "#"+id+"l";
-    var sizeID = "#"+id+"s";
-    
-    var $toggler = $(toggleID);
-    
-    if($(id).css('display') == "none"){
-        $(id).css('display',"inline");
-        $(sizeID).css('display',"inline");
-        $toggler.html("Less...");
-    } else {
-        $(id).css('display', "none");
-        $(sizeID).css('display', "none");
-        $toggler.html("More...");
-    }
+function moreHandler(){
+	$('.togglebot').click(function(){
+		var togglerID = $(this).attr('id');
+		var id = togglerID.substr(0,togglerID.length - 1);
+		$('#'+id).slideToggle("slow");
+		$('#'+id+'s').slideToggle("slow");
+		$(this).text($(this).text() == 'More...' ? 'Less...' : 'More...');
+	});
 }
 
-function dispToggle(id){
-    var toggleID = id + "l";
-    var sizeID = id+"s";
-    
-    var seeMe = document.getElementById(id).style.display;
-    var toggler = document.getElementById(toggleID);
-    
-    if(seeMe == "none"){
-        document.getElementById(id).style.display = "inline";
-        document.getElementById(sizeID).style.display = "inline";
-        toggler.innerHTML = "Less...";
-    } else {
-        document.getElementById(id).style.display = "none";
-        document.getElementById(sizeID).style.display = "none";
-        toggler.innerHTML = "More...";
-    }
-}
+$(document).ready(function(){
+	moreHandler();
+});
