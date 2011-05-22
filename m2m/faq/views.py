@@ -31,22 +31,23 @@ class FAQForm(forms.Form):
                     }),required=True)
         
     
-
+def sendFAQMail(recipients,section,request):
+    from django.core.mail import send_mail
+    # No matter what, we should have a form.
+    form = FAQForm(request.POST)
+    if form.is_valid():
+        # Set the appropriate subject lines...
+        subject = "FAQ - %s" % section
+        q = form.cleaned_data['question']
+        send_mail(subject,q,'faq@m2m.st.hmc.edu',recipients)
+    
 def basic(request):
     ''' displays the generic faq, without any specialization '''
     
     if request.method == 'POST':
-        from django.core.mail import send_mail
-        recipients = ['haak.erling@gmail.com',]
-        # No matter what, we should have a form.
-        form = FAQForm(request.POST)
-        if form.is_valid():
-            # Set the appropriate subject lines...
-            subject = "FAQ - Basic"
-            q = form.cleaned_data['question']
-            send_mail(subject,q,'faq@m2m.st.hmc.edu',recipients)
-    else:
-        form = FAQForm()
+        sendFAQMail(['haak.erling@gmail.com',],'Basic',request)
+    
+    form = FAQForm()
         
     return render_to_response('faq/basic.html',
                                 {
@@ -64,17 +65,9 @@ def servers(request):
     # dedicated POST-processing views.
     
     if request.method == 'POST':
-        from django.core.mail import send_mail
-        recipients = ['haak.erling@gmail.com',]
-        # No matter what, we should have a form.
-        form = FAQForm(request.POST)
-        if form.is_valid():
-            # Set the appropriate subject lines...
-            subject = "FAQ - Servers"
-            q = form.cleaned_data['question']
-            send_mail(subject,q,'faq@m2m.st.hmc.edu',recipients)
-    else:
-        random.seed()
+        sendFAQMail(['haak.erling@gmail.com',],'Server',request)
+    
+    random.seed()
     form = FAQForm()
     
     return render_to_response('faq/server.html',

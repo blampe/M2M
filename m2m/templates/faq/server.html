@@ -88,8 +88,14 @@
 		<div class="faqResponse">
 			<h2>Short Answer:</h2><p>Depends on your server-set up.</p>
 			<h2>Long Answer:</h2>
-			<p>
-			</p>
+			<ol>
+				<li> Install your webserver of choice, if you don't already have one (I recommend Apache or NGINX).</li>
+				<li> Set up a normal host, but change it so that it listens on port 13213 instead of 80.</li>
+				<li> Configure it so that it treats every file as an application, rather than something a browser knows
+				how to serve.</li>
+				<li> create a directory with symlinks to your samba share directories, and set that as the root of your host.</li>
+				<li> Let me know that you've set up direct serving.</li>
+			</ol>
 		</div>
 	</article>
 </div>
