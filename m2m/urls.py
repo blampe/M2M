@@ -37,6 +37,8 @@ urlpatterns = patterns('',
 	(r'^faq&', 'faq.views.basic'),
 	(r'^faq/', include('faq.urls')),
 	
+	(r'^tos', 'faq.views.serviceTerms'),
+	
     (r'^about/m2m$','faq.views.about',{'typeof':'m2m'}),
     
     # Uncomment the admin/doc line below to enable admin documentation:

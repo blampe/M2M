@@ -67,16 +67,14 @@
                                 <li><a href="" id="pstat"  class="{{pollStat|default:""}}">Polls</a></li>
                             </ul>
                         {%endif%}{%endcomment%}
-						<div style="float:right;">
-							<li><a href="{% url faq.views.basic %}" id="faq" class ="{{faq|default:""}}"> FAQ </a>
-								{% if faq %}
-								<ul style="left:auto;width:10em">
-									<li><a href="{%url faq.views.basic %}" id="bfaq" class="{{basic|default:""}}">General</a></li>
-									<li><a href="{%url faq.views.servers%}" id="sfaq" class="{{server|default:""}}">Server</a></li>
-								</ul>
-								{% endif %}
-							</li>
-						</div>
+						<li><a href="{% url faq.views.basic %}" id="faq" class ="{{faq|default:""}}"> FAQ </a>
+							{% if faq %}
+							<ul style="left:auto;width:10em">
+								<li><a href="{%url faq.views.basic %}" id="bfaq" class="{{basic|default:""}}">General</a></li>
+								<li><a href="{%url faq.views.servers%}" id="sfaq" class="{{server|default:""}}">Server</a></li>
+							</ul>
+							{% endif %}
+						</li>
                       </ul>
                     </nav>
                     <!-- End navigation --> 

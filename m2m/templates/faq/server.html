@@ -12,8 +12,8 @@
 			</h1>
 		</header>
 		<div class="faqResponse">
-			<p> <h2>Short Answer: </h2></p><p> At HMC, select students. </p>
-			<p> <h2>Long Answer: </h2></p><p>
+			<h2>Short Answer: </h2><p> At HMC, select students. </p>
+			<h2>Long Answer: </h2><p>
 			You do! You, being the students, as distinct from the school itself (which has its own
 			servers, but with which M2M does not, at this time, truck). And probably not you, since
 			you're looking at this FAQ. But, hey, you never know.</p>
@@ -31,11 +31,11 @@
 			</h1>
 		</header>
 		<div class="faqResponse">
-			<p><h2>Short Answer: </h2></p><p>Blood sacrifice, and a liberal sprinkling of baby's tears</p> 
-			<p><h2> Long Answer:</h2></p>
-			<p>On purpose? You're crazy, girlfriend.</p>
+			<h2>Short Answer: </h2><p>Blood sacrifice, and a liberal sprinkling of baby's tears</p> 
+			<h2> Long Answer:</h2>
+			<p>On purpose?</p>
 			<p> It's a simple-yet-difficult process, running a server. Here's what you'll need, at the
-			very least:</p>
+			very least:
 			<ul>
 			<li>(1) computer, with keyboard</li>
 			<li>(1) ethernet cord</li>
@@ -47,7 +47,7 @@
 			<ol>
 			<li> Choose a name for your server. This is the most important goddamn step, because you are saddled with
 			this fucking name forever, unless you want to be a dick and make CIS do more work than they ought to.
-			They get enough flak (sometimes deservedly) and do not need extra shit to do.</li>
+			They get enough flak (sometimes deservedly) and do not need extra shit to do. Rule #1.</li>
 			<li> Get your ass to the<a href="http://www.hmc.edu/about/administrativeoffices/cis1/forms/ipreq.html">
 			Static IP Request Form</a>, and fill it out. Your reason for the request should be something like 
 			"local ssh access"; they don't, in my experience, ask too many questions, and will complete
@@ -55,15 +55,43 @@
 			<li> Follow CIS's instructions about configuring your network settings. If you don't know how to
 			do this, check out <a href="http://tinyurl.com/3svamfp">this resource</a> for all the info you need.</li>
 			<li> Get SAMBA sharing enabled; windows has this automatically, I think, since it's their protocol,
-				but macs and unix will have to do some (not much) voodoo.</li>
-			<li> Set up your samba shares </li>
+				but macs and unix will have to do some (not much) voodoo. I would recomment against installing
+				Samba4 just yet, because it doesn't work properly.</li>
+			<li> Set up your samba shares, a topic which you can find plenty of information on yourself. </li>
 			<li> Put content in your samba shares </li>
 			</ol>
-			Annnnd that's all there is to it.
+			Annnnd that's all there is to it.</p>
 			
 		</div>
     </article>	
-	
+	<article>
+		<header>
+			<h1> What is direct serving?</h1>
+		</header>
+		<div class="faqResponse">
+			<h2>Short Answer:</h2><p>Letting people download through M2M.</p>
+			<h2>Long Answer:</h2>
+			<p>
+			If you love your downloadees, you can configure your server to allow M2M to access them directly,
+			instead of forcing people to use their browsers for SAMBA linking. This isn't much of an improvement
+			for those people searching on a Mac or Unix box - those OS's handle samba links sanely.</p>
+			<p>It <em>is</em> a huge improvement for Windows users, who previously had to navigate to files 
+			manually in their explorers. Let me tell you, that is a pain.</p>
+			<p>Direct serving allows everybody to download through their browsers, rather than samba, using HTTP
+			requests.</p>
+		</div>
+	</article>
+	<article>
+		<header>
+			<h1> How do I set up direct serving?</h1>
+		</header>
+		<div class="faqResponse">
+			<h2>Short Answer:</h2><p>Depends on your server-set up.</p>
+			<h2>Long Answer:</h2>
+			<p>
+			</p>
+		</div>
+	</article>
 </div>
 
 {% endblock %}

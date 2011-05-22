@@ -102,3 +102,11 @@ def about(request,typeof='m2m'):
                                 'section':'about',
 
                                 },context_instance=RequestContext(request))
+								
+
+def serviceTerms(request):
+
+	return render_to_response('faq/tos.html',
+							{
+							},
+							)
