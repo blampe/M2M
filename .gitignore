@@ -1,2 +1,5 @@
 site-packages
-*/*.pyc
+m2m/*.pyc
+m2m/*/*.pyc
+m2m/*/*/*.pyc
+m2m/*/*/*/*.pyc
