@@ -1,7 +1,7 @@
 # Django settings for m2m project.
 
  
-DEBUG = False 
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -64,7 +64,7 @@ MEDIA_URL = ''
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/static/"
-STATICFILES_ROOT = '/home/haak/django_projects/m2m/media/'
+STATICFILES_ROOT = '/home/haak/M2M/m2m/media/'
 
 # URL that handles the static files served from STATICFILES_ROOT.
 # Example: "http://static.lawrence.com/", "http://example.com/static/"
@@ -123,7 +123,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     
-    "/home/haak/django_projects/m2m/templates/",
+    "/home/haak/M2M/m2m/templates/",
     "C:/Users/haak/M2M/m2m/templates/",
     
 )
@@ -151,6 +151,7 @@ INSTALLED_APPS = (
      'requests',
      'browseNet',
      'stats',
+	 'faq',
      'problems',
      'aprilfools',
      'basic.blog',

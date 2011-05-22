@@ -9,7 +9,9 @@ from datetime import datetime
 urlpatterns = patterns('',
     # Example:
     # (r'^m2m/', include('m2m.foo.urls')),
-    
+	(r'^tos', 'faq.views.serviceTerms'),
+	(r'^dmca', 'faq.views.dmca'),
+	(r'^privacy.html', 'faq.views.privacy'),    
     #(r'^', 'problems.views.sitewide'), # for maintenance, etc
     
     (r'^monkeybutter$', 'search.views.test'),
@@ -34,6 +36,13 @@ urlpatterns = patterns('',
     (r'^stats', 'problems.views.stats'), # for maintenance, etc
     (r'^stats/', include('stats.urls')),
 
+	(r'^faq&', 'faq.views.basic'),
+	(r'^faq/', include('faq.urls')),
+	
+
+	
+    (r'^about/m2m$','faq.views.about',{'typeof':'m2m'}),
+    
     # Uncomment the admin/doc line below to enable admin documentation:
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

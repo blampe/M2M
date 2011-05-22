@@ -1,0 +1,18 @@
+upstream backend {
+	server 127.0.0.1:8080;
+}
+
+server {
+	listen 80;
+	server_name localaccess;
+	access_log /home/haak/M2M/m2m/logs/nginx_access.log;
+	error_log /home/haak/M2M/m2m/logs/nginx_error.log;
+	location / {
+		proxy_pass http://backend;
+		include /etc/nginx/proxy.conf;
+	}
+	location /media/ {
+		root /home/haak/M2M/m2m/;
+	}
+}
+
