@@ -21,14 +21,14 @@ $
             <tr>
                 <td class="info" width="2.5%"> </td>
                 <td class="info" width="72%" align="left">
-                    <a href="/results/?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == 'Name'%}-Name{%else%}Name{%endif%}&mode={{mode}}&type={{params.type}}">
+                    <a href="{% url search.views.results %}?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == 'Name'%}-Name{%else%}Name{%endif%}&mode={{mode}}&type={{params.type}}">
                         File Name
                         {%if params.order == 'Name'%}<img src="/media/images/asc.gif"/>
                         {%else%}{%if params.order == '-Name'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
                     </a>
                 </td>
                 <td class="info" width="9%">
-                    <a href="/results/?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == '-FileSize'%}FileSize{%else%}-FileSize{%endif%}&mode={{mode}}&type={{params.type}}">
+                    <a href="{% url search.views.results %}?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == '-FileSize'%}FileSize{%else%}-FileSize{%endif%}&mode={{mode}}&type={{params.type}}">
                         Size
                         {%if params.order == 'FileSize'%}<img src="/media/images/asc.gif"/>
                         {%else%}{%if params.order == '-FileSize'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
@@ -36,14 +36,14 @@ $
                 </td>
                 
                 <td class="info" width="7%" align="center">
-                    <a href="/results/?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == '-DateAdded'%}DateAdded{%else%}-DateAdded{%endif%}&mode={{mode}}&type={{params.type}}">
+                    <a href="{% url search.views.results %}?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == '-DateAdded'%}DateAdded{%else%}-DateAdded{%endif%}&mode={{mode}}&type={{params.type}}">
                         Date
                         {%if params.order == '-DateAdded'%}<img src="/media/images/asc.gif"/>
                         {%else%}{%if params.order == 'DateAdded'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
                     </a>
                 </td>
                 <td class="info" width="11%" align="left" style="padding-left:10px;">
-                    <a href="/results/?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == 'HostName'%}-HostName{%else%}HostName{%endif%}&mode={{mode}}&type={{params.type}}">
+                    <a href="{% url search.views.results %}?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == 'HostName'%}-HostName{%else%}HostName{%endif%}&mode={{mode}}&type={{params.type}}">
                         {%if params.order == 'HostName'%}<img src="/media/images/asc.gif"/>
                         {%else%}{%if params.order == '-HostName'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
                         Host
@@ -114,19 +114,19 @@ $
                     </tr>
                     <tr>
                         <td>
-                            <a href="/results/{{prev}}/?q={{q}}&optionsUp={{optionsUp}}&mode={{mode}}&order={{params.order}}&type={{params.type}}">Prev</a>
+                            <a href="{% url search.views.results %}{{prev}}/?q={{q}}&optionsUp={{optionsUp}}&mode={{mode}}&order={{params.order}}&type={{params.type}}">Prev</a>
                         </td>
                         {% for number in paginator %}
                             <td>
                                 {% if number == page%}
                                     {{number}}
                                 {%else%}
-								<a href="/results/{{number}}/?q={{q}}&optionsUp={{optionsUp}}&mode={{mode}}&order={{params.order}}&type={{params.type}}">{{number}}</a>
+								<a href="{% url search.views.results %}{{number}}/?q={{q}}&optionsUp={{optionsUp}}&mode={{mode}}&order={{params.order}}&type={{params.type}}">{{number}}</a>
                                 {%endif%}
                             </td>
                         {% endfor%}
                         <td align="right">
-                            <a href="/results/{{next}}/?q={{q}}&optionsUp={{optionsUp}}&mode={{mode}}&order={{params.order}}&type={{params.type}}">Next</a>
+                            <a href="{% url search.views.results %}{{next}}/?q={{q}}&optionsUp={{optionsUp}}&mode={{mode}}&order={{params.order}}&type={{params.type}}">Next</a>
                         </td>
                     </tr>
                 </table>

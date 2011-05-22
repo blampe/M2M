@@ -522,6 +522,18 @@ def results(request,page='1'):
                                 'page': 'WTF',
                               },)
     
+
+def movies(request, page="q"):
+
+    if page == "q":
+        return render_to_response('base_page.html',
+                                {
+                                    'title':"M2M - Movies",
+                                    'search':'current',
+                                    'movies':'current',
+                                },)
+                                    
+
 # are you in tears?
 # call me, that i might bathe in them.
 # 703 - 943 - 9385
