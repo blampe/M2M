@@ -12,12 +12,14 @@ class FAQForm(forms.Form):
     required_css_class = 'required'
     
     # just for fun, placeholder questions
-    questions = ['Why are you so handsome, M2M?', 
+    questions = ['I swear to god, if you spam me...']*5
+    questions += ['Why are you so handsome, M2M?', 
                 'Who\'s your daddy?', 
                 'How *you* doin\'?',
                 'Anyone for tea?',
                 'Fezzes are cool.',
-                'Are you sure about that?',]
+                'Are you sure about that?',
+                ]
     
     def __init__(self):
         super(FAQForm,self).__init__()
@@ -109,10 +111,10 @@ def serviceTerms(request):
     return render_to_response('faq/tos.html',
                             {'title':'M2M - Terms of Service'},
                             )
-							
+                            
 def dmca(request):
-	return render_to_response('404.html')
-	
+    return render_to_response('404.html')
+    
 def privacy(request):
 
-	return render_to_response('404.html')
+    return render_to_response('404.html')
