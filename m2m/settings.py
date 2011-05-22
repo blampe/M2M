@@ -1,7 +1,7 @@
 # Django settings for m2m project.
 
  
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -151,6 +151,7 @@ INSTALLED_APPS = (
      'requests',
      'browseNet',
      'stats',
+	 'faq',
      'problems',
      'aprilfools',
      'basic.blog',
