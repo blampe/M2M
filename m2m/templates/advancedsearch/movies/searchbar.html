@@ -1,0 +1,31 @@
+{% extends 'searchbar.html' %}
+
+{% block url %} {% url advancedsearch.views.movieSearch %} {% endblock %}
+
+{% block options%}
+    <select name="genre" TABINDEX = 2>
+        <option value="message" disabled="1">Genre: </option>
+        {% for genre in genres %}
+        <option value="{{genre.name}}" {% if params.genre != genre.name%}{%else%}selected="selected"{%endif%}>{{genre}}</option>
+        {%endfor%}
+    </select>
+    
+    <select name="cert">
+        <option value="message" disabled="1">Certification:</option>
+        {% for cert in certs %}
+        <option value="{{cert.cert}}" {% if params.cert != cert.cert %}{%else%}selected="selected"{%endif%}>{{cert}}</option>
+        {%endfor%}
+    </select>
+    
+    <select name="order">
+        <option value="message" disabled="1">Sort by...</option>
+        <option value="none" {% if params.order != 'none'%}{%else%}selected="selected"{%endif%}>No sorting</option>
+        <option  value="-FileSize" {% if params.order == '-DateAdded'%}selected="selected"{%endif%}>Date Added (D)</option>
+        <option  value="-FileSize" {% if params.order == 'DateAdded'%}selected="selected"{%endif%}>Date Added (A)</option>
+        <option  value="-FileSize" {% if params.order == 'rating'%}selected="selected"{%endif%}>Rating (A)</option>
+        <option  value="-FileSize" {% if params.order == '-rating'%}selected="selected"{%endif%}>Rating (D)</option>
+        <option  value="-FileSize" {% if params.order == 'rating'%}selected="selected"{%endif%}>Rating (A)</option>
+        <option  value="-FileSize" {% if params.order == '-popularity'%}selected="selected"{%endif%}>Popularity (D)</option>
+        <option  value="-FileSize" {% if params.order == 'popularity'%}selected="selected"{%endif%}>Popularity (A)</option>
+    </select>
+{% endblock %}

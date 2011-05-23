@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     (r'^$', 'search.views.index'),
     #(r'^?q=([a-zA-Z0-9]*)$','search.views.results' ),
     (r'^search/', include('search.urls')),
-    (r'^advanced/' include('advancedsearch.urls')),
+    (r'^advanced/', include('advancedsearch.urls')),
     
     #(r'^requests', 'problems.views.requests'), # for maintenance, etc
     (r'^requests/', include('requests.urls')),

@@ -1,4 +1,5 @@
-<form action="{% url search.views.results %}" method="GET" charset="UTF-8">
+<div style="text-align:center;">
+<form action="{%block url%}{% url search.views.results %}{%endblock%}" method="GET" charset="UTF-8">
 <div class="tablewrap" style="margin-left:25px;margin-right:25px">
     <div class = "info" style="padding:5px;width:auto" style="border:1px solid">
     <div id="searchbarActual" style="">
@@ -16,6 +17,7 @@
     </div>
 </div>
 <div style="{% if optionsUp == "1" %} visibility:visible;{%else%}visibility:hidden;{%endif%}margin-top:5px;" id="searchParams">
+    {%block options %}
     <select name="type" TABINDEX = 2>
         <option value="message" disabled="1">Type...</option>
         <option value="none" {% if params.type != '' and params.type != 'none'%}{%else%}selected="selected"{%endif%}>All</option>
@@ -24,6 +26,7 @@
         <option  value="software" {% if params.type == 'software'%}selected="selected"{%endif%}>Software</option>
         <option value="text" {% if params.type == 'text'%}selected="selected"{%endif%}>Text</option>
         <option  value="images" {% if params.type == 'images'%}selected="selected"{%endif%}>Images</option>
+        
     </select>
 
     <select name="mode" TABINDEX = 3>
@@ -45,6 +48,8 @@
         <option  value="HostName" {% if params.order == 'HostName'%}selected="selected"{%endif%}>Host (A)</option>
         <option  value="-HostName" {% if params.order == '-HostName'%}selected="selected"{%endif%}>Host (D)</option>
     </select>
+    {% endblock %}
     &nbsp;&nbsp;&nbsp;<br /> <br /> <br />
 </div>
 </form>
+</div>

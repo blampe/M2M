@@ -2,9 +2,9 @@ from django.db import models
 #from djangosphinx import SphinxSearch, SphinxRelation, SphinxQuerySet
 #import djangosphinx.apis.current as sphinxapi
 
-import re
 
-from advancedsearch.models import Movie
+
+from advancedsearch.models import Movie, Show, Music
 
 from browseNet.models import Host, Path
 
@@ -15,11 +15,13 @@ class File(models.Model):
     '''An indexed file on the Network'''
     
     id = models.IntegerField(primary_key=True, db_column='ID') # Field name made lowercase.
-    MIDs = models.ForeignKey(Movie, "ID")
+    MIDs = models.ForeignKey(Movie, related_name='files', null=True, on_delete=models.SET_NULL)
+    SIDs = models.ForeignKey(Show, null=True, related_name='files', on_delete=models.SET_NULL)
+    MuIDs = models.ForeignKey(Music, null=True,related_name='files', on_delete=models.SET_NULL)
     path = models.ForeignKey(Path,db_column='PID') # Field name made lowercase.
     filename = models.CharField(max_length=765, db_column='FileName') # Field name made lowercase.
     filenameend = models.CharField(max_length=12, db_column='FileNameEnd') # Field name made lowercase.
-    dateadded = models.IntegerField(db_column='DateAdded') # Field name made lowercase.
+    dateadded = models.DateTimeField(db_column='DateAdded') # Field name made lowercase.
     filesize = models.BigIntegerField(db_column='FileSize') # Field name made lowercase.
     filedate = models.DateTimeField(db_column='FileDate') # Field name made lowercase.
     indexed = models.NullBooleanField(null=True, db_column='Indexed', blank=True) # Field name made lowercase.
@@ -34,46 +36,11 @@ class File(models.Model):
     
     def __unicode__(self):
         #-*-coding:iso-8859-1-*-
-        return self.filename.encode('raw_unicode_escape').decode('utf-8')
+        return self.filename
     
     class Meta:
         db_table = u'file'
         
-
-
-class Show(models.Model):
-    ''' an episode of a tv show!'''
-    ID = models.IntegerField(primary_key=True)
-    FID = models.ManyToOneRel(File, "id")
-    season = models.IntegerField()
-    episode = models.IntegerField()
-    showName = models.CharField(max_length=100)
-    episodeName = models.CharField(max_length=100)
-    
-    #endings = super.videoEndings
-    
-    
-    @classmethod
-    def getFromFiles(cls):
-        ''' Imports things that are recognized as TV Shows from File table'''
-
-class Music(models.Model):
-    ''' Music file.'''
-    ID = models.IntegerField(primary_key=True)
-    FID = models.ManyToOneRel(File, "id")
-    artist = models.CharField(max_length=100)
-    album =  models.CharField(max_length=100)
-    trackName = models.CharField(max_length=100)
-    genre = models.CharField(max_length=100)
-    time = models.TimeField()
-    
-    #endings = super.audioEndings
-    
-    @classmethod
-    def getFromFiles(cls):
-        ''' Imports things that are recognized as Music from File table'''
-
-
 class History(models.Model):
     uid = models.IntegerField(db_column='UID') # Field name made lowercase.
     position = models.IntegerField(db_column='Position') # Field name made lowercase.
