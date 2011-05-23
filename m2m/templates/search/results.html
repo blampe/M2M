@@ -18,16 +18,16 @@ $
         <table>
             {# Table Headings #}
             <thead>
-            <tr>
-                <td class="info" width="2.5%"> </td>
-                <td class="info" width="72%" align="left">
+            <tr class="info">
+                <td width="2.5%"> </td>
+                <td width="72%" align="left">
                     <a href="{% url search.views.results %}?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == 'Name'%}-Name{%else%}Name{%endif%}&mode={{mode}}&type={{params.type}}">
                         File Name
                         {%if params.order == 'Name'%}<img src="/media/images/asc.gif"/>
                         {%else%}{%if params.order == '-Name'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
                     </a>
                 </td>
-                <td class="info" width="9%">
+                <td width="9%">
                     <a href="{% url search.views.results %}?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == '-FileSize'%}FileSize{%else%}-FileSize{%endif%}&mode={{mode}}&type={{params.type}}">
                         Size
                         {%if params.order == 'FileSize'%}<img src="/media/images/asc.gif"/>
@@ -35,14 +35,14 @@ $
                     </a>
                 </td>
                 
-                <td class="info" width="7%" align="center">
+                <td width="7%" align="center">
                     <a href="{% url search.views.results %}?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == '-DateAdded'%}DateAdded{%else%}-DateAdded{%endif%}&mode={{mode}}&type={{params.type}}">
                         Date
                         {%if params.order == '-DateAdded'%}<img src="/media/images/asc.gif"/>
                         {%else%}{%if params.order == 'DateAdded'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
                     </a>
                 </td>
-                <td class="info" width="11%" align="left" style="padding-left:10px;">
+                <td width="11%" align="left" style="padding-left:10px;">
                     <a href="{% url search.views.results %}?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == 'HostName'%}-HostName{%else%}HostName{%endif%}&mode={{mode}}&type={{params.type}}">
                         {%if params.order == 'HostName'%}<img src="/media/images/asc.gif"/>
                         {%else%}{%if params.order == '-HostName'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}

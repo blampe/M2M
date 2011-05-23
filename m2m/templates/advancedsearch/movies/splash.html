@@ -6,13 +6,67 @@
 {% include 'advancedsearch/movies/searchbar.html' %}
 {% endblock %}
 
+{% block stylin %}
+<style>
+.scrollable{
+    position:relative;
+	overflow:hidden;
+	width: 100%;
+    height:400px;
+    max-height: 400px;
+}
+
+.scrollable .items {
+	/* this cannot be too large */
+	width:20000em;
+	position:absolute;
+}
+.items div {
+	float:left;
+}
+
+</style>
+{% endblock %}
+{% block scriptin %}
+<script>
+$(function() {
+
+	// initialize scrollable
+	$(".scrollable").scrollable({circular:true,mousewheel:true}).autoscroll({autoplay:true,interval:5000});
+
+});
+</script>
+{% endblock %}
 {% block extraContent %}
 <h2>Latest movies on the network:</h2>
-<div id="latestmovies">
+<a class='prev browse left'></a>
+<div id="latestmovies" class='scrollable'>
+ <div class='items'>
 {% for movie in latestMovies %}
+{% if forloop.counter == 1 %}
+<div>
+{%endif%}
+{% if forloop.counter == 5 or forloop.counter == 9%}
+</div><div>
+{% endif %}
 <a href="{% url advancedsearch.views.movieDetail movie.id%}">
     <img style="margin-left: 14px;margin-top:10px;" class="splashposter" src="{{movie.poster}}" alt="{{movie}}" title="{{movie.id}}"/>
 </a>
-{% endfor %}
+{% if forloop.last%}
 </div>
+{% endif %}
+{% endfor %}
+</div></div>
+<a class='next browse right'></a>
+{% endblock %}
+
+{% block endContent %}
+
+<div id="image_wrap">
+
+	<!-- Initially the image is a simple 1x1 pixel transparent GIF -->
+	<img src="http://static.flowplayer.org/tools/img/blank.gif" width="500" height="375" />
+
+</div>
+
 {% endblock %}

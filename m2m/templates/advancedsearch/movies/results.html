@@ -1,7 +1,6 @@
 {% extends 'advancedsearch/movies/splash.html' %}
 
 {% block scriptin%}
-<script src="http://cdn.jquerytools.org/1.2.5/jquery.tools.min.js"></script>
 <script>
 /*
 function toggleThumbs(){
@@ -16,10 +15,10 @@ function toggleThumbs(){
 */
 $(document).ready(function(){
     $('.moviename').tooltip({
-                            effect:'fade',
                             delay:0,
                             position:"center left",
-                            offset:[-285,-155]
+                            relative:true,
+                            offset:[0,-45]
                             });
     //toggleThumbs();
 });
@@ -29,6 +28,7 @@ $(document).ready(function(){
 <style>
 .tooltip {
     display: none;
+    background-color:white;
 }
 </style>
 {% endblock %}
@@ -41,14 +41,14 @@ $(document).ready(function(){
 <div style="text-align:center;">{{page}}</div><br/><br />
 <div class='tablewrap'>
 <table>
-<tr class="info"><td class="info">Name</td><td class="info" align="right">Runtime</td></tr>
+<tr class="info"><td>Name</td><td align="right">Runtime</td></tr>
 {% for movie in object_list %}
 <tr class="{%cycle 'darkrow' ''%}" style="max-height:1em;">
     
     <td valign="top">
         <a class='moviename'id="{{movie.id}}" href="{%url advancedsearch.views.movieDetail movie.id%}">{{movie}}</a>
         <div style="display:none;" class="tooltip" id="{{movie.id}}t">
-            <img valign="top" class="thumb" src="{{movie.thumb}}"/>
+            <img valign="top" class="poster" src="{{movie.poster}}"/>
         </div>
     </td>
     <td valign="top" align="right">{{movie.runtime}}</td>

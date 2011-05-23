@@ -221,15 +221,15 @@ function extraRequestHandler(){
 
 {% if openReq %}
     <script>
-        $(function(){
+        $(document).ready(
             
-            $("#requester :input[title]").tooltip({
+            $("form :input[title]").tooltip({
                 position:"center",
                 offset: [-2,10],
                 effect: "fade",
                 opacity: 0.7
             });
-        });
+        );
         
     </script>
     

@@ -28,25 +28,25 @@
     {% endif %}
 <div class="tablewrap">
     <table>
-        <tr>
-            <td class="info">{# column for isOnline gif #}</td>
-            <td class="info">
+        <tr class="info">
+            <td >{# column for isOnline gif #}</td>
+            <td >
                 {% if ordering != 'hostname'%}<a href="{% url browseNet.views.listAll 1%}?order=hostname">{%endif%}
                 Host</a></td>
-            <td class="info">
+            <td >
                 {% if ordering != '-workgroup'%}<a href="{% url browseNet.views.listAll 1%}?order=-workgroup">{%endif%}
                 Workgroup</a></td>
-            <td class="info" align="">
+            <td  align="">
                 {% if ordering != 'hid__totalfilesize'%}<a href="{% url browseNet.views.listAll 1%}?order=hid__totalfilesize">{%endif%}
                 Size</a></td>
-            <td class="info" align="center">
+            <td  align="center">
                 {% if ordering != '-hid__lastscan'%}<a href="{% url browseNet.views.listAll 1%}?order=-hid__lastscan">{%endif%}
                 Last Crawl</a></td>
-            <td class="info" align="center">
+            <td  align="center">
                 Action</td>
-            <td class="info">
+            <td >
                 Share</td>
-            <td class="info" align="right">
+            <td  align="right">
                 Size</td>
         </tr>
         

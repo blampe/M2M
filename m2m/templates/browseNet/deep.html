@@ -17,10 +17,10 @@ Browsing <strong><a href="{% url browseNet.views.deepBrowse 'H' host.hid%}">{{ho
 <div class="tablewrap">
 <table style="width:100%">
     {%if folderList%}
-        <tr>
-            <td class="info" style="width:60%"> Directory Name </td>
-            <td class="info" style="text-align:right;"> Size </td>
-            <td class="info" style="text-align:right;"> File Date</td>
+        <tr class="info">
+            <td  style="width:60%"> Directory Name </td>
+            <td  style="text-align:right;"> Size </td>
+            <td  style="text-align:right;"> File Date</td>
         </tr>
         {% for folder in folderList|all:ordering%}
             <tr class="{%cycle '' 'darkrow'%}">
@@ -32,10 +32,10 @@ Browsing <strong><a href="{% url browseNet.views.deepBrowse 'H' host.hid%}">{{ho
     {%endif%}
 
     {%if fileList %}
-        <tr>
-            <td class="info" style="width:60%"> File Name </td>
-            <td class="info" style="text-align:right;"> Size </td>
-            <td class="info" style="text-align:right;"> File Date </td>
+        <tr class="info">
+            <td  style="width:60%"> File Name </td>
+            <td  style="text-align:right;"> Size </td>
+            <td  style="text-align:right;"> File Date </td>
         </tr>
         {% for file in fileList|all:ordering %}
             <tr class="{%cycle '' 'darkrow' %}">

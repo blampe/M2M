@@ -24,8 +24,9 @@ a:link{
     position:relative;
 }
 
-td.info {
+tr.info td {
     background-image:url(/media/images/table_grad.png);
+    font-weight:bold;
 }
 
 div.info {
