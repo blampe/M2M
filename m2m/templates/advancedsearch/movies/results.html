@@ -38,6 +38,7 @@ $(document).ready(function(){
 {%endfor%}
 {% endblock %}
 {% block content %}
+{% if object_list %}
 <div style="text-align:center;">{{page}}</div><br/><br />
 <div class='tablewrap'>
 <table>
@@ -70,6 +71,13 @@ $(document).ready(function(){
     <a href="{%url advancedsearch.views.movieSearch page.next_page_number %}">Next</a>
 {% endif %}    
 </span>
+
+
+{% else %}
+
+<div style="text-align:center;">Sorry, we don't have anything like that. Why don't you make a <a href="{%url requests.views.open %}">request</a>?</div>
+
+{% endif %}
 {% endblock %}
 
 {% block extraContent %}
