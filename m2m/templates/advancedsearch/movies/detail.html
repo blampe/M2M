@@ -1,0 +1,55 @@
+{% extends 'advancedsearch/movies/splash.html'%}
+{% load search_extras %}
+{% block title %} M2M - {{movie}} {%endblock %}
+
+{% block content %}<div style="display:block">
+<img id='poster' style='float:left;margin-right:25px;' src="{{movie.poster}}"/><h1><a href="{{movie.url}}">{{movie}}</a></h1>
+<h3>{{movie.rating}}/10</h3>
+<div style="display:inline;">Directed by {{movie.director}}<br />
+
+Rated {% if movie.cert.cert == "None" %} NR {%else%}{{movie.cert}}{%endif%}<br />
+Released {{movie.released}}<br />
+
+<p id="overview">
+ {{movie.overview}}
+</p>
+Genres:
+{% for genre in movie.genres.all %}
+{{genre}}{% if forloop.last %}{%else%}, {%endif%}
+{% endfor %}
+
+</div>
+</div>
+{% endblock %}
+
+{%block extraContent %}
+{% for file in movie.files.all %}
+<div style="display:block">
+{%if file.path.hid.servesDirect %}<a href="{{file|makeLink:'True'}}" title="direct download!">
+                        <img src="/media/images/bluearrowdown3.png" class="directLink"/>
+                        </a>
+    {%endif%}
+    <a href="{{file|makeLink}}"
+       title="{{file}}"
+       class="fileLink" rel="nofollow">{{file}}</a> 
+    {% with file|host as host %}
+        <a href="smb://{{host}}">{{host.smb}}</a>
+    {% endwith %} 
+       {% with file|size as size %}
+    {{size|sizeToReadable}}
+    {% endwith %}
+    {% if file.goodfile == 1 %}
+    <img valign="top" src="/media/images/goodfile.gif"/>{%else%}
+    {% if file.goodfile == 0%}
+        <img valign='top' src="/media/images/badfile.gif"/>
+    {%else%}
+        <img valign='top' src="/media/images/unclearfile.gif"/>
+    {%endif%}
+    {%endif%}<br />
+{% endfor %}
+
+</div>
+
+{#<img id='backdrop' style="width:100%;margin-top:25px;" src="{{movie.backdrop}}" valign="top"/>#}
+
+{% endblock %}

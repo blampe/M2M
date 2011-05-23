@@ -2,10 +2,17 @@
 
 {% block title %} M2M - Movies {% endblock %}
 
-{% block content %}
+{% block searchbar %}
 {% include 'advancedsearch/movies/searchbar.html' %}
 {% endblock %}
 
 {% block extraContent %}
-
+<h2>Latest movies on the network:</h2>
+<div id="latestmovies">
+{% for movie in latestMovies %}
+<a href="{% url advancedsearch.views.movieDetail movie.id%}">
+    <img style="margin-left: 14px;margin-top:10px;" class="splashposter" src="{{movie.poster}}" alt="{{movie}}" title="{{movie.id}}"/>
+</a>
+{% endfor %}
+</div>
 {% endblock %}

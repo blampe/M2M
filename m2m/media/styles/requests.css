@@ -77,14 +77,17 @@ div#extraForm{
 	border-top: none;
 	width:658px;
 	left:50%;
-	margin: 0 0 0 -329px;
+	margin: 0 0 0 -329px;    
+    padding-bottom: 15px;
 	position: fixed;
 	background-color:white;
 	-webkit-border-radius: 0 0 5px 0;
 	display: none;
 	z-index:100;
 }
+div#extraform table{
 
+}
 #requestForm form div{
     width:200px;
 }

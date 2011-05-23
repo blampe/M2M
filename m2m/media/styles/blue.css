@@ -21,6 +21,7 @@ a:link{
 
 #footer {
     background-image:url(/media/images/bottom_grad.png);
+    position:relative;
 }
 
 td.info {
@@ -29,6 +30,12 @@ td.info {
 
 div.info {
     background-image:url(/media/images/table_grad.png);
+}
+
+#footer > * {
+    position: absolute;
+    bottom:-20px;
+    right: 0;
 }
 
 #footer a:link {

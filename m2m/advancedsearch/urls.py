@@ -5,9 +5,10 @@ from django.views.generic import DetailView, ListView
 
 urlpatterns = patterns('advancedsearch.views',
     (r'^$', 'splash'),
-    (r'^movies$', 'movieSplash'),
-    (r'^movies/results', 'movieSearch'),
+    (r'^movies/?$', 'movieSplash'),
+    (r'^movies/results/?$', 'movieSearch'),
     (r'^movies/results/(?P<page>\d+)','movieSearch'),
+    (r'^movies/details/(?P<id>\d+)','movieDetail'),
     
     (r'^shows$', 'showSplash'),
     

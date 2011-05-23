@@ -9,7 +9,6 @@ from datetime import datetime
 import re #regexp shit
 
 from browseNet.models import Smb
-from requests.models import Comments
 
 from basic.blog.templatetags.blog import formatBody
 

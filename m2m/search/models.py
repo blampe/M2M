@@ -25,7 +25,7 @@ class File(models.Model):
     filesize = models.BigIntegerField(db_column='FileSize') # Field name made lowercase.
     filedate = models.DateTimeField(db_column='FileDate') # Field name made lowercase.
     indexed = models.NullBooleanField(null=True, db_column='Indexed', blank=True) # Field name made lowercase.
-    
+    goodfile = models.IntegerField(default=1)
     objects = models.Manager()
     
     videoEndings    = ".avi|.mpg|.mp4|.m4v|.mov|.mpeg|.wmv|.mkv|.divx|.flv|.m2ts"

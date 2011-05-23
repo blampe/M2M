@@ -1,0 +1,76 @@
+{% extends 'advancedsearch/movies/splash.html' %}
+
+{% block scriptin%}
+<script src="http://cdn.jquerytools.org/1.2.5/jquery.tools.min.js"></script>
+<script>
+/*
+function toggleThumbs(){
+    $('.moviename').hover(function(){
+        $('#'+$(this).attr('id')+'t').fadeIn('slow');
+        return false;
+    },function(){
+        $('#'+$(this).attr('id')+'t').fadeOut('slow');
+        return false;
+    });
+}
+*/
+$(document).ready(function(){
+    $('.moviename').tooltip({
+                            effect:'fade',
+                            delay:0,
+                            position:"center left",
+                            offset:[-285,-155]
+                            });
+    //toggleThumbs();
+});
+</script>
+{%endblock%}
+{% block styling %}
+<style>
+.tooltip {
+    display: none;
+}
+</style>
+{% endblock %}
+{% block externalContent %}
+{% for movie in object_list %}
+
+{%endfor%}
+{% endblock %}
+{% block content %}
+<div style="text-align:center;">{{page}}</div><br/><br />
+<div class='tablewrap'>
+<table>
+<tr class="info"><td class="info">Name</td><td class="info" align="right">Runtime</td></tr>
+{% for movie in object_list %}
+<tr class="{%cycle 'darkrow' ''%}" style="max-height:1em;">
+    
+    <td valign="top">
+        <a class='moviename'id="{{movie.id}}" href="{%url advancedsearch.views.movieDetail movie.id%}">{{movie}}</a>
+        <div style="display:none;" class="tooltip" id="{{movie.id}}t">
+            <img valign="top" class="thumb" src="{{movie.thumb}}"/>
+        </div>
+    </td>
+    <td valign="top" align="right">{{movie.runtime}}</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+<br>
+<div style="text-align:center;">
+{%if page.has_previous %}
+    <a href="{%url advancedsearch.views.movieSearch page.previous_page_number %}">Prev</a>
+{%endif %}
+{% for pager in paginator.page_range %}
+	{% if pager != page.number %}<a href="{% url advancedsearch.views.movieSearch pager %}">{{pager}}</a>
+	{% else %} {{pager}}
+	{% endif %}
+{% endfor %}
+{% if page.has_next %}
+    <a href="{%url advancedsearch.views.movieSearch page.next_page_number %}">Next</a>
+{% endif %}    
+</span>
+{% endblock %}
+
+{% block extraContent %}
+{% endblock %}

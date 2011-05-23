@@ -1,4 +1,4 @@
-from requests.models import Comment, Comments
+from requests.models import Comment
 from django.contrib import admin
 
 
@@ -31,20 +31,6 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ['request','completingServer']
     
     date_hierarchy = 'requestTime'
-    
-    actions = [markDeleted]
-
-class CommentsAdmin(admin.ModelAdmin):
-    
-    list_display = (
-                    'cid',
-                    'comment',
-                    'completedtime',
-                    )
-    
-    list_filter = [
-                   'completed',
-                  ]
     
     actions = [markDeleted]
 
