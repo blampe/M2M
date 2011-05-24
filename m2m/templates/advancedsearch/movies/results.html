@@ -24,52 +24,83 @@ $(document).ready(function(){
 });
 </script>
 {%endblock%}
-{% block styling %}
+{% block stylin %}
 <style>
 .tooltip {
     display: none;
-    background-color:white;
+    
+    border: none;
+    padding: 0px;
+    /* this is a hack */
+    background-color:#1E3042;
 }
+
 </style>
 {% endblock %}
-{% block externalContent %}
-{% for movie in object_list %}
 
-{%endfor%}
-{% endblock %}
 {% block content %}
+{% if object_list %}
 <div style="text-align:center;">{{page}}</div><br/><br />
 <div class='tablewrap'>
 <table>
-<tr class="info"><td>Name</td><td align="right">Runtime</td></tr>
+<tr class="info">
+    <td>
+        <a href="{%url advancedsearch.views.movieSearch page.number %}?q={{q}}&order={%spaceless%}
+        {%if params.order == 'name'%}-name{%else%}{%if params.order == '-name'%}{%else%}name{%endif%}{%endif%}{%for key,value in params.items%}{%if key != 'order' %}&{{key}}={{value}}{%endif%}{%endfor%}{%endspaceless%}">
+            Name</a>
+    </td>
+    <td align="right">
+        <a href="{%url advancedsearch.views.movieSearch page.number %}?q={{q}}&order={%spaceless%}
+        {%if params.order == 'rating'%}-rating{%else%}{%if params.order == '-rating'%}{%else%}rating{%endif%}{%endif%}{%for key,value in params.items%}{%if key != 'order' %}&{{key}}={{value}}{%endif%}{%endfor%}{%endspaceless%}">
+        Rating/10
+        </a>
+    </td>
+    <td align="right">
+        <a href="{%url advancedsearch.views.movieSearch page.number %}?q={{q}}&order={%spaceless%}
+        {%if params.order == 'runtime'%}-runtime{%else%}{%if params.order == '-runtime'%}{%else%}runtime{%endif%}{%endif%}{%for key,value in params.items%}{%if key != 'order' %}&{{key}}={{value}}{%endif%}{%endfor%}{%endspaceless%}">
+        Runtime
+        </a>
+    </td>
+</tr>
 {% for movie in object_list %}
 <tr class="{%cycle 'darkrow' ''%}" style="max-height:1em;">
     
     <td valign="top">
         <a class='moviename'id="{{movie.id}}" href="{%url advancedsearch.views.movieDetail movie.id%}">{{movie}}</a>
         <div style="display:none;" class="tooltip" id="{{movie.id}}t">
-            <img valign="top" class="poster" src="{{movie.poster}}"/>
+            <img class="poster" src="{{movie.poster}}"/>
         </div>
     </td>
+    <td align="right"> {{movie.rating}} </td>
     <td valign="top" align="right">{{movie.runtime}}</td>
 </tr>
 {% endfor %}
 </table>
 </div>
 <br>
-<div style="text-align:center;">
-{%if page.has_previous %}
-    <a href="{%url advancedsearch.views.movieSearch page.previous_page_number %}">Prev</a>
-{%endif %}
-{% for pager in paginator.page_range %}
-	{% if pager != page.number %}<a href="{% url advancedsearch.views.movieSearch pager %}">{{pager}}</a>
-	{% else %} {{pager}}
-	{% endif %}
-{% endfor %}
-{% if page.has_next %}
-    <a href="{%url advancedsearch.views.movieSearch page.next_page_number %}">Next</a>
-{% endif %}    
-</span>
+{% if paginator.count > 1 %}
+    <div style="text-align:center;">
+    {%if page.has_previous %}
+        <a href="{%url advancedsearch.views.movieSearch page.previous_page_number %}">Prev</a>
+    {%endif %}
+    {% for pager in paginator.page_range %}
+        {% if pager != page.number %}<a href="{% url advancedsearch.views.movieSearch pager %}">{{pager}}</a>
+        {% else %} {{pager}}
+        {% endif %}
+    {% endfor %}
+    {% if page.has_next %}
+        <a href="{%url advancedsearch.views.movieSearch page.next_page_number %}">Next</a>
+    {% endif %}    
+    </div>
+{% endif %}
+
+
+
+{% else %}
+
+<div style="text-align:center;">Sorry, we don't have anything like that. Why don't you make a <a href="{%url requests.views.open %}">request</a>?</div>
+
+{% endif %}
 {% endblock %}
 
 {% block extraContent %}

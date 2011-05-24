@@ -126,8 +126,10 @@ def size(object):
 ################################################################
 #  Handler for {% logo %} tag
 #
+from django.core.urlresolvers import reverse
 import random
 class LogoNode(template.Node):
+    
     mChoices = ['Mmath'] * 10 # make it more likely to see the old M's
     mChoices += ['Moldenglish',
                 'Mvivaldi',
@@ -135,25 +137,54 @@ class LogoNode(template.Node):
                 'Mmagneto']
     arrows = ['Arrowmath'] * 10 # also the old arrow
     
-    def __init__(self):
+    styling = "<a class='logolink' href=\"%s\">\
+                <div id='modlogo' style=\"\
+                              position:relative;\
+                              display: inline;\
+                              margin-left:3px;\
+                              line-height:.8em;\
+                              font-weight:bold;\
+                              font-size:8em;\
+                              \">%s</div>\
+                </a>"
+    
+    extras = {
+        'movies':styling % (reverse('advancedsearch.views.movieSplash'),'ovies'),
+        'music': styling % (reverse('advancedsearch.views.musicSplash'),'usic'),
+        'shows': styling % (reverse('advancedsearch.views.showSplash'),'TV'),
+        'None':"",
+    }
+    
+    def __init__(self, module):
+        
         self.left = random.choice(self.mChoices)
         self.right = random.choice(self.mChoices)
         self.arrow = random.choice(self.arrows)
+        if module not in self.extras:
+            raise ValueError("logo tag could not recognize module: %r" % module)
+        else:
+            self.extra = self.extras[module]
     def render(self, context):
-        return "<img id='leftlogo' src='/media/images/%(left)s.png'/>\
-                <img id='arrowlogo' src='/media/images/%(arrow)s.png'/>\
-                <img id='rightlogo' src='/media/images/%(right)s.png'/>" % {'left':self.left,
-                                                          'right':self.right,
-                                                          'arrow':self.arrow}
-    
+        try:
+            return "<a class='logolink' href=\"%(index)s\">\
+                    <div style='display:inline;float:left;margin-left:30px;margin-right:px;'>\
+                        <img  id='leftlogo' src='/media/images/%(left)s.png'/>\
+                        <img  id='arrowlogo' src='/media/images/%(arrow)s.png'/>\
+                        <img  id='rightlogo' src='/media/images/%(right)s.png'/></div></a>%(extra)s" % {
+                                                                                    'left':self.left,
+                                                                                    'right':self.right,
+                                                                                    'arrow':self.arrow,
+                                                                                    'extra':self.extra,
+                                                                                    'index':reverse('search.views.index')
+                                                                                    }
+        except:
+            return '<span style="font-size:6em;">Logo Unavailable</span>'
 @register.tag(name="logo")
 def do_logo(parser,token):
     try:
-        if len(token.split_contents()) > 1:
-            raise template.TemplateSyntaxError("%r tag takes no arguments" % token.split_contents()[0:])
-        tag_name = token.split_contents()
+        tag_name, module = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError ("Something's up with the logo tag.")
-    return LogoNode()
+        raise template.TemplateSyntaxError ("%r tag requires an argument" % token.contents.split()[0])
+    return LogoNode(module)
 #
 ################################################################

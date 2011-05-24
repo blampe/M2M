@@ -147,16 +147,19 @@ div.info {
 
 #logoContainer {
     /*background-image: url(/media/images/m2m.gif);*/
-    background-height: 80px;
-    background-width: 423px;
+
     background-attachment: auto;
     background-repeat: no-repeat;
     background-position: bottom left;
-
+    
     height: 80px;
-    width: 500px;
-    margin-left:30px;
+ 
     padding-top:30px; /*55*/
+}
+
+#modlogo{
+    font: "Times New Roman",Georgia,Serif;
+
 }
 
 #leftlogo{

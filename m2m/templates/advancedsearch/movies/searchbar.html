@@ -22,13 +22,13 @@
     <select name="order">
         <option value="message" disabled="1">Sort by...</option>
         <option value="none" {% if params.order != 'none'%}{%else%}selected="selected"{%endif%}>No sorting</option>
-        <option  value="-Name" {% if params.order == '-Name'%}selected="selected"{%endif%}>Name (D)</option>
-        <option  value="Name" {% if params.order == 'Name'%}selected="selected"{%endif%}>Name (A)</option>
-        <option  value="-DateAdded" {% if params.order == '-DateAdded'%}selected="selected"{%endif%}>Date Added (D)</option>
-        <option  value="DateAdded" {% if params.order == 'DateAdded'%}selected="selected"{%endif%}>Date Added (A)</option>
-        <option  value="-Rating" {% if params.order == '-rating'%}selected="selected"{%endif%}>Rating (D)</option>
-        <option  value="Rating" {% if params.order == 'rating'%}selected="selected"{%endif%}>Rating (A)</option>
-        <option  value="-Popularity" {% if params.order == '-popularity'%}selected="selected"{%endif%}>Popularity (D)</option>
-        <option  value="Popularity" {% if params.order == 'popularity'%}selected="selected"{%endif%}>Popularity (A)</option>
+        <option  value="-name" {% if params.order == '-name'%}selected="selected"{%endif%}>Name (D)</option>
+        <option  value="name" {% if params.order == 'name'%}selected="selected"{%endif%}>Name (A)</option>
+        <option  value="-dateadded" {% if params.order == '-dateddded'%}selected="selected"{%endif%}>Date Added (D)</option>
+        <option  value="dateadded" {% if params.order == 'dateadded'%}selected="selected"{%endif%}>Date Added (A)</option>
+        <option  value="-rating" {% if params.order == '-rating'%}selected="selected"{%endif%}>Rating (D)</option>
+        <option  value="rating" {% if params.order == 'rating'%}selected="selected"{%endif%}>Rating (A)</option>
+        <option  value="-popularity" {% if params.order == '-popularity'%}selected="selected"{%endif%}>Popularity (D)</option>
+        <option  value="popularity" {% if params.order == 'popularity'%}selected="selected"{%endif%}>Popularity (A)</option>
     </select>
 {% endblock %}

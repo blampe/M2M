@@ -179,14 +179,14 @@ function extraRequestHandler(){
                     <strong>{{entry.completingServer|default:"Completer"}}'s Comment:</strong><br />
                     <p>{{entry.completerComment|toHTML}}</p>
                 {% endif %}
-                {% if openReq %}
+                {% if openReq or closedReq %}
                     <div class="likes">
                     
                     <form class="likeform" action="" id="{{entry.CID}}" method="POST">
                         {% csrf_token %}
                         <input type=hidden name="id" value="{{entry.CID}}"/>
                         <input type=hidden name="page" value="{{page}}"/>
-                        <em>{{entry.Likes}} like{{entry.Likes|pluralize}}</em>;
+                        <em>{{entry.Likes}} like{{entry.Likes|pluralize}}</em>{%endif%}{% if openReq %};
                         <button class="as_link" title="like this" type=" name="liker" onclick="doLike({{entry.CID}})"><strong><span>like this</span></strong></button>
                     </form>
                     

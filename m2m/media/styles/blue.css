@@ -48,6 +48,8 @@ div.info {
 	text-decoration: underline;
 }
 
+
+
 #pagelinks {
     font-weight: bold;
 }
@@ -85,10 +87,27 @@ a:hover, a:active{
 	text-decoration: underline;
 }
 
-img.directLink{
+a.logolink { text-decoration: none;}
 
+a.directLink:hover{
+    background-color: none;
+    
+    text-decoration: none;
+    width:25px;
+    height:30px;
 }
 
+a.directLink img{
+    vertical-align:middle;
+    }
+
+a.directLink div {
+    background-color: none;
+    
+    text-decoration: none;
+    width:25px;
+    height:30px;
+}
 #container {
     border-right: 8px solid #90E6F6; 
 	border-left: 8px solid #90E6F6;
