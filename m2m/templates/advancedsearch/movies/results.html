@@ -28,10 +28,11 @@ $(document).ready(function(){
 <style>
 .tooltip {
     display: none;
-    background-color:white;
+    
     border: none;
     padding: 0px;
-
+    /* this is a hack */
+    background-color:#1E3042;
 }
 
 </style>
@@ -77,19 +78,22 @@ $(document).ready(function(){
 </table>
 </div>
 <br>
-<div style="text-align:center;">
-{%if page.has_previous %}
-    <a href="{%url advancedsearch.views.movieSearch page.previous_page_number %}">Prev</a>
-{%endif %}
-{% for pager in paginator.page_range %}
-	{% if pager != page.number %}<a href="{% url advancedsearch.views.movieSearch pager %}">{{pager}}</a>
-	{% else %} {{pager}}
-	{% endif %}
-{% endfor %}
-{% if page.has_next %}
-    <a href="{%url advancedsearch.views.movieSearch page.next_page_number %}">Next</a>
-{% endif %}    
-</span>
+{% if paginator.count > 1 %}
+    <div style="text-align:center;">
+    {%if page.has_previous %}
+        <a href="{%url advancedsearch.views.movieSearch page.previous_page_number %}">Prev</a>
+    {%endif %}
+    {% for pager in paginator.page_range %}
+        {% if pager != page.number %}<a href="{% url advancedsearch.views.movieSearch pager %}">{{pager}}</a>
+        {% else %} {{pager}}
+        {% endif %}
+    {% endfor %}
+    {% if page.has_next %}
+        <a href="{%url advancedsearch.views.movieSearch page.next_page_number %}">Next</a>
+    {% endif %}    
+    </div>
+{% endif %}
+
 
 
 {% else %}

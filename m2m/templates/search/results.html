@@ -30,8 +30,8 @@ $
                 <td width="9%">
                     <a href="{% url search.views.results %}?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == '-FileSize'%}FileSize{%else%}-FileSize{%endif%}&mode={{mode}}&type={{params.type}}">
                         Size
-                        {%if params.order == 'FileSize'%}<img src="/media/images/asc.gif"/>
-                        {%else%}{%if params.order == '-FileSize'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
+                        {%if params.order == 'FileSize'%}<img src="/media/images/desc.gif"/>
+                        {%else%}{%if params.order == '-FileSize'%}<img src="/media/images/asc.gif"/>{%endif%}{%endif%}
                     </a>
                 </td>
                 

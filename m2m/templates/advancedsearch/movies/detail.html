@@ -1,5 +1,6 @@
 {% extends 'advancedsearch/movies/splash.html'%}
 {% load search_extras %}
+{% load delete from advancedsearch_extras %}
 {% block title %} M2M - {{movie}} {%endblock %}
 
 {% block scriptin %}
@@ -10,7 +11,9 @@
 
 {% endblock %}
 
-{% block content %}<div style="display:block">
+{% block content %}
+
+<div style="display:block">
 <img id='poster' style='float:left;margin-right:25px;' src="{{movie.poster}}"/><h1><a href="{{movie.url}}">{{movie}}</a></h1>
 <h3>{{movie.rating}}/10</h3>
 <div style="display:inline;">Directed by {{movie.director}}<br />
@@ -28,12 +31,13 @@ Genres:
 
 </div>
 </div>
+
 {% endblock %}
 
 {%block extraContent %}
 
 {% for file in movie.files.all %}
-<div style="display:block">
+
 {%if file.path.hid.servesDirect %}<a class="directLink" href="{{file|makeLink:'True'}}" title="direct download!">
                         <img valign="top" src="/media/images/arrowBlueDown2.png" width="15px" id="directImg"/>
                         </a>
@@ -55,10 +59,15 @@ Genres:
         <img valign='top' src="/media/images/unclearfile.gif"/>
     {%endif%}
     {%endif%}<br />
+{% empty %}
+{% delete Movie movie.id %}
+Sorry, this movie doesn't have any files - it has now been removed from our database.
 {% endfor %}
 
-</div>
 
+{% block endContent%}
+
+{% endblock %}
 {#<img id='backdrop' style="width:100%;margin-top:25px;" src="{{movie.backdrop}}" valign="top"/>#}
 
 {% endblock %}
