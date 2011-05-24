@@ -2,6 +2,14 @@
 {% load search_extras %}
 {% block title %} M2M - {{movie}} {%endblock %}
 
+{% block scriptin %}
+
+<script>
+
+</script>
+
+{% endblock %}
+
 {% block content %}<div style="display:block">
 <img id='poster' style='float:left;margin-right:25px;' src="{{movie.poster}}"/><h1><a href="{{movie.url}}">{{movie}}</a></h1>
 <h3>{{movie.rating}}/10</h3>
@@ -23,10 +31,11 @@ Genres:
 {% endblock %}
 
 {%block extraContent %}
+
 {% for file in movie.files.all %}
 <div style="display:block">
 {%if file.path.hid.servesDirect %}<a class="directLink" href="{{file|makeLink:'True'}}" title="direct download!">
-                        <img src="/media/images/bluearrowdown3.png" class="directLink"/>
+                        <img valign="top" src="/media/images/arrowBlueDown2.png" width="15px" id="directImg"/>
                         </a>
     {%endif%}
     <a href="{{file|makeLink}}"

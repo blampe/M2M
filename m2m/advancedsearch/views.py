@@ -96,7 +96,12 @@ def movieSearch(request, page=1):
     genres = [x.name for x in MovieGenre.objects.all()]
     certs = [x.cert for x in MovieCert.objects.all()]
     
-    allowedOrders = ['none','Name', '-Name','DateAdded','-DateAdded','Rating','-Rating',]
+    allowedOrders = ['none',
+            'name', '-name',
+            'dateadded','-dateadded',
+            'rating','-rating',
+            'popularity','-popularity',
+            'runtime','-runtime']
     
     ALLOWED_VALUES = {
         'genre':genres,
@@ -134,6 +139,9 @@ def movieSearch(request, page=1):
     if params['cert'] != 'all':
         movieList = movieList.filter(cert__cert=params['cert'])
     
+    if params['order'] != 'none':
+        movieList = movieList.order_by(params['order'],params['order'] if params['order'][0] != '-' else params['order'][1:])
+    
     try:
         optionsUp = '1' if request.GET['optionsUp'] == '1' else '0'
     except KeyError:
@@ -150,6 +158,7 @@ def movieSearch(request, page=1):
         'object_list':p.page(page+1).object_list,
         'page':p.page(page+1),
         'paginator':p,
+        'params':params,
         
         }    
     )
