@@ -25,7 +25,7 @@ Genres:
 {%block extraContent %}
 {% for file in movie.files.all %}
 <div style="display:block">
-{%if file.path.hid.servesDirect %}<a href="{{file|makeLink:'True'}}" title="direct download!">
+{%if file.path.hid.servesDirect %}<a class="directLink" href="{{file|makeLink:'True'}}" title="direct download!">
                         <img src="/media/images/bluearrowdown3.png" class="directLink"/>
                         </a>
     {%endif%}

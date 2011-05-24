@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load search_extras %}
+{% load logo from search_extras %}
 <html>
     <head>
         <title>{% block title %}{{title|default:"M2M"}}{%endblock%}</title>
@@ -41,11 +41,12 @@
         <div id="container">
             
             <header id="pageHeader"><!-- Start page header -->
-            {% block navigator %}
+            
                     <div id="logoContainer">
-                        <a href="{% url search.views.index %}">{% logo %}</a>
+                        {%block logohold%}{% logo None %}{%endblock %}
                     </div>
                     <div id="koi"></div>
+                    {% block navigator %}
                     <nav id="navcontainer"><!-- Start Navigation -->
                       <ul>
                         <li><a href="{% url search.views.index %}" id="search" rel="self" class="{{search|default:""}}">SEARCH</a></li>
