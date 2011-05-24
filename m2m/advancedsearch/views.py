@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404
+from django.db.models import Count
 
 from datetime import datetime
 
@@ -20,7 +21,8 @@ def movieSplash(request):
     genres = MovieGenre.objects.all()
     certs = MovieCert.objects.all()
     
-    latestMovies = Movie.objects.order_by('-dateadded')[:12]
+    # filter by date, don't show movies without files
+    latestMovies = Movie.objects.order_by('-dateadded').annotate(num_files=Count('files')).filter(num_files__gte=1)[:12]
     
     return render_to_response('advancedsearch/movies/splash.html',
         {
@@ -96,7 +98,12 @@ def movieSearch(request, page=1):
     genres = [x.name for x in MovieGenre.objects.all()]
     certs = [x.cert for x in MovieCert.objects.all()]
     
-    allowedOrders = ['none','Name', '-Name','DateAdded','-DateAdded','Rating','-Rating',]
+    allowedOrders = ['none',
+            'name', '-name',
+            'dateadded','-dateadded',
+            'rating','-rating',
+            'popularity','-popularity',
+            'runtime','-runtime']
     
     ALLOWED_VALUES = {
         'genre':genres,
@@ -122,8 +129,9 @@ def movieSearch(request, page=1):
         except KeyError:
             # some options weren't chosen - we set them here.
             params.update({param:defaults[param]})
-    
-    movieList = Movie.objects.all()
+            
+    # don't search movies without files - these will get cleared out of database later
+    movieList = Movie.objects.all().annotate(num_files=Count('files')).filter(num_files__gte=1)
     
     if q != "":
         movieList = movieList.filter(name__icontains=q)
@@ -133,6 +141,9 @@ def movieSearch(request, page=1):
     
     if params['cert'] != 'all':
         movieList = movieList.filter(cert__cert=params['cert'])
+    
+    if params['order'] != 'none':
+        movieList = movieList.order_by(params['order'],params['order'] if params['order'][0] != '-' else params['order'][1:])
     
     try:
         optionsUp = '1' if request.GET['optionsUp'] == '1' else '0'
@@ -150,6 +161,7 @@ def movieSearch(request, page=1):
         'object_list':p.page(page+1).object_list,
         'page':p.page(page+1),
         'paginator':p,
+        'params':params,
         
         }    
     )

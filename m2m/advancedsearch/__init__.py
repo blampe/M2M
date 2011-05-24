@@ -14,7 +14,7 @@ def writeComplaints(issues,filename='/home/haak/M2M/m2m/templates/issues.txt'):
     return
 
     
-def getMoviesFromFiles(count=0):
+def crawlForMovies(count=0):
     ''' Imports things that are recognized as Movies from File table'''
     from search.models import File
     # grab all video files from things with Movie in the path name,

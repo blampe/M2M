@@ -30,8 +30,8 @@ $
                 <td width="9%">
                     <a href="{% url search.views.results %}?q={{q}}&{% if optionsUp == '1'%}optionsUp=1&{%endif%}order={%if params.order == '-FileSize'%}FileSize{%else%}-FileSize{%endif%}&mode={{mode}}&type={{params.type}}">
                         Size
-                        {%if params.order == 'FileSize'%}<img src="/media/images/asc.gif"/>
-                        {%else%}{%if params.order == '-FileSize'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
+                        {%if params.order == 'FileSize'%}<img src="/media/images/desc.gif"/>
+                        {%else%}{%if params.order == '-FileSize'%}<img src="/media/images/asc.gif"/>{%endif%}{%endif%}
                     </a>
                 </td>
                 
@@ -65,8 +65,7 @@ $
                     </td>
                     <td>
                         {%if file.path.hid.servesDirect %}<a href="{{file|makeLink:'True'}}" title="direct download!">
-                        <img src="/media/images/bluearrowdown3.png" class="directLink"/>
-                        </a>
+                        <img src="/media/images/arrowBlueDown2.png" width="15px" id="directImg"/></a>
                         {%endif%}
                         <a href="{{file|makeLink}}"
                            title="{{file.oldname}}"
