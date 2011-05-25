@@ -6,6 +6,31 @@
 
 {% block content %}
 <h1>{{host}}</h1>
+{% if pset.badfileproblem_set.all %}
+These files have been marked as bad by users:
+{% endif %}
+<div class="tablewrap">
+<table width="80%">
+    <thead>
+        <tr class="info">
+            <td width="40%">Location</td>
+            <td>Filename</td>
+        </tr>
+    </thead>
+    
+    <tbody>
+    {% for problem in pset.badfileproblem_set.all %}
+    <tr class="{% cycle 'darkrow' '' %}">
+        <td><a href="{{problem.file|makeLink}}">{{problem.file.path}}</a></td>
+        <td> <strong>{{problem.file}}</strong></td>
+    </tr>
+    {% empty %}
+    <tr><td>No bad files known on {{host}}!</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
 {% if pset.dneproblem_set.all %}
 Could not match these against external databases, but probably should have been able to:<br/><br/>
 {%endif%}
@@ -30,16 +55,14 @@ Could not match these against external databases, but probably should have been 
     </tbody>
 </table>
 </div>
-{% endblock %}
 
-{% block extraContent %}
 {% if pset.savingproblem_set.all %}
 Could not save these, for some reason - probably not the server's fault.
 {% endif %}
 <div class="tablewrap">
 <table>
 {% for problem in pset.savingproblem_set.all %}
-<tr class="{% cycle 'darkrow' '' %}">
+<tr class="{% cycle 'darkrow' '' %}" >
 <td><a href="{{problem.file|makeLink}}">{{problem.file.path}}</a></td>
 <td><strong>{{problem.file}}</strong></td>
 </tr>
@@ -48,12 +71,11 @@ Could not save these, for some reason - probably not the server's fault.
 {% endfor %}
 </table>
 </div>
-{% endblock %}
 
-{% block endContent %}
 {% if pset.undefproblem_set.all %}
 Something's wrong with these files, but I can't tell what happened:
 {% endif %}
+<div class="tablewrap">
 <table>
 {% for problem in pset.undefproblem_set.all %}
 <tr class="{% cycle 'darkrow' '' %}">
@@ -61,8 +83,8 @@ Something's wrong with these files, but I can't tell what happened:
 <td>{{problem.file}}</td>
 </tr>
 {% empty %}
-<tr><td>No undefined issues for {{host}}!</td></tr>
+<tr><td align='center'>No undefined issues for {{host}}!</td></tr>
 {%endfor%}
 </table>
-
+</div>
 {% endblock %}

@@ -5,12 +5,32 @@
 
 {%block scriptin%}
 <script type="text/javascript">
-$
 
-
+$(function(){
+   /* $('.statusind').tooltip({
+                            delay:30,
+                            position:"top center",
+                            relative:true,
+                            effect:'slide',
+                            offset:[10,0],
+                            tipClass:'imgtooltip',
+                            });
+});
+*/
 </script>
 {%endblock%}
 
+{% block stylin %}
+<style>
+div.tooltip img{
+cursor:pointer;
+}
+</style>
+{% endblock%}
+
+{% block externalContent %}
+
+{% endblock %}
 {% block extraContent %}
 
     {%if  filesfound %}
@@ -70,9 +90,14 @@ $
                         <a href="{{file|makeLink}}"
                            title="{{file.oldname}}"
                            class="fileLink" rel="nofollow">
-                            {% if mode == 'filesSubstr' or mode == 'filesdirsSubstr' %}{{file|highlight:words}}
-                            {%else%}{{file|highlight:words}}{%endif%}
-                        </a>
+                            {% if mode == 'filesSubstr' or mode == 'filesdirsSubstr' %}{{file|highlight:words}}</a> 
+                            {{file|status}} <div style="background-color:white;
+                                                        text-align:center;
+                                                        padding-top:5px;" class="tooltip">
+                                            <img valign="top" src="/media/images/goodfile.gif"><img src="/media/images/unclearfile.gif"><img src="/media/images/badfile.gif">
+                                            </div>
+                            {%else%}{{file|highlight:words}}</a>{%endif%}
+                        
                     </td>
                     <td>
                         {% with file|size as size %}

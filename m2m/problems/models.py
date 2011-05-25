@@ -128,6 +128,19 @@ class DNEProblem(Problem):
                 Story.append(Paragraph("%s" % file.filename, styleN))
             Story.append(Paragraph("Movies should NOT have 'blueray', 'hdtv', 'tv', '480p' or any of that shit in their names. We can tell, honestly, from the file size, and I can't keep up with the extra fluff to strip it out; I can't catch everything.",styleN))
             return Story
+
+class BadFileProblem(Problem):
+    ''' bad files on a host'''
+    name = "Bad Files"
+    
+    def docPage(canvas,doc):
+        canvas.saveState()
+        canvas.setFont('Times-Bold', 10)
+        canvas.drawCentredString(PAGE_WIDTH/2.0, PAGE_HEIGHT - (.25 * inch), Title)
+        canvas.setFont('Times-Roman',9)
+        canvas.drawString(7 * inch, .75 * inch, "Page %d" % (doc.page,))
+        canvas.restoreState()    
+    
             
 class UndefProblem(Problem):
     ''' No category problem'''

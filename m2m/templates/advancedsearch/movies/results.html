@@ -34,7 +34,9 @@ $(document).ready(function(){
     /* this is a hack */
     background-color:#1E3042;
 }
+.moviename {
 
+}
 </style>
 {% endblock %}
 
@@ -72,7 +74,7 @@ $(document).ready(function(){
         </div>
     </td>
     <td align="right"> {{movie.rating}} </td>
-    <td valign="top" align="right">{{movie.runtime}}</td>
+    <td valign="middle" align="right">{{movie.runtime|time:"g:i"}}</td>
 </tr>
 {% endfor %}
 </table>

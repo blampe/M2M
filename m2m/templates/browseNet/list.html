@@ -56,6 +56,9 @@
             <td valign="top">
                 <a href="{% url browseNet.views.deepBrowse 'H' server.hid.hid|default:-1%}">{{server}}</a><br/>
                 {{server.hid.ip}}
+                {% if server.hid.hasProblems %}<br/>
+                <a href="{% url problems.views.host server.hid.hid%}"> see problem files </a>
+                {% endif %}
             </td>
             <td valign="top">{{server.workgroup}}</td>
             <td valign="top">{{server.hid|sizeToReadable}}</td>

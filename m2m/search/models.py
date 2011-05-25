@@ -25,6 +25,8 @@ class File(models.Model):
     filesize = models.BigIntegerField(db_column='FileSize') # Field name made lowercase.
     filedate = models.DateTimeField(db_column='FileDate') # Field name made lowercase.
     indexed = models.NullBooleanField(null=True, db_column='Indexed', blank=True) # Field name made lowercase.
+    
+    # good = 1, bad = 0, unclear = 3
     goodfile = models.IntegerField(default=1)
     objects = models.Manager()
     
@@ -50,6 +52,13 @@ class File(models.Model):
         try:
             self.savingproblem
             self.savingproblem.delete()
+            self.save()
+        except:
+            pass
+    def remove_bad_file_problem(self):
+        try:
+            self.badfileproblem
+            self.badfileproblem.delete()
             self.save()
         except:
             pass
