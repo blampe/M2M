@@ -1,0 +1,21 @@
+{% extends 'base_page.html' %}
+{% load search_extras %}
+{% block content %}
+<h1>{{host}}</h1>
+
+Could not match these against external databases, but probably should have been able to:<br/><br/>
+{% for problem in pset.dneproblem_set.all %}
+
+<a href="{{problem.file|makeLink}}">{{problem.file.path}}</a>: <strong>{{problem.file}}</strong> <br/>
+
+{% endfor %}
+
+{% endblock %}
+
+{% block extraContent %}
+
+{% endblock %}
+
+{% block endContent %}
+
+{% endblock %}

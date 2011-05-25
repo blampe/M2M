@@ -34,6 +34,8 @@ urlpatterns = patterns('',
     (r'^news/', include('basic.blog.urls')),
     (r'^comments/', include('django.contrib.comments.urls')),
     
+    (r'^problems/', include('problems.urls')),
+    
     (r'^stats', 'problems.views.stats'), # for maintenance, etc
     (r'^stats/', include('stats.urls')),
 

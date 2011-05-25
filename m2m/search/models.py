@@ -34,6 +34,25 @@ class File(models.Model):
     imageEndings    = ".jpg|.jpeg|.raw|.tiff|.gif|.png|.psd|.tga|.tpic|.svg"
     
     
+    def remove_problems(self):
+        self.remove_dne_problem()
+        self.remove_saving_problem()
+    
+    def remove_dne_problem(self):
+        if self.dneproblem:
+            self.dneproblem = None
+            self.save()
+    
+    def remove_saving_problem(self):
+        if self.savingproblem:
+            self.savingproblem = None
+            self.save()
+    
+    def remove_under_problem(self):
+        if self.undefproblem:
+            self.undefproblem = None
+            self.save()
+    
     def __unicode__(self):
         #-*-coding:iso-8859-1-*-
         return self.filename

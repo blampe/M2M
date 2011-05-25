@@ -2,21 +2,41 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from themoviedb.tmdb import search, getMovieInfo, TmdHttpError
 
+
 import re
 import datetime
 
-def writeComplaints(issues,filename='/home/haak/M2M/m2m/templates/issues.txt'):
+
+from models import Movie, Show, Music
+from search.models import File
+from problems.models import DNEProblem, SavingProblem, ProblemSet
+
+def logComplaints(issues=False):
     ''' issues should be in (problemfiles,couldnotmatchfiles) format'''
-    import cPickle as pickle
-    f = file.open(filename, 'w')
-    pickle.dump(issues,f)
-    f.close()
+    if not issues:
+        return
+    # fuck the saveSet for now, it's not as interesting.
+    #saveSet = File.objects.filter(id__in=[x.id for x in saveIssues])
+    
+    for f in issues['nomatches']:
+        try:
+            pset = f.path.hid.problems
+        except:
+            pset = ProblemSet.objects.create(host=f.path.hid)
+        try:
+            f.dneproblem
+        except:
+            prob = DNEProblem(file=f)
+            prob.save()
+            pset.dneproblem_set.add(prob)
+            pset.save()
+    
     return
 
     
 def crawlForMovies(count=0):
     ''' Imports things that are recognized as Movies from File table'''
-    from search.models import File
+    
     # grab all video files from things with Movie in the path name,
     # excluding things whose filename begin with '.' or '_'
     print "Filtering out non-(%s)" % File.videoEndings
@@ -39,12 +59,20 @@ def crawlForMovies(count=0):
     print "Narrowing down filenames a little further to deal with \"(director - year)\" construction"
     candidates.filter(filename__regex=r'(.)+( \(([a-zA-Z]* (- )?)?[12][0-9][0-9][0-9]\)\))?.(.)*')
     
-    issues['problems'] = []
-    issues['nomatches'] = []
+    #issues = {}
+    
+    #issues['problems'] = []
+    #issues['nomatches'] = []
     
     total = len(candidates)
     print "%d files to check. Here we go..." % total
     for candidate in candidates[count:]:
+    
+        try:
+            pset = f.path.hid.problems
+        except:
+            pset = ProblemSet.objects.create(host=f.path.hid)
+    
         count += 1
         # skip all of this if the file already has a movie
         print candidate.id
@@ -101,6 +129,7 @@ def crawlForMovies(count=0):
                     print "  Found year data."
                 except:
                     print "  No year data."
+                    year = ""
             except KeyError:
                 year = ""
         else:
@@ -117,9 +146,16 @@ def crawlForMovies(count=0):
                 
         if len(movies) > 0:
             print "  Found something!"
+            candidate.remove_dne_problem()
         else:
+            # add problem for later perusal
+            prob = DNEProblem(file=candidate)
+            prob.save()
+            pset.dneproblem_set.add(prob)
+            pset.save()
+            
             print "  No love. Moving on!"
-            issues['nomatches'] += [candidate]
+            #issues['nomatches'] += [candidate]
             continue
             
         # only take the first result, which is the most likely
@@ -169,7 +205,15 @@ def crawlForMovies(count=0):
                     latestEntry.save()
                 except:
                     print "    Something went wrong; moving on."
-                    issues['problems']+= [candidate]
+                    prob = SavingProblem(file=candidate)
+                    prob.save()
+                    pset.savingproblem_set.add(prob)
+                    pset.save()
+                    #issues['problems']+= [candidate]
+                    
+                candidate.remove_saving_problem()
+                
+                
                 print "    setting %s to movie's certification..." % movie['certification']
                 if len(MovieCert.objects.filter(cert="None" if movie['certification']==None else movie['certification'])) == 0:
                     print  "      Found a new cert, adding to database..."
@@ -197,5 +241,6 @@ def crawlForMovies(count=0):
                 latestEntry.save()
                
     print "Success."
-    writeComplaints(issues,'/home/haak/M2M/m2m/templates/moviecomplaints.txt')
+    # store problems in database
+    #logComplaints(issues)
     return 

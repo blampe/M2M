@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 
 # Create your views here.
 
@@ -55,3 +55,15 @@ def construction(request,message=''):
                               {
                                 'message':message,
                               })
+                              
+def host(request,id):
+    from browseNet.models import Host
+    
+    host = get_object_or_404(Host, pk=id)
+    
+    return render_to_response("problems/host.html",
+                                {
+                                'host':host,
+                                'pset':host.problems,
+                                'servers':'current'
+                                })

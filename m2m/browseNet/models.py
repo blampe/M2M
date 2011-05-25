@@ -62,7 +62,8 @@ class Host(models.Model):
     lastscan = models.DateTimeField(db_column='LastScan') # Field name made lowercase.
     totalfilesize = models.BigIntegerField(db_column='TotalFileSize') # Field name made lowercase.
     networkaddress = models.CharField(max_length=192, db_column='NetworkAddress') # Field name made lowercase.
-    
+    hasProblems = models.NullBooleanField(null=True,default=False)
+
     servesDirect = models.BooleanField()
     directPort = models.IntegerField(db_column="directPort")
     
