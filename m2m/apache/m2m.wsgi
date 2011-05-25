@@ -7,8 +7,8 @@ workspace = os.path.dirname(project)
 
 sys.path.append(workspace)
 
-sys.path.append('/usr/lib/python2.6/dist-packages/django')
-sys.path.append('/home/haak/django_projects/m2m')
+sys.path.append('/usr/lib/python2.7/dist-packages/django')
+sys.path.append('/home/haak/M2M/m2m')
 
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
