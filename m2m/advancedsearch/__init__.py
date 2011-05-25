@@ -7,9 +7,9 @@ import re
 import datetime
 
 
-from models import Movie, Show, Music
+
 from search.models import File
-from problems.models import DNEProblem, SavingProblem, ProblemSet
+from problems.models import DNEProblem, SavingProblem, ProblemSet, BadFileProblem
 
 def logComplaints(issues=False):
     ''' issues should be in (problemfiles,couldnotmatchfiles) format'''
@@ -36,6 +36,7 @@ def logComplaints(issues=False):
     
 def crawlForMovies(count=0):
     ''' Imports things that are recognized as Movies from File table'''
+    from models import Movie,MovieCert,MovieGenre
     
     # grab all video files from things with Movie in the path name,
     # excluding things whose filename begin with '.' or '_'
@@ -67,6 +68,9 @@ def crawlForMovies(count=0):
     total = len(candidates)
     print "%d files to check. Here we go..." % total
     for candidate in candidates[count:]:
+        if candidate.goodfile == 0:
+            print "Marked as bad file; skipping..."
+            continue
         candidate.remove_problems()
         try:
             pset = candidate.path.hid.problems
