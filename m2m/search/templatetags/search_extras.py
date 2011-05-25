@@ -95,9 +95,10 @@ def makeLink(object, directServe=False):
         else:
             return "smb://%s%s" % (object.path.hid, object.path)
     except AttributeError: # no object.path -> object is a path
-        try:if object.hid.servesDirect == True and directServe != False:
-            '''do nothing'''
-            return "smb://%s%s" % (object.hid, object)
+        try:
+            if object.hid.servesDirect == True and directServe != False:
+            #do nothing
+                return "smb://%s%s" % (object.hid, object)
         except AttributeError:
             try:
                 # no HID - shouldn't exist anymore anyway.
