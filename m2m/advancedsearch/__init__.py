@@ -67,11 +67,13 @@ def crawlForMovies(count=0):
     total = len(candidates)
     print "%d files to check. Here we go..." % total
     for candidate in candidates[count:]:
-    
+        candidate.remove_problems()
         try:
-            pset = f.path.hid.problems
+            pset = candidate.path.hid.problems
         except:
-            pset = ProblemSet.objects.create(host=f.path.hid)
+            pset = ProblemSet()
+            pset.host = candidate.path.hid
+            pset.save()
     
         count += 1
         # skip all of this if the file already has a movie
@@ -98,7 +100,8 @@ def crawlForMovies(count=0):
         info = u" ".join(info)
         info = re.split("\((.*)\)",info)
         
-        probablyTitle = info[0].rstrip()
+        # also '_'
+        probablyTitle = info[0].rstrip().replace('_',' ')
         
         # now, clean up MORE BULLSHIT;
         # fuck you guys, we know it's 1080 or 720 or BLURAY
@@ -149,7 +152,9 @@ def crawlForMovies(count=0):
             candidate.remove_dne_problem()
         else:
             # add problem for later perusal
-            prob = DNEProblem(file=candidate)
+            candidate.remove_dne_problem()
+            prob = DNEProblem()
+            prob.file = candidate
             prob.save()
             pset.dneproblem_set.add(prob)
             pset.save()
@@ -205,7 +210,8 @@ def crawlForMovies(count=0):
                     latestEntry.save()
                 except:
                     print "    Something went wrong; moving on."
-                    prob = SavingProblem(file=candidate)
+                    prob = SavingProblem()
+                    prob.file = candidate
                     prob.save()
                     pset.savingproblem_set.add(prob)
                     pset.save()

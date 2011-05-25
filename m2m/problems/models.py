@@ -33,7 +33,7 @@ class ProblemSet(models.Model):
         return Story
     
     def save(self, *args, **kwargs):
-        if self.savingproblem_set.all() or self.dneproblem_set.all() or self.undeproblem_set.all():
+        if self.savingproblem_set.all() or self.dneproblem_set.all() or self.undefproblem_set.all():
             self.host.hasProblems = True
         else:
             self.host.hasProblems = False
@@ -55,8 +55,11 @@ class ProblemSet(models.Model):
                 yield p         
         
 class Problem(models.Model):
-    file = models.OneToOneField(File, related_name="%(class)s", null=True)
-    pathology = models.ForeignKey(ProblemSet,related_name="%(class)s_set", null=True)
+    file = models.OneToOneField(File, related_name="%(class)s", null=True, blank=True)
+    pathology = models.ForeignKey(ProblemSet,related_name="%(class)s_set", null=True, blank=True)
+    
+    name = "Problem"# for printing stuff, redefine this
+    
     def render(self, Story):
         raise NotImplementedError("Should have something here")
     
@@ -65,13 +68,17 @@ class Problem(models.Model):
     
     def docPage(canvas,doc):
         raise NotImplementedError("Should have something here")
-           
-            
+        
+    def __unicode__(self):
+        return "%s: %d" % (self.name,self.file.id)
+        
     class Meta:
         abstract = True
     
 class SavingProblem(Problem):
     ''' these are things that failed to update after being linked to an advanced type'''
+    name = "Saving Problem" 
+    
     def docPage(canvas,doc):
         canvas.saveState()
         canvas.setFont('Times-Bold', 10)
@@ -93,11 +100,14 @@ class SavingProblem(Problem):
         return Story
     
     def __unicoode__(self):
-        return "Did Not Save Problem: %d" % self.file.id
+        return u"Did Not Save Problem: %d" % self.file.filename
     
         
 class DNEProblem(Problem):
     ''' these are things that did not match to an external database - probably a naming issue'''
+    
+    name = "NoMatch Problem"
+    
     def docPage(canvas,doc):
         canvas.saveState()
         canvas.setFont('Times-Bold', 10)
@@ -107,7 +117,7 @@ class DNEProblem(Problem):
         canvas.restoreState()
         
         def __unicode__(self):
-            return "Could Not Match Problem: %d" % self.file.id
+            return u"Could Not Match Problem: %d" % self.file.id
     
         def render(self, Story):
             return self.render_pdf(Story)
@@ -121,6 +131,9 @@ class DNEProblem(Problem):
             
 class UndefProblem(Problem):
     ''' No category problem'''
+    
+    name = "Unknown Problem"
+    
     def docPage(canvas,doc):
         canvas.saveState()
         canvas.setFont('Times-Bold', 10)
@@ -130,4 +143,4 @@ class UndefProblem(Problem):
         canvas.restoreState()
         
         def __unicode__(self):
-            return "Undefined Problem: %d" % self.file.id        
+            return u"Undefined Problem: %d" % self.file.id        

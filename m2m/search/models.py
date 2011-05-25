@@ -39,19 +39,28 @@ class File(models.Model):
         self.remove_saving_problem()
     
     def remove_dne_problem(self):
-        if self.dneproblem:
-            self.dneproblem = None
+        try:
+            self.dneproblem
+            self.dneproblem.delete()
             self.save()
+        except:
+            pass
     
     def remove_saving_problem(self):
-        if self.savingproblem:
-            self.savingproblem = None
+        try:
+            self.savingproblem
+            self.savingproblem.delete()
             self.save()
+        except:
+            pass
     
     def remove_under_problem(self):
-        if self.undefproblem:
-            self.undefproblem = None
+        try:
+            self.undefproblem
+            self.undefproblem.delete()
             self.save()
+        except:
+            pass
     
     def __unicode__(self):
         #-*-coding:iso-8859-1-*-

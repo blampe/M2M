@@ -55,9 +55,9 @@ $
             
             {# start spitting out results #}
             
-            
-            {% for file in filesfound %}
             <tbody>
+            {% for file in filesfound %}
+            
                 <tr class="{% cycle '' 'darkrow' %}" style="font-size:12px;line-height:18px;height:24px;">
                     <td style="padding-left:3px;;"><a href="">
                         <img src="/media/images/{% if file.path.hid.flags == 24 %}online.gif{%else%}offline.gif{%endif%}" />
