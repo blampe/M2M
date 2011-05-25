@@ -100,8 +100,14 @@ def crawlForMovies(count=0):
         info = u" ".join(info)
         info = re.split("\((.*)\)",info)
         
+        
         # also '_'
         probablyTitle = info[0].rstrip().replace('_',' ')
+        
+        # ignore anything between {}
+        
+        probablyTitle = re.sub(r'{.*}','',probablyTitle)
+        probablyTitle = probablyTitle.replace('  ',' ')
         
         # now, clean up MORE BULLSHIT;
         # fuck you guys, we know it's 1080 or 720 or BLURAY

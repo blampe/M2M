@@ -3,6 +3,7 @@
 
 {%block title %} M2M - You done fucked up {%endblock%}
 {%block searchbar %} {%endblock%}
+
 {% block content %}
 <h1>{{host}}</h1>
 {% if pset.dneproblem_set.all %}
@@ -10,16 +11,25 @@ Could not match these against external databases, but probably should have been 
 {%endif%}
 <div class="tablewrap">
 <table width="80%">
-<thead><tr class="info"><td width="40%">Location</td><td>Filename</td></tr></thead><tbody>
-{% for problem in pset.dneproblem_set.all %}
-<tr class="{% cycle 'darkrow' '' %}">
-<td><a href="{{problem.file|makeLink}}">{{problem.file.path}}</a></td>
-<td> <strong>{{problem.file}}</strong></td>
-</tr>
-{% empty %}
-<tr><td>No matching issues for {{host}}!</td></tr>
-{% endfor %}
-</tbody></table></div>
+    <thead>
+        <tr class="info">
+            <td width="40%">Location</td>
+            <td>Filename</td>
+        </tr>
+    </thead>
+    
+    <tbody>
+    {% for problem in pset.dneproblem_set.all %}
+    <tr class="{% cycle 'darkrow' '' %}">
+        <td><a href="{{problem.file|makeLink}}">{{problem.file.path}}</a></td>
+        <td> <strong>{{problem.file}}</strong></td>
+    </tr>
+    {% empty %}
+    <tr><td>No matching issues for {{host}}!</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
 {% endblock %}
 
 {% block extraContent %}
