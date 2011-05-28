@@ -1,5 +1,6 @@
 {% extends 'base_page.html' %}
 {% load search_extras %}
+{% load problems_extras %}
 
 {%block title %} M2M - You done fucked up {%endblock%}
 {%block searchbar %} {%endblock%}
@@ -11,18 +12,18 @@ These files have been marked as bad by users:
 {% endif %}
 <div class="tablewrap">
 <table width="80%">
-    <thead>
+    {% for problem in pset.badfileproblem_set.all %}
+        {% if forloop.first %}
+        <thead>
         <tr class="info">
-            <td width="40%">Location</td>
+            <td width="20%">Location</td>
             <td>Filename</td>
         </tr>
     </thead>
-    
-    <tbody>
-    {% for problem in pset.badfileproblem_set.all %}
+    {% endif %}
     <tr class="{% cycle 'darkrow' '' %}">
-        <td><a href="{{problem.file|makeLink}}">{{problem.file.path}}</a></td>
-        <td> <strong>{{problem.file}}</strong></td>
+        <td><a href="{{problem.file|makeLink}}">{{problem.file.path|lenlimit:"40"}}</a></td>
+        <td> <strong>{{problem.file|lenlimit:"40"}}</strong></td>
     </tr>
     {% empty %}
     <tr><td>No bad files known on {{host}}!</td></tr>
@@ -32,39 +33,48 @@ These files have been marked as bad by users:
 </div>
 
 {% if pset.dneproblem_set.all %}
-Could not match these against external databases, but probably should have been able to:<br/><br/>
+<br/>Could not match these against external databases, but probably should have been able to:<br/>
 {%endif%}
 <div class="tablewrap">
 <table width="80%">
-    <thead>
+    
+    
+    {% for problem in pset.dneproblem_set.all %}
+    {% if forloop.first %}
+        <thead>
         <tr class="info">
             <td width="40%">Location</td>
             <td>Filename</td>
         </tr>
     </thead>
-    
-    <tbody>
-    {% for problem in pset.dneproblem_set.all %}
+    {% endif %}
     <tr class="{% cycle 'darkrow' '' %}">
-        <td><a href="{{problem.file|makeLink}}">{{problem.file.path}}</a></td>
-        <td> <strong>{{problem.file}}</strong></td>
+        <td><a href="{{problem.file|makeLink}}">{{problem.file.path|lenlimit:"40"}}</a></td>
+        <td> <strong>{{problem.file|lenlimit:"70"}}</strong></td>
     </tr>
     {% empty %}
     <tr><td>No matching issues for {{host}}!</td></tr>
     {% endfor %}
-    </tbody>
 </table>
 </div>
 
 {% if pset.savingproblem_set.all %}
-Could not save these, for some reason - probably not the server's fault.
+<br/>Could not save these, for some reason - probably not the server's fault.
 {% endif %}
 <div class="tablewrap">
 <table>
 {% for problem in pset.savingproblem_set.all %}
+    {% if forloop.first %}
+        <thead>
+        <tr class="info">
+            <td width="40%">Location</td>
+            <td style="max-width:60%;overflow:scroll;">Filename</td>
+        </tr>
+    </thead>
+    {% endif %}
 <tr class="{% cycle 'darkrow' '' %}" >
-<td><a href="{{problem.file|makeLink}}">{{problem.file.path}}</a></td>
-<td><strong>{{problem.file}}</strong></td>
+<td><a href="{{problem.file|makeLink|highlight:""}}">{{problem.file.path|lenlimit:"40"}}</a></td>
+<td><strong>{{problem.file|lenlimit:"70"}}</strong></td>
 </tr>
 {% empty %}
 <tr><td align='center'>No saving issues for {{host}}!</td></tr>
@@ -73,18 +83,30 @@ Could not save these, for some reason - probably not the server's fault.
 </div>
 
 {% if pset.undefproblem_set.all %}
-Something's wrong with these files, but I can't tell what happened:
+<br/>Something's wrong with these files, but I can't tell what happened:
 {% endif %}
 <div class="tablewrap">
 <table>
 {% for problem in pset.undefproblem_set.all %}
+    {% if forloop.first %}
+        <thead>
+        <tr class="info">
+            <td width="40%">Location</td>
+            <td>Filename</td>
+        </tr>
+    </thead>
+    {% endif %}
 <tr class="{% cycle 'darkrow' '' %}">
-<td><a href="{{problem.file|makeLink}}">{{problem.file.path}}</a></td>
-<td>{{problem.file}}</td>
+<td><a href="{{problem.file|makeLink}}">{{problem.file.path|lenlimit:"40"}}</a></td>
+<td>{{problem.file|lenlimit:"70"}}</td>
 </tr>
 {% empty %}
 <tr><td align='center'>No undefined issues for {{host}}!</td></tr>
 {%endfor%}
 </table>
 </div>
+{% endblock %}
+
+{% block extraContent %}
+
 {% endblock %}
