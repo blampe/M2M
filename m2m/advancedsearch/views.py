@@ -177,10 +177,42 @@ def movieDetail(request,id):
           'search':'current',})
     
 def musicSplash(request):
-    return render_to_response('404.html',
+    return render_to_response('advancedsearch/music/splash.html',
         {
         'search':'current',
         'music':'current',
+        }
+    )
+
+def musicSearch(request,page=0):
+    return render_to_response('404.html',
+        {
+        'search':'current',
+        'shows':'current',
+        }
+    )
+    
+def artistDetail(request,id="Q"):
+    return render_to_response('404.html',
+        {
+        'search':'current',
+        'shows':'current',
+        }
+    )
+
+def albumDetail(request,id="Q"):
+    return render_to_response('404.html',
+        {
+        'search':'current',
+        'shows':'current',
+        }
+    )
+
+def songDetail(request,id="Q"):
+    return render_to_response('404.html',
+        {
+        'search':'current',
+        'shows':'current',
         }
     )
     
