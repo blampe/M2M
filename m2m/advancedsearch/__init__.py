@@ -207,11 +207,21 @@ def crawlForMovies(count=0):
                             released=movie['released'] if movie['released'] else None,
                             adult=True if movie['adult']=='true' else False,
                             director=movie['cast']['director'][0]['name'] if movie['cast'].has_key('director') else 'Unknown',
-                            backdrop=movieresult['images'][1]['poster'] if len(movie['images'])>1 and movie['images'][1].has_key('poster') else '/media/images/no_backdrop.jpg',
-                            poster = movie['images'][0]['cover'] if len(movie['images'])>0 and movie['images'][0].has_key('cover') else '/media/images/no_poster.jpg',
-                            thumb = movie['images'][0]['thumb'] if len(movie['images'])>0 and movie['images'][0].has_key('thumb') else '/media/images/no_thumb.jpg',
                             runtime=str(datetime.timedelta(minutes=int(movie['runtime']))) if movie['runtime'] else None,
                             )
+                try:
+                    latestEntry.backdrop=movieresult['images'][1]['poster'] if len(movie['images'])>1 and movie['images'][1].has_key('poster') else '/media/images/no_backdrop.jpg'
+                except IndexError:
+                    latestEntry.backdrop= '/media/images/no_backdrop.jpg'
+                try:
+                    latestEntry.poster = movie['images'][0]['cover'] if len(movie['images'])>0 and movie['images'][0].has_key('cover') else '/media/images/no_poster.jpg'
+                except:
+                    latestEntry.poster = '/media/images/no_poster.jpg'
+                try:
+                    latestEntry.thumb = movie['images'][0]['thumb'] if len(movie['images'])>0 and movie['images'][0].has_key('thumb') else '/media/images/no_thumb.jpg'
+                except:
+                    latestEntry.thumb = '/media/images/no_thumb.jpg'            
+                            
                 print "    adding %s to movie's file set..." % candidate
                 latestEntry.files.add(candidate)
                 # we have to save here, or the loop below will fail due to no entry in
