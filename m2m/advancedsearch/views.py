@@ -4,7 +4,8 @@ from django.db.models import Count
 from datetime import datetime
 
 from stats.models import Status, Log
-from models import MovieGenre,MovieCert,Movie
+from models import MovieGenre,MovieCert,Movie,\
+                    MusicGenre,Artist,Song,Album
 # Create your views here.
 
 PERPAGE = 50
