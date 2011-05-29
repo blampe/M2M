@@ -4,7 +4,7 @@ from django.db import models
 
 
 
-from advancedsearch.models import Movie, Show, Music
+from advancedsearch.models import Movie, Episode, Song
 
 from browseNet.models import Host, Path
 
@@ -16,8 +16,8 @@ class File(models.Model):
     
     id = models.IntegerField(primary_key=True, db_column='ID') # Field name made lowercase.
     MIDs = models.ForeignKey(Movie, related_name='files', null=True, on_delete=models.SET_NULL)
-    SIDs = models.ForeignKey(Show, null=True, related_name='files', on_delete=models.SET_NULL)
-    MuIDs = models.ForeignKey(Music, null=True,related_name='files', on_delete=models.SET_NULL)
+    SIDs = models.ForeignKey(Episode, null=True, related_name='files', on_delete=models.SET_NULL)
+    MuIDs = models.ForeignKey(Song, null=True,related_name='files', on_delete=models.SET_NULL)
     path = models.ForeignKey(Path,db_column='PID') # Field name made lowercase.
     filename = models.CharField(max_length=765, db_column='FileName') # Field name made lowercase.
     filenameend = models.CharField(max_length=12, db_column='FileNameEnd') # Field name made lowercase.

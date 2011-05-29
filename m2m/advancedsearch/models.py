@@ -32,7 +32,7 @@ class Movie(models.Model):
     #endings = super.videoEndings
     
     def __unicode__(self):
-        return u"%s" % self.name
+        return u"{}".format(self.name)
 
 class MovieGenre(models.Model):
     movies = models.ManyToManyField(Movie, related_name="genres",null=True)
@@ -40,48 +40,78 @@ class MovieGenre(models.Model):
     name = models.CharField(max_length=100, unique=True)
     
     def __unicode__(self):
-        return u'%s' % self.name
+        return u'{}'.format(self.name)
     
-    # this is dumb. why isn't this handled automatically?
-    #def save(self,*args,**kwargs):
-    #    if not self.ID:
-    #        i = list(MovieGenre.objects.raw('SELECT * FROM advancedsearch_moviegenre ORDER BY ID DESC LIMIT 1'))
-    #        if len(i) < 1:
-    #            self.ID = 1
-    #        else:
-    #            self.ID = i[0].ID+1
-    #    models.Model.save(self,*args,**kwargs)
-
 class MovieCert(models.Model):
     
     cert = models.CharField(max_length=5,unique=True,null=True)
     
     def __unicode__(self):
-        return u'%s' % self.cert
+        return u'{}'.format(self.cert)
         
-class Show(models.Model):
+class Episode(models.Model):
     ''' an episode of a tv show!'''
     
     season = models.IntegerField()
     episode = models.IntegerField()
-    showName = models.CharField(max_length=100)
+    showName = models.ForeignKey('Show')
     episodeName = models.CharField(max_length=100)
     
     #endings = super.videoEndings
     def __unicode__(self):
-        return u"%s S%dE%d" % (self.showName,self.season,self.episode)
+        return u"{} S{}E{}".format(self.showName,self.season,self.episode)
 
-class Music(models.Model):
+class Show(models.Model):
+    pass
+
+        
+class Song(models.Model):
     ''' Music file.'''
     
-    artist = models.CharField(max_length=100)
-    album =  models.CharField(max_length=100)
-    trackName = models.CharField(max_length=100)
-    genre = models.CharField(max_length=100)
+    artist = models.ForeignKey('Artist', null=True)
+    album =  models.ForeignKey('Album', null=True)
+    name = models.CharField(max_length=100)
     time = models.TimeField()
-    
+    explicit = models.BooleanField(default=False)
+    tracknum = models.IntegerField()
     #endings = super.audioEndings
+    appleID = models.BigIntegerField(null=True,unique=True)
+    applePreview = models.URLField(null=True)
+    # 1: perfect
+    # 2: dir structure match
+    # 3: ummm...dunno.
+    matchtype = models.IntegerField()
     
     def __unicode__(self):
-        return u"%s, %s" % (self.trackName, self.artist)
+        return u"{}".format(self.name)
+
+class MusicGenre(models.Model):
+    songs = models.ManyToManyField(Song,related_name="genres", null=True)
+    name = models.CharField(max_length=100,unique=True)
     
+    def __unicode__(self):
+        return "{}".format(self.name)
+    
+class Album(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    artist = models.ForeignKey('Artist', null=True)
+    explicit = models.BooleanField(default=False)
+    appleCover = models.URLField(null=True)
+    cover = models.URLField(null=True)
+    appleID = models.BigIntegerField(null=True,unique=True)
+    releaseDate = models.DateTimeField()
+    
+    def __init__(self,*args,**kwargs):
+        models.Model.__init__(self,*args,**kwargs)
+        
+        self.trackCount = len(self.song_set.all())
+    
+    def __unicode__(self):
+        return u"{}".format(self.name)
+    
+class Artist(models.Model):
+    name = models.CharField(max_length=100)
+    appleID = models.BigIntegerField(null=True,unique=True)
+    
+    def __unicode__(self):
+        return "{}".format(self.name)
