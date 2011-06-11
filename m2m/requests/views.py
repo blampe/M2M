@@ -166,7 +166,7 @@ def deleted(request,page=1):
                             'page':page+1,
                             'setLen':setLen,
                             'displaySet':displaySet,
-                          })
+                          },context_instance=RequestContext(request))
     
 
 def edit(request,id):
