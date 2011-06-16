@@ -10,7 +10,6 @@
 
 {% include 'advancedsearch/movies/searchbar.html' %}
 {% endblock %}
-
 {% block stylin %}
 <style>
 .scrollable{
@@ -43,6 +42,7 @@ $(function() {
 </script>
 {% endblock %}
 {% block extraContent %}
+<a href="{% url advancedsearch.views.movieRandom %}">Random</a>
 <h2>Latest movies on the network:</h2>
 <a class='prev browse left'></a>
 <div id="latestmovies" class='scrollable'>

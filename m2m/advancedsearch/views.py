@@ -35,6 +35,12 @@ def movieSplash(request):
         }
     )
 
+def movieRandom(request):
+    
+    movieId = Movie.objects.order_by('?')[:1][0].id
+    return movieDetail(request,movieId)
+    
+    
 def movieSearch(request, page=1):
     from django.core.paginator import Paginator
     escape_chars = {
