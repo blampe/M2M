@@ -2,21 +2,42 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from themoviedb.tmdb import search, getMovieInfo, TmdHttpError
 
+
 import re
 import datetime
 
-def writeComplaints(issues,filename='/home/haak/M2M/m2m/templates/issues.txt'):
+
+
+from search.models import File
+from problems.models import DNEProblem, SavingProblem, ProblemSet, BadFileProblem
+
+def logComplaints(issues=False):
     ''' issues should be in (problemfiles,couldnotmatchfiles) format'''
-    import cPickle as pickle
-    f = file.open(filename, 'w')
-    pickle.dump(issues,f)
-    f.close()
+    if not issues:
+        return
+    # fuck the saveSet for now, it's not as interesting.
+    #saveSet = File.objects.filter(id__in=[x.id for x in saveIssues])
+    
+    for f in issues['nomatches']:
+        try:
+            pset = f.path.hid.problems
+        except:
+            pset = ProblemSet.objects.create(host=f.path.hid)
+        try:
+            f.dneproblem
+        except:
+            prob = DNEProblem(file=f)
+            prob.save()
+            pset.dneproblem_set.add(prob)
+            pset.save()
+    
     return
 
     
 def crawlForMovies(count=0):
     ''' Imports things that are recognized as Movies from File table'''
-    from search.models import File
+    from models import Movie,MovieCert,MovieGenre
+    
     # grab all video files from things with Movie in the path name,
     # excluding things whose filename begin with '.' or '_'
     print "Filtering out non-(%s)" % File.videoEndings
@@ -39,12 +60,25 @@ def crawlForMovies(count=0):
     print "Narrowing down filenames a little further to deal with \"(director - year)\" construction"
     candidates.filter(filename__regex=r'(.)+( \(([a-zA-Z]* (- )?)?[12][0-9][0-9][0-9]\)\))?.(.)*')
     
-    issues['problems'] = []
-    issues['nomatches'] = []
+    #issues = {}
+    
+    #issues['problems'] = []
+    #issues['nomatches'] = []
     
     total = len(candidates)
     print "%d files to check. Here we go..." % total
     for candidate in candidates[count:]:
+        if candidate.goodfile == 0:
+            print "Marked as bad file; skipping..."
+            continue
+        candidate.remove_problems()
+        try:
+            pset = candidate.path.hid.problems
+        except:
+            pset = ProblemSet()
+            pset.host = candidate.path.hid
+            pset.save()
+    
         count += 1
         # skip all of this if the file already has a movie
         print candidate.id
@@ -70,7 +104,14 @@ def crawlForMovies(count=0):
         info = u" ".join(info)
         info = re.split("\((.*)\)",info)
         
-        probablyTitle = info[0].rstrip()
+        
+        # also '_'
+        probablyTitle = info[0].rstrip().replace('_',' ')
+        
+        # ignore anything between {}
+        
+        probablyTitle = re.sub(r'{.*}','',probablyTitle)
+        probablyTitle = probablyTitle.replace('  ',' ')
         
         # now, clean up MORE BULLSHIT;
         # fuck you guys, we know it's 1080 or 720 or BLURAY
@@ -101,6 +142,7 @@ def crawlForMovies(count=0):
                     print "  Found year data."
                 except:
                     print "  No year data."
+                    year = ""
             except KeyError:
                 year = ""
         else:
@@ -117,9 +159,18 @@ def crawlForMovies(count=0):
                 
         if len(movies) > 0:
             print "  Found something!"
+            candidate.remove_dne_problem()
         else:
+            # add problem for later perusal
+            candidate.remove_dne_problem()
+            prob = DNEProblem()
+            prob.file = candidate
+            prob.save()
+            pset.dneproblem_set.add(prob)
+            pset.save()
+            
             print "  No love. Moving on!"
-            issues['nomatches'] += [candidate]
+            #issues['nomatches'] += [candidate]
             continue
             
         # only take the first result, which is the most likely
@@ -156,11 +207,21 @@ def crawlForMovies(count=0):
                             released=movie['released'] if movie['released'] else None,
                             adult=True if movie['adult']=='true' else False,
                             director=movie['cast']['director'][0]['name'] if movie['cast'].has_key('director') else 'Unknown',
-                            backdrop=movieresult['images'][1]['poster'] if len(movie['images'])>1 and movie['images'][1].has_key('poster') else '/media/images/no_backdrop.jpg',
-                            poster = movie['images'][0]['cover'] if len(movie['images'])>0 and movie['images'][0].has_key('cover') else '/media/images/no_poster.jpg',
-                            thumb = movie['images'][0]['thumb'] if len(movie['images'])>0 and movie['images'][0].has_key('thumb') else '/media/images/no_thumb.jpg',
                             runtime=str(datetime.timedelta(minutes=int(movie['runtime']))) if movie['runtime'] else None,
                             )
+                try:
+                    latestEntry.backdrop=movieresult['images'][1]['poster'] if len(movie['images'])>1 and movie['images'][1].has_key('poster') else '/media/images/no_backdrop.jpg'
+                except IndexError:
+                    latestEntry.backdrop= '/media/images/no_backdrop.jpg'
+                try:
+                    latestEntry.poster = movie['images'][0]['cover'] if len(movie['images'])>0 and movie['images'][0].has_key('cover') else '/media/images/no_poster.jpg'
+                except:
+                    latestEntry.poster = '/media/images/no_poster.jpg'
+                try:
+                    latestEntry.thumb = movie['images'][0]['thumb'] if len(movie['images'])>0 and movie['images'][0].has_key('thumb') else '/media/images/no_thumb.jpg'
+                except:
+                    latestEntry.thumb = '/media/images/no_thumb.jpg'            
+                            
                 print "    adding %s to movie's file set..." % candidate
                 latestEntry.files.add(candidate)
                 # we have to save here, or the loop below will fail due to no entry in
@@ -169,7 +230,16 @@ def crawlForMovies(count=0):
                     latestEntry.save()
                 except:
                     print "    Something went wrong; moving on."
-                    issues['problems']+= [candidate]
+                    prob = SavingProblem()
+                    prob.file = candidate
+                    prob.save()
+                    pset.savingproblem_set.add(prob)
+                    pset.save()
+                    #issues['problems']+= [candidate]
+                    
+                candidate.remove_saving_problem()
+                
+                
                 print "    setting %s to movie's certification..." % movie['certification']
                 if len(MovieCert.objects.filter(cert="None" if movie['certification']==None else movie['certification'])) == 0:
                     print  "      Found a new cert, adding to database..."
@@ -197,5 +267,6 @@ def crawlForMovies(count=0):
                 latestEntry.save()
                
     print "Success."
-    writeComplaints(issues,'/home/haak/M2M/m2m/templates/moviecomplaints.txt')
+    # store problems in database
+    #logComplaints(issues)
     return 

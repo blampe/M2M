@@ -9,7 +9,7 @@ urlpatterns = patterns('advancedsearch.views',
     (r'^movies/results/?$', 'movieSearch'),
     (r'^movies/results/(?P<page>\d+)','movieSearch'),
     (r'^movies/details/(?P<id>\d+)','movieDetail'),
-    
+    (r'^movies/random/$','movieRandom'),
     (r'^shows$', 'showSplash'),
     
     (r'^music$', 'musicSplash'),

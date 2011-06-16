@@ -66,6 +66,9 @@ def highlight(object,words, autoescape=None):
         value = object.fullname
     except:
         return object
+    
+    value = value[:37] + "..." + value[-35:]
+    
     # REGULAR EXPRESSION MATCHING FOR HIGHLIGHTING SHIT
     for word in words:
         regexps = re.compile("("+word+")",flags=re.IGNORECASE) # generate a regexp WITH wrapping parens
@@ -92,9 +95,17 @@ def makeLink(object, directServe=False):
         else:
             return "smb://%s%s" % (object.path.hid, object.path)
     except AttributeError: # no object.path -> object is a path
-        if object.hid.servesDirect == True and directServe != False:
-            '''do nothing'''
-        return "smb://%s%s" % (object.hid, object)
+        try:
+            if object.hid.servesDirect == True and directServe != False:
+            #do nothing
+                return "smb://%s%s" % (object.hid, object)
+        except AttributeError:
+            try:
+                # no HID - shouldn't exist anymore anyway.
+                object.delete()
+            except:
+                pass
+            return "??"
     except:
         return "??"
 
@@ -122,6 +133,23 @@ def size(object):
     except:
         return '??'
 
+
+@register.filter
+def status(object):
+    ''' prints good/bad/unclear image for file'''
+    try:
+        object.pathsize
+        return ''
+    except AttributeError:
+        img = "<img class='statusind' style=\"float:right;margin-right:15px;\" src='/media/images/%(img)s' alt='%(alt)s'/>"
+        if object.goodfile == 1:
+            value = img % {'img':'goodfile.gif','alt':'File is good!'}
+        elif object.goodfile == 0:
+            value = img % {'img':'badfile.gif','alt':'File is bad.'}
+        else:
+            value = img % {'img':'goodfile.gif','alt':'File is contested.'}
+    return mark_safe(value)
+status.is_safe=True
         
 ################################################################
 #  Handler for {% logo %} tag

@@ -122,8 +122,8 @@ function extraRequestHandler(){
             {{number|default:'1'}}
         {% else %}
             {%if openReq %}<a href="{% url requests.views.open number%}">{{number}}</a>{%endif%}
-            {%if closedReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%}
-            {%if delReq%}<a href="{% url requests.views.deleted number%}">{{number}}</a>{%endif%}
+            {%if closedReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%} {# why won't {% url %} work for these two!? #}
+            {%if delReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%}
         {% endif %}
     {%endspaceless%}
     {% endfor %}</strong>
@@ -207,7 +207,7 @@ function extraRequestHandler(){
         {% else %}
             {%if openReq %}<a href="{% url requests.views.open number%}">{{number}}</a>{%endif%}
             {%if closedReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%} {# this is bull #}
-            {%if delReq%}<a href="{% url requests.views.deleted number%}">{{number}}</a>{%endif%}
+            {%if delReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%} {# this is also bull #}
             
         {% endif %}
     {% endfor %}

@@ -25,6 +25,8 @@ class File(models.Model):
     filesize = models.BigIntegerField(db_column='FileSize') # Field name made lowercase.
     filedate = models.DateTimeField(db_column='FileDate') # Field name made lowercase.
     indexed = models.NullBooleanField(null=True, db_column='Indexed', blank=True) # Field name made lowercase.
+    
+    # good = 1, bad = 0, unclear = 3
     goodfile = models.IntegerField(default=1)
     objects = models.Manager()
     
@@ -33,6 +35,41 @@ class File(models.Model):
     textEndings     = ".txt|.chm|.pdf|.html|.rtf|.doc|.docx|.odt|.tex"
     imageEndings    = ".jpg|.jpeg|.raw|.tiff|.gif|.png|.psd|.tga|.tpic|.svg"
     
+    
+    def remove_problems(self):
+        self.remove_dne_problem()
+        self.remove_saving_problem()
+    
+    def remove_dne_problem(self):
+        try:
+            self.dneproblem
+            self.dneproblem.delete()
+            self.save()
+        except:
+            pass
+    
+    def remove_saving_problem(self):
+        try:
+            self.savingproblem
+            self.savingproblem.delete()
+            self.save()
+        except:
+            pass
+    def remove_bad_file_problem(self):
+        try:
+            self.badfileproblem
+            self.badfileproblem.delete()
+            self.save()
+        except:
+            pass
+    
+    def remove_under_problem(self):
+        try:
+            self.undefproblem
+            self.undefproblem.delete()
+            self.save()
+        except:
+            pass
     
     def __unicode__(self):
         #-*-coding:iso-8859-1-*-
