@@ -214,7 +214,7 @@ def crawlForMovies(count=0):
                 except IndexError:
                     latestEntry.backdrop= '/media/images/no_backdrop.jpg'
                 try:
-                    latestEntry.poster = movie['images'][0]['cover'] if len(movie['images'])>0 and movie['images'][0].has_key('cover') else '/media/images/no_poster.jpg'
+                    latestEntry.poster = movie['images'][0]['cover'] if len(movie['images'])>0 and movie['images'][0].has_key('cover') else '/imaging/no_poster/{}'.format(movie.id)
                 except:
                     latestEntry.poster = '/media/images/no_poster.jpg'
                 try:
