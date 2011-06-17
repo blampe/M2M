@@ -25,7 +25,7 @@ def no_poster(request,id):
     except:
         return bad_request(request)
         
-    fnt = ImageFont.truetype("StencilStd.otf", 25)
+    fnt = ImageFont.truetype("Impact.ttf", 25)
     response = HttpResponse(mimetype="image/jpeg")
     img = Image.open("C:/Users/haak/M2M/m2m/media/images/no_poster.jpg" if DEBUG else "/home/haak/M2M/m2m/media/images/no_poster.jpg")
 
