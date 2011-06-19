@@ -7,11 +7,11 @@ from PIL import ImageFont, Image, ImageDraw
 
 from advancedsearch.models import Movie
 
-DEBUG = False
+from django.conf import settings
 
 def bad_request(request):
     response = HttpResponse(mimetype="image/gif")
-    img = Image.open("C:/Users/haak/M2M/m2m/media/images/badfile.gif" if DEBUG else "/home/haak/M2M/m2m/media/images/badfile.gif")
+    img = Image.open("C:/Users/haak/M2M/m2m/media/images/badfile.gif" if settings.DEBUG else "/home/haak/M2M/m2m/media/images/badfile.gif")
     
     img.save(response,"GIF")
     return response
@@ -25,9 +25,9 @@ def no_poster(request,id):
     except:
         return bad_request(request)
         
-    fnt = ImageFont.truetype("StencilStd.otf" if DEBUG else "/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", 25)
+    fnt = ImageFont.truetype("StencilStd.otf" if settings.DEBUG else "/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", 25)
     response = HttpResponse(mimetype="image/jpeg")
-    img = Image.open("C:/Users/haak/M2M/m2m/media/images/no_poster.jpg" if DEBUG else "/home/haak/M2M/m2m/media/images/no_poster.jpg")
+    img = Image.open("C:/Users/haak/M2M/m2m/media/images/no_poster.jpg" if settings.DEBUG else "/home/haak/M2M/m2m/media/images/no_poster.jpg")
 
     draw = ImageDraw.Draw(img)
     txtsize = draw.textsize(movie.name,font=fnt)

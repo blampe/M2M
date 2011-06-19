@@ -209,6 +209,8 @@ def crawlForMovies(count=0):
                             director=movie['cast']['director'][0]['name'] if movie['cast'].has_key('director') else 'Unknown',
                             runtime=str(datetime.timedelta(minutes=int(movie['runtime']))) if movie['runtime'] else None,
                             )
+                            
+                # setting images for the movie - ugly try/escape chain, sorry
                 try:
                     latestEntry.backdrop=movieresult['images'][1]['poster'] if len(movie['images'])>1 and movie['images'][1].has_key('poster') else '/media/images/no_backdrop.jpg'
                 except IndexError:
