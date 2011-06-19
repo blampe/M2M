@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     (r'^dmca', 'faq.views.dmca'),
     (r'^privacy.html', 'faq.views.privacy'),    
     #(r'^', 'problems.views.sitewide'), # for maintenance, etc
-    
+    (r'^imaging/',include('imaging.urls')),
     (r'^monkeybutter$', 'search.views.test'),
     
     (r'^$', 'search.views.index'),
