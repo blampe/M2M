@@ -9,10 +9,9 @@ Projects you need:
 		tagging
 
 	You need django, obviously
-	Also djangosphinx, but only because it has the API we want.
-        You might not need this anymore. what you DO need, for now,
-        because i am lazy, is to have a folder called djangosphinx in your
-        dist-/site-packages folder.
+	You also need a package-path in your python site-dists folder that looks like
+        djangosphinx/apis/api278/__init__.py
+    You should find the api278 folder in the same directory as this README.
 
 	You will also need nginx and apache2, unless you are doing development,
     in which case the bundled django server does just fine.

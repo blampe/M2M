@@ -211,12 +211,14 @@ def crawlForMovies(count=0):
                             director=movie['cast']['director'][0]['name'] if movie['cast'].has_key('director') else 'Unknown',
                             runtime=str(datetime.timedelta(minutes=int(movie['runtime']))) if movie['runtime'] else None,
                             )
+                            
+                # setting images for the movie - ugly try/escape chain, sorry
                 try:
                     latestEntry.backdrop=movieresult['images'][1]['poster'] if len(movie['images'])>1 and movie['images'][1].has_key('poster') else '/media/images/no_backdrop.jpg'
                 except IndexError:
                     latestEntry.backdrop= '/media/images/no_backdrop.jpg'
                 try:
-                    latestEntry.poster = movie['images'][0]['cover'] if len(movie['images'])>0 and movie['images'][0].has_key('cover') else '/media/images/no_poster.jpg'
+                    latestEntry.poster = movie['images'][0]['cover'] if len(movie['images'])>0 and movie['images'][0].has_key('cover') else '/imaging/no_poster/{}'.format(movie.id)
                 except:
                     latestEntry.poster = '/media/images/no_poster.jpg'
                 try:
