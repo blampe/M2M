@@ -445,11 +445,13 @@ def results(request,page='1'):
          # REMOTE_ADDR is *always* 127.0.0.1
          # unless we're on test server!
             client = request.META['REMOTE_ADDR']
+            
+        from stats.models import Log
         newest = Log(time=time.mktime(time.localtime()),
              client=client,
              hits=result['total'],
              position=int(page)*PERPAGE,
-             searchstring="Search: {}".format(q)
+             searchstring="Search: {}".format(q),
              mode=logType[params['mode']],
              type=logMode[params['type']],
              hosttype=3)
