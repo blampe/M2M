@@ -195,15 +195,19 @@ def musicSearch(request,page=0):
     return render_to_response('404.html',
         {
         'search':'current',
-        'shows':'current',
+        'music':'current',
         }
     )
     
 def artistDetail(request,id="Q"):
-    return render_to_response('404.html',
+
+    artist = get_object_or_404(Artist,pk=id)
+
+    return render_to_response('advancedsearch/music/artistDetail.html',
         {
         'search':'current',
-        'shows':'current',
+        'music':'current',
+        'artist':artist,
         }
     )
 

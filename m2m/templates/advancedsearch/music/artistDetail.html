@@ -1,0 +1,27 @@
+{% extends 'advancedsearch/music/splash.html' %}
+
+{% block title %} M2M - {{artist}} {%endblock %}
+
+{% block content %}
+
+<h1> {{artist}} </h1>
+
+<ul>
+{% for album in artist.album_set.all %}
+<li>
+<img src="{{album.appleCover}}" valign="middle"/>{{ album }}, released {{album.releaseDate|date:"M d, Y"}}<br />
+<ol>
+{% for song in album.song_set.all %}
+<li>&nbsp;{{song}}:{{song.time}}:{{song.genres.all}}
+<ul>
+{% for file in song.files.all %}
+<li><a href="smb://{{file.path.hid}}{{file.path}}/"> {{file}} </a></li>
+{% endfor %}
+</ul>
+</li>
+{% endfor %}
+</ol>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -304,11 +304,10 @@ def crawlForMusic(count=0):
                             .exclude(filename__istartswith='!')
     total = len(candidates)
     print "{:d} files to check. Here we go...".format(total)
-    for candidate in candidates[count:]:
+    for candidate in candidates[4:5]:
         if candidate.goodfile == 0:
             print "File marked as bad, skipping."
             continue
-        candidate.remove_problems()
         pset = clean_slate(candidate)
         
         count += 1
@@ -331,7 +330,7 @@ def crawlForMusic(count=0):
         info = candidate.filename[:sliceIndex]
         
         print "  slicing off tracknumber, if it's there..."
-        if re.match("^\d\d - ",info):
+        if re.match("^\d+( )?-( )?",info):
             info = info[5:]
         
         # some people (coughWOPRcough) like to use '\.' instead of spaces, in their filenames.
@@ -345,7 +344,7 @@ def crawlForMusic(count=0):
         probablyTitle = info[0].rstrip().replace('_',' ')
         
         # ignore anything between {}
-        
+        print "  cutting out things in \{\}..."
         probablyTitle = re.sub(r'{.*}','',probablyTitle)
         probablyTitle = probablyTitle.replace('  ',' ')
         
@@ -355,6 +354,11 @@ def crawlForMusic(count=0):
         probablyAlbum = candidate.path.shortname
         probablyArtist = candidate.path.parent.shortname
         
+        # cut out artists from file name? i.e. "Oxford Comma - Vampire Weekend" -> "Oxford Comma"
+        print "  cutting out probable artist name from title, if applicable"
+        probablyTitle = re.sub('{}'.format(probablyArtist),'',probablyTitle)
+        probablyTitle = probablyTitle.replace(' - ','').replace('  ',' ')
+        
         print "Searching for {}, by {} in album: {}".format(probablyTitle,probablyArtist,probablyAlbum)
         params.update({'term':probablyTitle,
                        'entity':'musicTrack',
@@ -363,52 +367,69 @@ def crawlForMusic(count=0):
         resultDump = json.load(urllib.urlopen(url))
         if resultDump['resultCount'] == 0:
             candidate.remove_dne_problem()
-            prob = DNEProblem()
-            prob.file = candidate
-            prob.save()
-            pset.dneproblem_set.add(prob)
-            pset.save()
+            #prob = DNEProblem()
+            #prob.file = candidate
+            #prob.save()
+            #pset.dneproblem_set.add(prob)
+            #pset.save()
             print "No love. Moving on!"
             continue
         
         results = resultDump['results']
-        for result in resultDump:
+        for result in results:
+            print u"Result: {}:{} by {}".format(result['collectionName'],result['trackName'],result['artistName'])
             if result['artistName'] == probablyArtist \
                 and (result['collectionName'] == probablyAlbum or \
                 result['collectionCensoredName'] == probablyAlbum) and \
-                (trackName == probablyTitle or trackCensoredName == probablyTitle):
+                (result['trackName'] == probablyTitle or result['trackCensoredName'] == probablyTitle):
                 # an exact match! yessss
                 artist,new = Artist.objects.get_or_create(name=probablyArtist,
                                                           appleID=result['artistId'])
                 if new:
                     print "New artist added to database: {}".format(artist)
+                else:
+                    print "Already have artist: {}".format(artist)
+                    
                 album,new = Album.objects.get_or_create(name=probablyAlbum,
                                                         appleID=result['collectionId'])
                 if new:
                     print "New album added to database: {}".format(album)
                     album.appleCover = result['artworkUrl100']
                     album.explicit = True if result['collectionExplicitness'] != 'notExplicit' else False
-                    album.releaseDate = results['releaseDate']
+                    album.releaseDate = datetime.datetime.strptime(result['releaseDate'], "%Y-%m-%dT%I:%M:%SZ")
                     album.save()
                     print "Adding {} to {}'s album set...".format(album,artist)
-                    artist.albums.add(album)
+                    artist.album_set.add(album)
                 
                 
                 genre, new = MusicGenre.objects.get_or_create(name=result['primaryGenreName'])
                 if new:
                     print "Found new genre: {}".format(genre)
+                else:
+                    print "Not a new genre: {}".format(genre)
                 
+                duration = datetime.timedelta(0,0,0,result['trackTimeMillis'])
+                print "Duration: {}".format(duration)
                 track,new = Song.objects.get_or_create(name=probablyTitle,artist=artist,album=album,
                                                        appleID=result['trackId'],
                                                        tracknum=result['trackNumber'],
-                                                       applePreview=result['previewUrl'])
+                                                       applePreview=result['previewUrl'],
+                                                       time = str(datetime.timedelta(milliseconds=result['trackTimeMillis'])),
+                                                       matchtype = 1)
                 if new:
                     print "New Song - {}".format(track)
                     print "Adding to {}'s song set...".format(album)
                     album.song_set.add(track)
                     print "Adding to {}'s song_set...".format(artist)
                     artist.song_set.add(track)
+                    print "Adding song to genre {}'s song_set..."
+                    genre.songs.add(track)
+                    genre.save()
+                else:
+                    print "Not a new song."
                 print "Adding File {} to track's file set..."
-                track.file_set.add(candidate)
+                track.files.add(candidate)
+                # since this is a perfect match, we don't need to look through any other results
+                break
                 
                 

@@ -77,6 +77,8 @@ class Song(models.Model):
     #endings = super.audioEndings
     appleID = models.BigIntegerField(null=True,unique=True)
     applePreview = models.URLField(null=True)
+    
+    #Matchtypes:
     # 1: perfect
     # 2: dir structure match
     # 3: ummm...dunno.
@@ -93,13 +95,13 @@ class MusicGenre(models.Model):
         return "{}".format(self.name)
     
 class Album(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     artist = models.ForeignKey('Artist', null=True)
     explicit = models.BooleanField(default=False)
     appleCover = models.URLField(null=True)
     cover = models.URLField(null=True)
     appleID = models.BigIntegerField(null=True,unique=True)
-    releaseDate = models.DateTimeField()
+    releaseDate = models.DateTimeField(null=True)
     
     def __init__(self,*args,**kwargs):
         models.Model.__init__(self,*args,**kwargs)
