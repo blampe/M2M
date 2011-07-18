@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.db.models import Count
 
 from datetime import datetime
+import time
 
 from stats.models import Status, Log
 from models import MovieGenre,MovieCert,Movie,\
@@ -157,6 +158,25 @@ def movieSearch(request, page=1):
     except KeyError:
         optionsUp='0'
     p = Paginator(movieList,PERPAGE)
+    
+##############################################################
+# ---- Log results of the search ---- #
+#
+    try:
+        client = request.META['HTTP_X_FORWARDED_FOR']
+    except KeyError:
+     # REMOTE_ADDR is *always* 127.0.0.1
+     # unless we're on test server!
+        client = request.META['REMOTE_ADDR']
+        
+    newest = Log(time=time.mktime(time.localtime()),
+                 client=client,
+                 hits=p.count,
+                 position=page*PERPAGE,
+                 searchstring="Search [MOVIE]: {}".format(q))
+    newest.save()
+######################################################
+    
     return render_to_response('advancedsearch/movies/results.html',
         {
         'search':'current',
