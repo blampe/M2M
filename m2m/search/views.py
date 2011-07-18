@@ -449,11 +449,11 @@ def results(request,page='1'):
         from stats.models import Log
         newest = Log(time=time.mktime(time.localtime()),
              client=client,
-             hits=result['total'],
+             found=result['total'],
              position=int(page)*PERPAGE,
              searchstring="Search: {}".format(q),
              mode=logType[params['mode']],
-             type=logMode[params['type']],
+             flags=logMode[params['type']],
              hosttype=3)
         newest.save()    
     ######################################################
