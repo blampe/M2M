@@ -437,13 +437,6 @@ def results(request,page='1'):
             'dirsSubstr':2,
             'filesdirsSubstr':3,
         }
-        
-        from django.db import connection
-        
-        cursor = connection.cursor()
-        
-        cursor.execute('LOCK TABLES log WRITE')
-        
         # one day, this block will actually check if key exists,
         # rather than try/excepting it like a dirty migrant worker.
         try:
@@ -452,26 +445,15 @@ def results(request,page='1'):
          # REMOTE_ADDR is *always* 127.0.0.1
          # unless we're on test server!
             client = request.META['REMOTE_ADDR']
-            
-    # Do not fuck with this;
-    # it will make you its bitch.       
-        cursor.execute(
-            'INSERT INTO log (Time,Client,SearchString,Hits,Position,Mode,HostType,Flags,Duration,Found,Date,MinSize,MaxSize)\
-            VALUES (%(time)d, "%(client)s", "%(search)s",%(hits)d,%(pos)d,%(mode)d,%(hostT)d,%(type)d,0,0,0,0,0)' % {
-                'time':time.mktime(time.localtime()),
-                'client': client,
-                'search':"Search: %(query)s" % {'query':q},
-                'hits':result['total'],
-                'pos':int(page)*PERPAGE, # in case PERPAGE changes. this way we know exactly which results.
-                'mode':logType[params['mode']],
-                'hostT':3, # 3 means that we're searching SMB shares, which is all we do.
-                'type':logMode[params['type']],
-            }
-        )
-        cursor.execute('UNLOCK TABLES')
-        transaction.set_dirty()
-        transaction.commit()
-        connection.close()
+        newest = Log(time=time.mktime(time.localtime()),
+             client=client,
+             hits=result['total'],
+             position=int(page)*PERPAGE,
+             searchstring="Search: {}".format(q)
+             mode=logType[params['mode']],
+             type=logMode[params['type']],
+             hosttype=3)
+        newest.save()    
     ######################################################
     
         try: 
