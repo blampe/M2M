@@ -342,12 +342,12 @@ def crawlForMusic(count=0):
         
         # also '_'
         probablyTitle = info[0].rstrip().replace('_',' ')
-        
+
         # ignore anything between {}
         print "  cutting out things in \{\}..."
         probablyTitle = re.sub(r'{.*}','',probablyTitle)
         probablyTitle = probablyTitle.replace('  ',' ')
-        
+        titlecopy = probablyTitle
         params = {}
         
         # hopefully nobody was retarded about this:
@@ -373,6 +373,30 @@ def crawlForMusic(count=0):
             continue
             
         resultDump = json.load(urllib.urlopen(url))
+    
+        if resultDump['resultCount'] == 0 and titlecopy != "":
+            # wrap this in a try...except because FUCK YOU
+            try:
+                print "  This is a WOPR file, that rat bastard. Making changes."
+                probablyTitle = titlecopy
+                print "  Cutting out artist name from title."
+                probablyTitle = re.sub(u'{}'.format(probablyArtist.replace('(',r'\(').replace(')',r'\)')),'',probablyTitle)
+                info = re.split(' - ',probablyTitle)
+                probablyTitle = info[-1]
+                probablyAlbum = info[1]
+                params = {}
+                try:
+                    print u"Searching for {}, by {} in album: {}".format(probablyTitle,probablyArtist,probablyAlbum)
+                except:
+                    print u"Can't print search term, OH WELL"
+                params.update({'term':probablyTitle,
+                               'entity':'musicTrack',
+                               'attribute':'allTrackTerm',})
+                url = u"{}?{}".format(searchbase,urllib.urlencode(params))
+
+                resultDump = json.load(urllib.urlopen(url))
+            except:
+                pass
         if resultDump['resultCount'] == 0:
             candidate.remove_dne_problem()
             #prob = DNEProblem()
