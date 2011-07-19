@@ -39,6 +39,25 @@ def movieSplash(request):
 def movieRandom(request):
     
     movieId = Movie.objects.order_by('?')[:1][0].id
+    
+##############################################################
+# ---- Log results of the search ---- #
+#
+    try:
+        client = request.META['HTTP_X_FORWARDED_FOR']
+    except KeyError:
+     # REMOTE_ADDR is *always* 127.0.0.1, but the above doesn't work
+     # on test boxes using the django server
+        client = request.META['REMOTE_ADDR']
+        
+    newest = Log(time=time.mktime(time.localtime()),
+                 client=client,
+                 hits=p.count,
+                 position=page*PERPAGE,
+                 searchstring="Search [MOVIE - RANDOM]")
+    newest.save()
+######################################################
+    
     return movieDetail(request,movieId)
     
     
