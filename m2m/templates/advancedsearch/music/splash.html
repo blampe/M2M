@@ -1,0 +1,27 @@
+{% extends "base_page.html" %}
+{% load search_extras %}
+
+{% block searchbar %}
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Music is coming.</h1>
+
+<h2> Get ready.</h2>
+
+{% endblock %}
+
+{% block extraContent %}
+<p>We're working to bring you the same convenience in searching as we have brought for movies - it's not quite ready yet, but if you're interested (especially you, servers), here's what you can do to help everybody get ready:</p>
+<ol>
+	<li>Rearrange your directories.<p>Because it would be a lot of work for everybody to add metadata to their filenames, we ask that you structure your directories in the same (and, we think, intuitive) way:
+		<blockquote>[whatever-you-like]/Artist/Album/Song.mp3</blockquote>
+		This will allow us to correctly determine the artist and the album for a given song - which is important since
+		different artists often have songs that share titles (those bitches). M2M will look at files whose directory tree includes any folder that contains the word "music" (ignoring capitalization).</p></li>
+	<li>Rename your files.<p>M2M Recognizes song titles based on their names. This means we have to trust you to name them correctly, and in a manner that we can recognize. There are a <strong>lot</strong> of file naming conventions on the network, especially with regard to sound files. We've tried to work around the ones that look the most common, but we can't get all of them - they vary too much between servers, and even within servers' collections there isn't a lot of consistency.</p><p> Thus, we ask that you strip all information out songs' filenames except for their title. Coupled with the directory structure listed above, the nearly all of the metadata that's in the filenames can be determined automatically.</p><p>If you can't bear to delete so much, just surround non-title information with braces. As with the movies, anything between "{}" will be ignored as far as recognizing the title goes.</p></li>
+</ol>	
+<p>That's it; these two steps will enable M2M to recognize nearly all of the music collected on the network, and make it searchable by genre, artist, album, and title. Some of the more esoteric artists won't be catalogued immediately, but as we expand our reach, more and more will be included.</p>
+<p>We have some really exciting things coming down the line, but first and foremost we want to get these advanced searching categories out of the way.</p>
+{% endblock %}

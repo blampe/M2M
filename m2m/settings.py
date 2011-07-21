@@ -77,7 +77,10 @@ STATIC_URL = '/media/'
 ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 # A list of locations of additional static files
-STATICFILES_DIRS = ("C:/Users/haak/M2M/m2m/media/",)
+STATICFILES_DIRS = (
+		"C:/Users/haak/M2M/m2m/media/", # windows dev
+		"/Users/haak/Desktop/M2M/m2m/media/" # mac dev
+)
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -123,8 +126,9 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     
-    "/home/haak/M2M/m2m/templates/",
-    "C:/Users/haak/M2M/m2m/templates/",
+    "/home/haak/M2M/m2m/templates/", # linux dev
+    "C:/Users/haak/M2M/m2m/templates/", # windows dev
+	"/Users/haak/Desktop/M2M/m2m/templates", # mac dev
     
 )
 

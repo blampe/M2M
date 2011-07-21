@@ -183,7 +183,7 @@ def movieDetail(request,id):
           'search':'current',})
     
 def musicSplash(request):
-    return render_to_response('404.html',
+    return render_to_response('advancedsearch/music/splash.html',
         {
         'search':'current',
         'music':'current',
