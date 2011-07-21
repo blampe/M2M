@@ -1,5 +1,6 @@
 {% extends 'advancedsearch/music/splash.html' %}
-
+{% load search_extras %}
+{% load advancedsearch_extras %}
 {% block title %} M2M - {{artist}} {%endblock %}
 
 {% block content %}
@@ -11,14 +12,19 @@
 <li>
 <img src="{{album.appleCover}}" valign="middle"/>{{ album }}, released {{album.releaseDate|date:"M d, Y"}}<br />
 <ol>
-{% for song in album.song_set.all %}
-<li>&nbsp;{{song}}:{{song.time}}:{{song.genres.all}}
+{% for song in album.song_set.all|order_by:"tracknum" %}
+{% if song.files.count > 0 %}
+<li>&nbsp;{{song}} {{song.time|time:"i:s"}} [{% for genre in song.genres.all %} {{genre.name}} {% endfor %}]
 <ul>
 {% for file in song.files.all %}
-<li><a href="smb://{{file.path.hid}}{{file.path}}/"> {{file}} </a></li>
+<li><a href="smb://{{file.path.hid}}{{file.path}}/"> {{file}} </a> {{file.filesize|sizeToReadable}}</li>
 {% endfor %}
 </ul>
 </li>
+{% else %}
+{# if it has no files, delete the song (silently) #}
+{% delete Song song.id %}
+{% endif %}
 {% endfor %}
 </ol>
 </li>

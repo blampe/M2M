@@ -99,7 +99,7 @@ class MusicGenre(models.Model):
     name = models.CharField(max_length=100,unique=True)
     
     def __unicode__(self):
-        return "{}".format(self.name)
+        return u"{}".format(self.name)
     
 class Album(models.Model):
     name = models.CharField(max_length=100)
@@ -123,4 +123,4 @@ class Artist(models.Model):
     appleID = models.BigIntegerField(null=True,unique=True)
     
     def __unicode__(self):
-        return "{}".format(self.name)
+        return u"{}".format(self.name)

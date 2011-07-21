@@ -10,6 +10,19 @@ from browseNet.models import Path
 import urllib2
 
 register = template.Library()
+@register.filter
+def order_by(queryset, args):
+    '''
+    Orders a queryset
+    
+    Arguments:
+        queryset
+            duh
+        args
+            a string of attributes by which to order, separated by commas
+    '''
+    args = [x.strip() for x in args.split(',')]
+    return queryset.order_by(*args)
 
 @register.filter
 def sizeToReadable(value):
@@ -158,7 +171,7 @@ from django.core.urlresolvers import reverse
 import random
 class LogoNode(template.Node):
     
-    mChoices = ['Mmath'] * 10 # make it more likely to see the old M's
+    mChoices = ['Mmath'] * 15 # make it more likely to see the old M's
     mChoices += ['Moldenglish',
                 'Mvivaldi',
                 'Mcurlz',

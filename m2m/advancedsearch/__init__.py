@@ -302,7 +302,7 @@ def crawlForMusic(count=0):
                             .exclude(filename__istartswith='.')\
                             .exclude(filename__istartswith='_')\
                             .exclude(filename__istartswith='!')
-    total = len(candidates)
+    total = candidates.count() - count
     print "{:d} files to check. Here we go...".format(total)
     for candidate in candidates[count:]:
         if candidate.goodfile == 0:
@@ -346,19 +346,20 @@ def crawlForMusic(count=0):
         # ignore anything between {}
         print "  cutting out things in \{\}..."
         probablyTitle = re.sub(r'{.*}','',probablyTitle)
+        probablyTitle = probablyTitle.replace('_',' ')
         probablyTitle = probablyTitle.replace('  ',' ')
         titlecopy = probablyTitle
         params = {}
         
         # hopefully nobody was retarded about this:
-        probablyAlbum = candidate.path.shortname
-        probablyArtist = candidate.path.parent.shortname
+        probablyAlbum = unicode(candidate.path.shortname.replace('.',' ').replace('_',' ').replace('  ',' '))
+        probablyArtist = unicode(candidate.path.parent.shortname.replace('.',' ').replace('_',' ').replace('  ',' '))
         try:
             # cut out artists from file name? i.e. "Oxford Comma - Vampire Weekend" -> "Oxford Comma"
             print "  cutting out probable artist name from title, if applicable"
-            probablyTitle = re.sub('{}'.format(probablyArtist.replace('(',r'\(').replace(')',r'\)')),'',probablyTitle)
-            probablyTitle = probablyTitle.replace(' - ','').replace('  ',' ')
-        except UnicodeEncodeError:
+            probablyTitle = re.sub(u'{}'.format(probablyArtist.replace(u'(',r'\(').replace(u')',r'\)')),u'',probablyTitle)
+            probablyTitle = probablyTitle.replace(u' - ',u'').replace(u'  ',u' ')
+        except:
             continue
         try:
             print u"Searching for {}, by {} in album: {}".format(probablyTitle,probablyArtist,probablyAlbum)
@@ -372,7 +373,10 @@ def crawlForMusic(count=0):
         except:
             continue
             
-        resultDump = json.load(urllib.urlopen(url))
+        try:
+            resultDump = json.load(urllib.urlopen(url))
+        except:
+            resultDump = {'resultCount':0}
     
         if resultDump['resultCount'] == 0 and titlecopy != "":
             # wrap this in a try...except because FUCK YOU
@@ -380,7 +384,7 @@ def crawlForMusic(count=0):
                 print "  This is a WOPR file, that rat bastard. Making changes."
                 probablyTitle = titlecopy
                 print "  Cutting out artist name from title."
-                probablyTitle = re.sub(u'{}'.format(probablyArtist.replace('(',r'\(').replace(')',r'\)')),'',probablyTitle)
+                probablyTitle = unicode(re.sub(u'{}'.format(probablyArtist.replace('(',r'\(').replace(')',r'\)')),'',probablyTitle))
                 info = re.split(' - ',probablyTitle)
                 probablyTitle = info[-1]
                 probablyAlbum = info[1]
@@ -419,15 +423,24 @@ def crawlForMusic(count=0):
                 result['collectionCensoredName'] == probablyAlbum) and \
                 (result['trackName'] == probablyTitle or result['trackCensoredName'] == probablyTitle):
                 # an exact match! yessss
-                artist,new = Artist.objects.get_or_create(name=probablyArtist,
+                try:
+                    artist,new = Artist.objects.get_or_create(name=probablyArtist,
                                                           appleID=result['artistId'])
+                except:
+                    continue
+                    
                 if new:
                     print u"New artist added to database: {}".format(artist)
                 else:
                     print u"Already have artist: {}".format(artist)
                     
-                album,new = Album.objects.get_or_create(name=probablyAlbum,
+                try:
+                    album,new = Album.objects.get_or_create(name=probablyAlbum,
                                                         appleID=result['collectionId'])
+                except:
+                    # some appleID shit got fucked
+                    continue
+                    
                 if new:
                     print u"New album added to database: {}".format(album)
                     album.appleCover = result['artworkUrl100']
@@ -458,12 +471,12 @@ def crawlForMusic(count=0):
                     album.song_set.add(track)
                     print u"Adding to {}'s song_set...".format(artist)
                     artist.song_set.add(track)
-                    print u"Adding song to genre {}'s song_set..."
+                    print u"Adding song to genre {}'s song_set...".format(genre)
                     genre.songs.add(track)
                     genre.save()
                 else:
                     print "Not a new song."
-                print u"Adding File {} to track's file set..."
+                print u"Adding File {} to track's file set...".format(candidate.filename)
                 track.files.add(candidate)
                 # since this is a perfect match, we don't need to look through any other results
                 break

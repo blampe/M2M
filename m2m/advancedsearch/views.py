@@ -10,7 +10,25 @@ from models import MovieGenre,MovieCert,Movie,\
 # Create your views here.
 
 PERPAGE = 50
-
+escape_chars = {
+                    '!':r'\!',
+                    '<':r'\<',
+                    '>':r'\>',
+                   # '(':r'\(',     # this is an operator for something
+                   # ')':r'\)',     # this is an operator for something
+                   # '@':r'\@',     # this is an operator for something
+                    '~':r'\~',
+                    "'":r'\'',
+                    '"':r'\"',
+                    '\\':r"",
+                    '/' : r'\/',
+                    #'$':r'$',
+                    '%':"",
+                    '#':'',
+                    #'^':'%%5E',    # this is an operator for something
+                    #'-':r'\-',     # this is an operator for something
+                    #r'|':"%%7F",   # this is an operator for something
+                    }
 def splash(request):
     ''' 
         An overview of the latest movies, music, and shows added to the network?
@@ -63,25 +81,7 @@ def movieRandom(request):
     
 def movieSearch(request, page=1):
     from django.core.paginator import Paginator
-    escape_chars = {
-                    '!':r'\!',
-                    '<':r'\<',
-                    '>':r'\>',
-                   # '(':r'\(',     # this is an operator for something
-                   # ')':r'\)',     # this is an operator for something
-                   # '@':r'\@',     # this is an operator for something
-                    '~':r'\~',
-                    "'":r'\'',
-                    '"':r'\"',
-                    '\\':r"",
-                    '/' : r'\/',
-                    #'$':r'$',
-                    '%':"",
-                    '#':'',
-                    #'^':'%%5E',    # this is an operator for something
-                    #'-':r'\-',     # this is an operator for something
-                    #r'|':"%%7F",   # this is an operator for something
-                    }
+    
     try:
         q = request.GET['q']
         
