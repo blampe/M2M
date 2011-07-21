@@ -11,16 +11,34 @@
 
 {% endblock %}
 
-{% block content %}
+{% block stylin %}
 
-<div style="display:block">
-<img id='poster' style='float:left;margin-right:25px;' src="{{movie.poster}}"/><h1><a href="{{movie.url}}">{{movie}}</a></h1>
+<style>
+#content div {
+	display:block;
+	margin-left: 25%;
+}
+
+#extraContent table{
+	position: relative;
+	left: 25%;
+}
+</style>
+
+{% endblock %}
+
+{% block content %}
+<img id='poster' style='position:fixed;margin-right:25px;' src="{{movie.poster}}"/>
+
+<div>
+<header><h1><a href="{{movie.url}}">{{movie}}</a></h1>
 <h3>{{movie.rating}}/10</h3>
+
 <div style="display:inline;">Directed by {{movie.director}}<br />
 
 Rated {% if movie.cert.cert == "None" %} NR {%else%}{{movie.cert}}{%endif%}<br />
-Released {{movie.released}}<br />
-
+Released {{movie.released}}<br /></div>
+</header>
 <p id="overview">
  {{movie.overview}}
 </p>
@@ -28,8 +46,6 @@ Genres:
 {% for genre in movie.genres.all %}
 {{genre}}{% if forloop.last %}{%else%}, {%endif%}
 {% endfor %}
-
-</div>
 </div>
 
 {% endblock %}
@@ -37,28 +53,31 @@ Genres:
 {%block extraContent %}
 
 {% for file in movie.files.all %}
-
-{%if file.path.hid.servesDirect %}<a class="directLink" href="{{file|makeLink:'True'}}" title="direct download!">
+{% if forloop.first %}<table>{% endif %}
+<tr><td>{%if file.path.hid.servesDirect %}
+	<a class="directLink" href="{{file|makeLink:'True'}}" title="direct download!">
                         <img valign="top" src="/media/images/arrowBlueDown2.png" width="15px" id="directImg"/>
                         </a>
-    {%endif%}
-    <a href="{{file|makeLink}}"
-       title="{{file}}"
-       class="fileLink" rel="nofollow">{{file}}</a> 
-    {% with file|host as host %}
+    {%endif%}</td>
+    <td style="padding-right:15px;">
+		<a href="{{file|makeLink}}"
+      	 title="{{file}}"
+	     class="fileLink" rel="nofollow">{{file}}</a></td> 
+    <td align="right">{% with file|host as host %}
         <a href="smb://{{host}}">{{host.smb}}</a>
-    {% endwith %} 
-       {% with file|size as size %}
+    {% endwith %} </td>
+    <td align="right">   {% with file|size as size %}
     {{size|sizeToReadable}}
-    {% endwith %}
-    {% if file.goodfile == 1 %}
+    {% endwith %}</td>
+    <td>{% if file.goodfile == 1 %}
     <img valign="top" src="/media/images/goodfile.gif"/>{%else%}
     {% if file.goodfile == 0%}
         <img valign='top' src="/media/images/badfile.gif"/>
     {%else%}
         <img valign='top' src="/media/images/unclearfile.gif"/>
-    {%endif%}
-    {%endif%}<br />
+    {%endif%}</td>
+    {%endif%}</tr>
+{% if forloop.last %}</table>{% endif %}
 {% empty %}
 {% delete Movie movie.id %}
 Sorry, this movie doesn't have any files - it has now been removed from our database.
