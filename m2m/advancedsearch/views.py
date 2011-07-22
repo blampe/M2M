@@ -2,13 +2,33 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.db.models import Count
 
 from datetime import datetime
+import time
 
 from stats.models import Status, Log
-from models import MovieGenre,MovieCert,Movie
+from models import MovieGenre,MovieCert,Movie,\
+                    MusicGenre,Artist,Song,Album
 # Create your views here.
 
 PERPAGE = 50
-
+escape_chars = {
+                    '!':r'\!',
+                    '<':r'\<',
+                    '>':r'\>',
+                   # '(':r'\(',     # this is an operator for something
+                   # ')':r'\)',     # this is an operator for something
+                   # '@':r'\@',     # this is an operator for something
+                    '~':r'\~',
+                    "'":r'\'',
+                    '"':r'\"',
+                    '\\':r"",
+                    '/' : r'\/',
+                    #'$':r'$',
+                    '%':"",
+                    '#':'',
+                    #'^':'%%5E',    # this is an operator for something
+                    #'-':r'\-',     # this is an operator for something
+                    #r'|':"%%7F",   # this is an operator for something
+                    }
 def splash(request):
     ''' 
         An overview of the latest movies, music, and shows added to the network?
@@ -37,30 +57,31 @@ def movieSplash(request):
 def movieRandom(request):
     
     movieId = Movie.objects.order_by('?')[:1][0].id
+    
+##############################################################
+# ---- Log results of the search ---- #
+#
+    try:
+        client = request.META['HTTP_X_FORWARDED_FOR']
+    except KeyError:
+     # REMOTE_ADDR is *always* 127.0.0.1, but the above doesn't work
+     # on test boxes using the django server
+        client = request.META['REMOTE_ADDR']
+        
+    newest = Log(time=time.mktime(time.localtime()),
+                 client=client,
+                 hits=p.count,
+                 position=page*PERPAGE,
+                 searchstring="Search [MOVIE - RANDOM]")
+    newest.save()
+######################################################
+    
     return movieDetail(request,movieId)
     
     
 def movieSearch(request, page=1):
     from django.core.paginator import Paginator
-    escape_chars = {
-                    '!':r'\!',
-                    '<':r'\<',
-                    '>':r'\>',
-                   # '(':r'\(',     # this is an operator for something
-                   # ')':r'\)',     # this is an operator for something
-                   # '@':r'\@',     # this is an operator for something
-                    '~':r'\~',
-                    "'":r'\'',
-                    '"':r'\"',
-                    '\\':r"",
-                    '/' : r'\/',
-                    #'$':r'$',
-                    '%':"",
-                    '#':'',
-                    #'^':'%%5E',    # this is an operator for something
-                    #'-':r'\-',     # this is an operator for something
-                    #r'|':"%%7F",   # this is an operator for something
-                    }
+    
     try:
         q = request.GET['q']
         
@@ -156,6 +177,25 @@ def movieSearch(request, page=1):
     except KeyError:
         optionsUp='0'
     p = Paginator(movieList,PERPAGE)
+    
+##############################################################
+# ---- Log results of the search ---- #
+#
+    try:
+        client = request.META['HTTP_X_FORWARDED_FOR']
+    except KeyError:
+     # REMOTE_ADDR is *always* 127.0.0.1
+     # unless we're on test server!
+        client = request.META['REMOTE_ADDR']
+        
+    newest = Log(time=time.mktime(time.localtime()),
+                 client=client,
+                 hits=p.count,
+                 position=page*PERPAGE,
+                 searchstring="Search [MOVIE]: {}".format(q))
+    newest.save()
+######################################################
+    
     return render_to_response('advancedsearch/movies/results.html',
         {
         'search':'current',
@@ -187,6 +227,42 @@ def musicSplash(request):
         {
         'search':'current',
         'music':'current',
+        }
+    )
+
+def musicSearch(request,page=0):
+    return render_to_response('404.html',
+        {
+        'search':'current',
+        'music':'current',
+        }
+    )
+    
+def artistDetail(request,id="Q"):
+
+    artist = get_object_or_404(Artist,pk=id)
+
+    return render_to_response('advancedsearch/music/artistDetail.html',
+        {
+        'search':'current',
+        'music':'current',
+        'artist':artist,
+        }
+    )
+
+def albumDetail(request,id="Q"):
+    return render_to_response('404.html',
+        {
+        'search':'current',
+        'shows':'current',
+        }
+    )
+
+def songDetail(request,id="Q"):
+    return render_to_response('404.html',
+        {
+        'search':'current',
+        'shows':'current',
         }
     )
     

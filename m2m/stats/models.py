@@ -26,7 +26,7 @@ class Status2(models.Model):
 
 class Log(models.Model):
     
-    lid = models.IntegerField(primary_key=True,db_column="LID")
+    id = models.IntegerField(primary_key=True,db_column="LID")
     
     # Time - timestamp of logged activity
     time = models.IntegerField(db_column="Time",max_length=10) # !! Turn this into datefield after production
@@ -34,6 +34,9 @@ class Log(models.Model):
     # SearchString - site activities, categorized by start word
     #   'Browse:' - user navigating deep browse.
     #   'Search:' - user making regular search query
+    #       'Search [MOVIE]:' - user searching through the movies search
+    #       'Search [MUSIC]:' - user searching through the music search
+    #       'Search [SHOW]:' - user searching through the show search
     #   'Request:' - user making request
     #   'Complete:' - user completing request
     #   'EditReq:' - User editing request

@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 23
+/svn/!svn/ver/255/trunk
+END
+pylast.py
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/!svn/ver/255/trunk/pylast.py
+END
+INSTALL
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/199/trunk/INSTALL
+END
+setup.py
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/228/trunk/setup.py
+END
+COPYING
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/226/trunk/COPYING
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 30
+/svn/!svn/ver/202/trunk/README
+END
+.build
+K 25
+svn:wc:ra_dav:version-url
+V 30
+/svn/!svn/ver/255/trunk/.build
+END

@@ -7,7 +7,7 @@ import re
 class Path(models.Model):
     pid = models.IntegerField(primary_key=True, db_column='PID') # Field name made lowercase.
     hash = models.IntegerField(db_column='Hash') # Field name made lowercase.
-    ppid = models.IntegerField(db_column='PPID') # Field name made lowercase.
+    parent = models.ForeignKey('self',db_column='PPID',related_name='children') # Field name made lowercase.
     hid = models.ForeignKey('Host',db_column='HID',related_name='browse_path_set') # Field name made lowercase.
     sid = models.ForeignKey('Share',db_column='SID') # Field name made lowercase.
     shortname = models.CharField(max_length=765, db_column='ShortName') # Field name made lowercase.

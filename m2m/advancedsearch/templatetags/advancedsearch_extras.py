@@ -2,7 +2,7 @@ from django import template
 from django.utils.safestring import mark_safe
 from django.core.exceptions import ObjectDoesNotExist
 
-from advancedsearch.models import Movie, Music, Show
+from advancedsearch.models import *
 from browseNet.models import Path
 
 
@@ -38,3 +38,4 @@ def do_delete(parser,token):
     except:
         raise ValueError("Could not understand the id %r" % id)
     return DeleteNode(model,id,id_var)
+    

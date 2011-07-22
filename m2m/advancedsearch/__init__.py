@@ -34,18 +34,27 @@ def logComplaints(issues=False):
     return
 
     
+def clean_slate(candidate):
+    candidate.remove_problems()
+    try:
+        pset = candidate.path.hid.problems
+    except:
+        pset = ProblemSet()
+        pset.host = candidate.path.hid
+        pset.save()
+    return pset
 def crawlForMovies(count=0):
     ''' Imports things that are recognized as Movies from File table'''
     from models import Movie,MovieCert,MovieGenre
     
     # grab all video files from things with Movie in the path name,
     # excluding things whose filename begin with '.' or '_'
-    print "Filtering out non-(%s)" % File.videoEndings
-    candidates = File.objects.filter(filenameend__regex=r'(%s)' % File.videoEndings)
+    print "Filtering out non-({})".format(File.videoEndings)
+    candidates = File.objects.filter(filenameend__regex=r'({})'.format(File.videoEndings))
     
     dirExcludes = "pornography"
-    print "Filtering out things in (%s) directories, things not in movies" % dirExcludes
-    candidates = candidates.exclude(path__fullname__regex='(%s)' % dirExcludes)\
+    print "Filtering out things in ({}) directories, things not in movies".format(dirExcludes)
+    candidates = candidates.exclude(path__fullname__regex='({})'.format(dirExcludes))\
                            .filter(path__fullname__icontains='Movies')\
                            .exclude(filename__istartswith='.')\
                            .exclude(filename__istartswith='_')
@@ -66,19 +75,12 @@ def crawlForMovies(count=0):
     #issues['nomatches'] = []
     
     total = len(candidates)
-    print "%d files to check. Here we go..." % total
+    print "{:d} files to check. Here we go...".format(total)
     for candidate in candidates[count:]:
         if candidate.goodfile == 0:
             print "Marked as bad file; skipping..."
             continue
-        candidate.remove_problems()
-        try:
-            pset = candidate.path.hid.problems
-        except:
-            pset = ProblemSet()
-            pset.host = candidate.path.hid
-            pset.save()
-    
+        pset = clean_slate(candidate)
         count += 1
         # skip all of this if the file already has a movie
         print candidate.id
@@ -272,3 +274,211 @@ def crawlForMovies(count=0):
     # store problems in database
     #logComplaints(issues)
     return 
+    
+def crawlForMusic(count=0):
+    '''
+    # last.fm stuff; it's faster to use iTunes searching, for crawling.
+    # maybe last.fm can be included to pages? for streaming - i like this idea
+    import pylast
+    API_KEY = "283c7b1312dc8cbfc2f87c5295eaf1a4"
+    API_SECRET = "9039c6513dd4a9598a6925c44db1b24a"
+    username = 'm2mmusic'
+    password_hash = pylast.md5("skynet")
+    network = pylast.LastFMNetwork(api_key=API_KEY,api_secret=API_SECRET,
+                                   username=username, password_hash=password_hash)
+    '''
+    from models import Song, Artist, Album, MusicGenre
+    # iTunes api stuff
+    import json, urllib
+    searchbase = "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsSearch"
+    lookupbase = "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup"
+    
+    print "Filtering out non-({})".format(File.audioEndings)
+    candidates = File.objects.filter(filenameend__regex=r'({})'.format(File.audioEndings))
+    
+    dirExcludes = None
+    print "filtering out things in ({}), things not in music, and (\.|_|!)-beginning files".format(dirExcludes)
+    candidates = candidates.filter(path__fullname__icontains="Music")\
+                            .exclude(filename__istartswith='.')\
+                            .exclude(filename__istartswith='_')\
+                            .exclude(filename__istartswith='!')
+    total = candidates.count() - count
+    print "{:d} files to check. Here we go...".format(total)
+    for candidate in candidates[count:]:
+        if candidate.goodfile == 0:
+            print "File marked as bad, skipping."
+            continue
+        pset = clean_slate(candidate)
+        
+        count += 1
+        # skip all of this if the file already has a movie
+        print candidate.id
+        try:
+            if candidate.MuIDs != None:
+                print "  Candidate file {} is already recognized; moving on!".format(candidate.id)
+                continue
+        except ObjectDoesNotExist:
+            # an old movie file was deleted
+            print "  Previous song no longer extant, resetting link..."
+            candidate.MuIDs = None
+            candidate.save()
+        # get rid of the file extension
+        print "#{:d} out of {:d}".format(count, total)
+        print "  Candidate (ID {:d}): {} ".format(candidate.id, candidate)
+        print "  slicing off extension..."
+        sliceIndex = candidate.filename.rfind('.')
+        info = candidate.filename[:sliceIndex]
+        
+        print "  slicing off tracknumber, if it's there..."
+        if re.match("^\d+( )?(-)?( )?",info):
+            info = re.sub(r"^\d+( )?(-?)( )?",'',info)
+        
+        # some people (coughWOPRcough) like to use '\.' instead of spaces, in their filenames.
+        # fuck those people.
+        info = re.split("\.",info)
+        info = u" ".join(info)
+        info = re.split("\((.*)\)",info)
+        
+        
+        # also '_'
+        probablyTitle = info[0].rstrip().replace('_',' ')
+
+        # ignore anything between {}
+        print "  cutting out things in \{\}..."
+        probablyTitle = re.sub(r'{.*}','',probablyTitle)
+        probablyTitle = probablyTitle.replace('_',' ')
+        probablyTitle = probablyTitle.replace('  ',' ')
+        titlecopy = probablyTitle
+        params = {}
+        
+        # hopefully nobody was retarded about this:
+        probablyAlbum = unicode(candidate.path.shortname.replace('.',' ').replace('_',' ').replace('  ',' '))
+        probablyArtist = unicode(candidate.path.parent.shortname.replace('.',' ').replace('_',' ').replace('  ',' '))
+        try:
+            # cut out artists from file name? i.e. "Oxford Comma - Vampire Weekend" -> "Oxford Comma"
+            print "  cutting out probable artist name from title, if applicable"
+            probablyTitle = re.sub(u'{}'.format(probablyArtist.replace(u'(',r'\(').replace(u')',r'\)')),u'',probablyTitle)
+            probablyTitle = probablyTitle.replace(u' - ',u'').replace(u'  ',u' ')
+        except:
+            continue
+        try:
+            print u"Searching for {}, by {} in album: {}".format(probablyTitle,probablyArtist,probablyAlbum)
+        except:
+            print u"Can't print search term, OH WELL"
+        params.update({'term':probablyTitle,
+                       'entity':'musicTrack',
+                       'attribute':'allTrackTerm',})
+        try:
+            url = u"{}?{}".format(searchbase,urllib.urlencode(params))
+        except:
+            continue
+            
+        try:
+            resultDump = json.load(urllib.urlopen(url))
+        except:
+            resultDump = {'resultCount':0}
+    
+        if resultDump['resultCount'] == 0 and titlecopy != "":
+            # wrap this in a try...except because FUCK YOU
+            try:
+                print "  This is a WOPR file, that rat bastard. Making changes."
+                probablyTitle = titlecopy
+                print "  Cutting out artist name from title."
+                probablyTitle = unicode(re.sub(u'{}'.format(probablyArtist.replace('(',r'\(').replace(')',r'\)')),'',probablyTitle))
+                info = re.split(' - ',probablyTitle)
+                probablyTitle = info[-1]
+                probablyAlbum = info[1]
+                params = {}
+                try:
+                    print u"Searching for {}, by {} in album: {}".format(probablyTitle,probablyArtist,probablyAlbum)
+                except:
+                    print u"Can't print search term, OH WELL"
+                params.update({'term':probablyTitle,
+                               'entity':'musicTrack',
+                               'attribute':'allTrackTerm',})
+                url = u"{}?{}".format(searchbase,urllib.urlencode(params))
+
+                resultDump = json.load(urllib.urlopen(url))
+            except:
+                pass
+        if resultDump['resultCount'] == 0:
+            candidate.remove_dne_problem()
+            #prob = DNEProblem()
+            #prob.file = candidate
+            #prob.save()
+            #pset.dneproblem_set.add(prob)
+            #pset.save()
+            print "No love. Moving on!"
+            continue
+        
+        results = resultDump['results']
+        for result in results:
+            try:
+                print u"Result: {}:{} by {}".format(result['collectionName'],result['trackName'],result['artistName'])
+            except UnicodeEncodeError:
+                print u"Can't print some part of the result. OH WELL"
+                
+            if result['artistName'] == probablyArtist \
+                and (result['collectionName'] == probablyAlbum or \
+                result['collectionCensoredName'] == probablyAlbum) and \
+                (result['trackName'] == probablyTitle or result['trackCensoredName'] == probablyTitle):
+                # an exact match! yessss
+                try:
+                    artist,new = Artist.objects.get_or_create(name=probablyArtist,
+                                                          appleID=result['artistId'])
+                except:
+                    continue
+                    
+                if new:
+                    print u"New artist added to database: {}".format(artist)
+                else:
+                    print u"Already have artist: {}".format(artist)
+                    
+                try:
+                    album,new = Album.objects.get_or_create(name=probablyAlbum,
+                                                        appleID=result['collectionId'])
+                except:
+                    # some appleID shit got fucked
+                    continue
+                    
+                if new:
+                    print u"New album added to database: {}".format(album)
+                    album.appleCover = result['artworkUrl100']
+                    album.explicit = True if result['collectionExplicitness'] != 'notExplicit' else False
+                    album.releaseDate = datetime.datetime.strptime(result['releaseDate'], "%Y-%m-%dT%I:%M:%SZ")
+                    album.save()
+                    print u"Adding {} to {}'s album set...".format(album,artist)
+                    artist.album_set.add(album)
+                
+                
+                genre, new = MusicGenre.objects.get_or_create(name=result['primaryGenreName'])
+                if new:
+                    print u"Found new genre: {}".format(genre)
+                else:
+                    print u"Not a new genre: {}".format(genre)
+                
+                duration = datetime.timedelta(0,0,0,result['trackTimeMillis'])
+                print u"Duration: {}".format(duration)
+                track,new = Song.objects.get_or_create(name=probablyTitle,artist=artist,album=album,
+                                                       appleID=result['trackId'],
+                                                       tracknum=result['trackNumber'],
+                                                       applePreview=result['previewUrl'],
+                                                       time = str(datetime.timedelta(milliseconds=result['trackTimeMillis'])),
+                                                       matchtype = 1)
+                if new:
+                    print u"New Song - {}".format(track)
+                    print u"Adding to {}'s song set...".format(album)
+                    album.song_set.add(track)
+                    print u"Adding to {}'s song_set...".format(artist)
+                    artist.song_set.add(track)
+                    print u"Adding song to genre {}'s song_set...".format(genre)
+                    genre.songs.add(track)
+                    genre.save()
+                else:
+                    print "Not a new song."
+                print u"Adding File {} to track's file set...".format(candidate.filename)
+                track.files.add(candidate)
+                # since this is a perfect match, we don't need to look through any other results
+                break
+                
+                

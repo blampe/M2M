@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load logo from search_extras %}
+{% load search_extras %}
 <html>
     <head>
         <title>{% block title %}{{title|default:"M2M"}}{%endblock%}</title>
@@ -55,6 +55,7 @@
                                 <li><a href="{%url advancedsearch.views.movieSplash %}" id="msearch" rel="self" class="{{movies|default:""}}">Movies</a></li>
                                 <!--<li><a href="{%url advancedsearch.views.showSplash %}" id="ssearch" rel="self" class="{{shows|default:""}}">Shows</a></li>-->
                                 <li><a href="{%url advancedsearch.views.musicSplash %}" id="musearch" rel="self" class="{{music|default:""}}">[Music]</a></li>
+
                             </ul>
                           {% endif %}
                         <li><a href="{% url requests.views.open %}" id="requests"  rel="self" class="{{requests|default:""}}">REQUESTS</a></li>
@@ -100,7 +101,6 @@
                             
                                 
                                 {#{% include "searchbar.html" %}#}
-                                
                                 
                             
                         {% endblock %}
