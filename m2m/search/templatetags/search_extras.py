@@ -149,6 +149,8 @@ def status(object):
         else:
             value = img % {'img':'goodfile.gif','alt':'File is contested.'}
     return mark_safe(value)
+    except:
+        return ''
 status.is_safe=True
         
 ################################################################
