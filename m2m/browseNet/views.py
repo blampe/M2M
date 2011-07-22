@@ -197,5 +197,5 @@ def deepBrowse(request,type="Q",id=-1):
                                 'folderList':folderList,
                                 'fileList':fileList,
                                 'ordering':ordering,
-                                'host':host,
+                                'host':host, # not actually the host - just the HID
                             },)
