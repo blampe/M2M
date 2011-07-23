@@ -7,7 +7,14 @@ class Command(BaseCommand):
     help = "crawls for advanced search objects"
     
     def handle(self, *args, **kwargs):
+        self.stdout.write("Cleaning house...")
+        cleanHouse()
+        
+        self.stdout.write("Starting movie crawl...")
         crawlForMovies()
+        
+        self.stdout.write("Starting music crawl...")
+        crawlForMusic()
         
         self.stdout.write("Crawl completed.")
         

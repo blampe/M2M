@@ -7,6 +7,12 @@
 {% include "advancedsearch/music/searchbar.html" %}
 {% endblock %}
 
+{% block stylin %}
+<style>
+code {background-color:#caf;padding:2px 2px 2px 2px}
+</style>
+{% endblock %}
+
 {% block content %}
 
 <h1>Latest Albums</h1>
@@ -21,9 +27,9 @@ Is your music not being seen? It's probably not named in a way that we recognize
 Some notes:
 <ul>
 <li>Everything between {}'s will be ignored.</li>
-<li>Please only have the song's title in the file name, or have name it in the format <blockquote>Album - # - Artist - Title.mp3</blockquote></li>
+<li>Please only have the song's title in the file name, or have name it in the format <br><code>Album - # - Artist - Title.mp3</code></li>
 <li>Put music in subfolders of a directory with the word "music" (case insensitive) in its name.</li>
-<li>The bottom level of your music directory should look like this, for best results:<blockquote>Artist/Album/Song.mp3</blockquote></li>
+<li>The bottom level of your music directory should look like this, for best results:<br><code>Artist/Album/Song.mp3</code></li>
 </ul>
 Following these guidelines will maximize our ability to catalogue your music collection.
 {% endblock %}

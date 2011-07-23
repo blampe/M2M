@@ -33,14 +33,7 @@ class Movie(models.Model):
     
     def __unicode__(self):
         return u"{}".format(self.name)
-
-class MovieTag(models.Model):
-    movies = models.ManyToManyField(Movie, related_name="tags",null=True)
-    name = models.CharField(max_length=100,unique=True)
-    
-    def __unicode__(self):
-        return u"{}".format(self.name)
-
+        
 class MovieGenre(models.Model):
     movies = models.ManyToManyField(Movie, related_name="genres",null=True)
     

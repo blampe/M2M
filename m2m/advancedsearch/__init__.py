@@ -6,10 +6,52 @@ from themoviedb.tmdb import search, getMovieInfo, TmdHttpError
 import re
 import datetime
 
-
-
 from search.models import File
 from problems.models import DNEProblem, SavingProblem, ProblemSet, BadFileProblem
+from advancedsearch.models import *
+
+def cleanHouse():
+    from django.db.models import Count
+    
+    
+    # movie models without files
+    print("Movies:")
+    empties = Movie.objects.annotate(num_f=Count('files')).filter(num_f__lt=1)
+    for movie in empties:
+        print("  cleaning out #{:d} {}".format(movie.id,movie.name))
+        try:
+            movie.delete()
+        except Exception, e:
+            print("    Exception: {}".format(e))
+    
+    # music models without files
+    print("Songs:")
+    empties = Song.objects.annotate(num_f=Count('files')).filter(num_f__lt=1)
+    for song in empties:
+        print("    cleaning out #{:d} {}".format(song.id,song.name))
+        try:
+            song.delete()
+        except Exception, e:
+            print("  Exception: {}".format(e))
+    print("Albums:")
+    empties = Album.objects.annotate(num_s=Count('song')).filter(num_s__lt=1)
+    for album in empties:
+        print("  cleaning out #{:d} {}".format(album.id,album.name))
+        try:
+            album.delete()
+        except Exception, e:
+            print("    Exception: {}".format(e))
+    print("Artists:")
+    empties = Artist.objects.annotate(num_a=Count('album')).filter(num_a__lt=1)
+    for artist in empties:
+        print("  cleaning out #{:d} {}".format(artist.id,artist.name))
+        try:
+            artist.delete()
+        except Exception, e:
+            print("    Exception: {}".format(e))
+        
+    return
+
 
 def logComplaints(issues=False):
     ''' issues should be in (problemfiles,couldnotmatchfiles) format'''
@@ -45,7 +87,6 @@ def clean_slate(candidate):
     return pset
 def crawlForMovies(count=0):
     ''' Imports things that are recognized as Movies from File table'''
-    from models import Movie,MovieCert,MovieGenre
     
     # grab all video files from things with Movie in the path name,
     # excluding things whose filename begin with '.' or '_'
@@ -287,7 +328,6 @@ def crawlForMusic(count=0):
     network = pylast.LastFMNetwork(api_key=API_KEY,api_secret=API_SECRET,
                                    username=username, password_hash=password_hash)
     '''
-    from models import Song, Artist, Album, MusicGenre
     # iTunes api stuff
     import json, urllib
     searchbase = "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsSearch"
@@ -488,5 +528,5 @@ def crawlForMusic(count=0):
                 track.files.add(candidate)
                 # since this is a perfect match, we don't need to look through any other results
                 break
-                
+            
                 
