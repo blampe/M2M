@@ -1,0 +1,57 @@
+<section id="results">
+{% for result in p.object_list %}
+{% if forloop.first %}
+<div class='tablewrap'>
+<table>
+<tr class="info">
+    <td>Name</td>
+    <td>
+        {% if type == 'Song' %}
+        {# duration #}
+        {% else %}
+        # Songs
+        {% endif %}
+    </td>
+    <td align=right>
+        {% if type == 'Artist'%}
+        # Albums
+        {% else %}
+        Artist
+        {% endif %}
+    </td>
+    {% if type == 'Song' %}<td align=right>Album</td><td align=right>Genre</td>{% endif %}
+</tr>
+{% endif %}
+
+<tr class="{%cycle '' 'darkrow' %}">
+<td> {{result.name}} </td>
+<td style="padding-left:10px"> {% if type == 'Song' %} {{result.time|time:"i:s"}}{% else %} {{result.song_set.count}} {%endif%}</td>
+<td style="padding-left:10px" align=right> 
+    {% if type == 'Artist'%} 
+        {{result.album_set.count}} 
+    {% else %}
+        <a href="{% url advancedsearch.views.artistDetail result.artist.id %}">{{result.artist}}</a>
+    {% endif %}
+</td>
+{% if type == 'Song' %} 
+    <td style="padding-left:10px;" align=right>
+        <a href="{% url advancedsearch.views.artistDetail result.artist.id %}#{{result.album.id}}">{{result.album}}</a>
+    </td>
+    <td style="padding-left:10px;" align=right>
+        {{ result.genres.all.0.name}}
+    </td>
+{% endif %}
+
+</tr>
+
+{% if forloop.last %}
+</table>
+</div>
+{% endif %}
+
+{% empty %}
+
+No {{type}} results!
+
+{% endfor %}
+</section>

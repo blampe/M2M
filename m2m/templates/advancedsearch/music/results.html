@@ -1,0 +1,45 @@
+{% extends "advancedsearch/music/splash.html" %}
+
+{% load search_extras %}
+{% load advancedsearch_extras %}
+
+{% block scriptin %}
+<script>
+$(document).ready(function(){
+    bindSongHandler();
+    });
+    
+function bindSongHandler(){
+    $.ajax({
+        type:"GET",
+        data: 'q={{q}}',
+        url: '/advanced/music/subresult/song?',
+        dataType: "html",
+        success: function(html,textStatus){
+            $('#songs').load("/advanced/music/subresult/song?q={{q}} #results");
+        },
+        error: function(XMLHttpRequest,textStatus,errorThrown){
+            $('#songs').replaceWith("Couldn't get songs.");
+        }
+    });
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section id="songs">
+
+</section>
+
+<section id="albums">
+
+</section>
+
+<section id="artists">
+
+</section>
+{% endblock %}
+
+{% block extraContent %}
+
+{% endblock %}
