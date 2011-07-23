@@ -59,7 +59,7 @@ class MovieCert(models.Model):
 class Episode(models.Model):
     ''' an episode of a tv show!'''
     
-    season = models.IntegerField()
+    season = models.ForeignKey('Season',null=True)
     episode = models.IntegerField()
     showName = models.ForeignKey('Show')
     episodeName = models.CharField(max_length=100)
@@ -68,6 +68,9 @@ class Episode(models.Model):
     def __unicode__(self):
         return u"{} S{}E{}".format(self.showName,self.season,self.episode)
 
+class Season(models.Model):
+    pass
+        
 class Show(models.Model):
     pass
 
@@ -84,6 +87,8 @@ class Song(models.Model):
     #endings = super.audioEndings
     appleID = models.BigIntegerField(null=True,unique=True)
     applePreview = models.URLField(null=True)
+    
+    dateadded = models.DateTimeField(null=True)
     
     #Matchtypes:
     # 1: perfect
@@ -108,7 +113,10 @@ class Album(models.Model):
     appleCover = models.URLField(null=True)
     cover = models.URLField(null=True)
     appleID = models.BigIntegerField(null=True,unique=True)
+    no_cover = models.URLField(null=True)
     releaseDate = models.DateTimeField(null=True)
+    
+    dateadded = models.DateTimeField(null=True)
     
     def __init__(self,*args,**kwargs):
         models.Model.__init__(self,*args,**kwargs)
@@ -121,6 +129,8 @@ class Album(models.Model):
 class Artist(models.Model):
     name = models.CharField(max_length=100)
     appleID = models.BigIntegerField(null=True,unique=True)
+    
+    dateadded = models.DateTimeField(null=True)
     
     def __unicode__(self):
         return u"{}".format(self.name)

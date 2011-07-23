@@ -18,4 +18,5 @@ urlpatterns = patterns('advancedsearch.views',
     (r'^music/artist/(?P<id>\d+)','artistDetail'),
     (r'^music/album/(?P<id>\d+)','albumDetail'),
     (r'^music/song/(?P<id>\d+)','songDetail'),
+    (r'^music/subresult/song','musicSearch_Song'),
     )

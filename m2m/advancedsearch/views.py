@@ -36,13 +36,15 @@ def splash(request):
     return render_to_response('404.html')
     
 def movieSplash(request):
-    
+    import random
     
     genres = MovieGenre.objects.all()
     certs = MovieCert.objects.all()
     
     # filter by date, don't show movies without files
-    latestMovies = Movie.objects.order_by('-dateadded').annotate(num_files=Count('files')).filter(num_files__gte=1)[:12]
+    latestMovies = list(Movie.objects.order_by('-dateadded').annotate(num_files=Count('files')).filter(num_files__gte=1)[:12])
+    
+    random.shuffle(latestMovies)
     
     return render_to_response('advancedsearch/movies/splash.html',
         {
@@ -192,7 +194,7 @@ def movieSearch(request, page=1):
                  client=client,
                  hits=p.count,
                  position=page*PERPAGE,
-                 searchstring="Search [MOVIE]: {}".format(q))
+                 searchstring=u"Search [MOVIE]: {}".format(q))
     newest.save()
 ######################################################
     
@@ -223,19 +225,156 @@ def movieDetail(request,id):
           'search':'current',})
     
 def musicSplash(request):
+    import random
+    latestAlbums = list(Album.objects.all().order_by('-dateadded')[:48])
+    random.shuffle(latestAlbums)
+    
     return render_to_response('advancedsearch/music/splash.html',
         {
         'search':'current',
         'music':'current',
+        'genres':MusicGenre.objects.all(),
+        'latest':latestAlbums,
         }
     )
 
-def musicSearch(request,page=0):
-    return render_to_response('404.html',
+def musicSearch(request):  
+
+##############################################################
+# ---- Log results of the search ---- #
+#
+    try:
+        client = request.META['HTTP_X_FORWARDED_FOR']
+    except KeyError:
+     # REMOTE_ADDR is *always* 127.0.0.1
+     # unless we're on test server!
+        client = request.META['REMOTE_ADDR']
+        
+    newest = Log(time=time.mktime(time.localtime()),
+                 client=client,
+                 searchstring=u"Search [MUSIC]: {}".format(request.GET['q']))
+    newest.save()
+######################################################    
+        
+    # hand these off to helper methods - which we have so that you can
+    # page through each set of results individually, via AJAX
+    #songset = musicSearch_Song(q)
+    #albumset = musicSearch_album(q)
+    #artistset = musicSearch_artist(q)
+    paramList = [
+                'genre',
+                'order',
+                'type',
+                ]   
+    genres = [x.name for x in MusicGenre.objects.all()]
+    
+    allowedTypes = ['Song','Album','Artist']
+    
+    allowedOrders = ['none',
+            'name', '-name',
+            'dateadded','-dateadded',
+            'rating','-rating',
+            'popularity','-popularity',
+            'runtime','-runtime']
+    
+    ALLOWED_VALUES = {
+        'genre':genres,
+        'order':allowedOrders,
+        'type':allowedTypes,
+    }
+    
+    defaults = {
+        'genre':'all',
+        'order':'none',
+        'type':'all',
+    }
+    params = {}
+    
+    # fill in params from GET
+    for param in paramList:
+        try:
+            if request.GET[param] in ALLOWED_VALUES[param] and request.GET[param] != "":
+                params.update({param:request.GET[param]})
+                
+            else:
+                params.update({param:defaults[param]})
+        except KeyError:
+            # some options weren't chosen - we set them here.
+            params.update({param:defaults[param]})    
+    
+    
+    try:
+        optionsUp = '1' if request.GET['optionsUp'] == '1' else '0'
+    except KeyError:
+        optionsUp='0'
+    
+    return render_to_response('advancedsearch/music/results.html',
         {
         'search':'current',
         'music':'current',
+        'genres':MusicGenre.objects.all(),
+        'q':request.GET['q'],
+        'params':params,
+        'optionsUp':optionsUp,
         }
+    )
+    
+def musicSearch_Song(request=None,page=0):
+    from django.core.paginator import Paginator
+    
+    try:
+        q = request.GET['q']
+        
+        # april fools queries
+        if datetime.now().day == 1 and datetime.now().month==4:
+            from aprilfools.views import resultcaller
+            q = resultcaller()
+        searchstring = q
+        for char in escape_chars:
+            # get rid of the bullshit
+            q = q.replace(char,escape_chars[char])
+        
+    except KeyError:
+        q = ""  
+    
+    songset = Song.objects.filter(name__icontains=q)
+    
+    p = Paginator(songset,PERPAGE)    
+    return render_to_response('advancedsearch/music/subresults.html',
+        {'p':p,
+         'type':'Song'}
+    )
+    
+def musicSearch_Album(request=None, q='',page=0):
+    from django.core.paginator import Paginator
+    
+    if request == None:
+        # used as helper method, not ajaxified
+        
+        # don't search for file-less files
+        albumset = Album.objects.annotate(num_f = Count('files')).filter(num_f__gte=1)
+        if q != '':
+            albumset = albumset.filter(name__icontains=q)
+    
+    p = Paginator(albumset,PERPAGE)
+    return render_to_response('advancedsearch/music/subresults.html',
+        {'p':p,}
+    )
+    
+def musicSearch_Artist(request=None, q='',page=0):
+    from django.core.paginator import Paginator
+    
+    if request == None:
+        # used as helper method, not ajaxified
+        
+        # don't search for file-less files
+        artistset = Artist.objects.annotate(num_f = Count('files')).filter(num_f__gte=1)
+        if q != '':
+            artistset = artistset.filter(name__icontains=q)
+
+    p = Paginator(artistset,PERPAGE)            
+    return render_to_response('advancedsearch/music/subresults.html',
+        {'p':p,}
     )
     
 def artistDetail(request,id="Q"):

@@ -11,12 +11,12 @@
         {%endfor%}
     </select>
     
-    <select name="cert">
-        <option value="message" disabled="1">Certification:</option>
-        <option value='all'>Any</option>
-        {% for cert in certs %}
-        <option value="{{cert.cert}}" {% if params.cert != cert.cert %}{%else%}selected="selected"{%endif%}>{{cert}}</option>
-        {%endfor%}
+    <select name="type">
+        <option value="message" disabled="1">Type: </option>
+        <option value="all">All</option>
+        <option value="Song">Songs</option>
+        <option value="Album">Albums</option>
+        <option value="Artist">Artists</option>
     </select>
     
     <select name="order">

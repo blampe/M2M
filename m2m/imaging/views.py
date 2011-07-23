@@ -5,7 +5,7 @@ from django.http import HttpResponse
 import PIL
 from PIL import ImageFont, Image, ImageDraw
 
-from advancedsearch.models import Movie
+from advancedsearch.models import Movie, Album
 
 from django.conf import settings
 
@@ -40,6 +40,25 @@ def no_poster(request,id):
     img.save(response,"JPEG")
     return response
     
+
+def no_cover(request,id):
+    id = int(id)
+    try:
+        album = Album.objects.get(pk=id)
+    except:
+        return bad_request(request)
+        
+    fnt = ImageFont.truetype("StencilStd.oft" if settings.DEBUG else "/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", 15)
+    response = HttpResponse(mimetype="image/jpeg")
+    img = Image.open("C:/Users/haak/M2M/m2m/media/images/no_cover.jpg" if settings.DEBUG else "/home/haak/M2M/m2m/media/images/no_cover.jpg")
+    
+    draw = ImageDraw.Draw(img)
+    txtsize = draw.textsize(album.name, font=fnt)
+    
+    draw_word_wrap(img,album.name, fnt, ypos=5, max_width=img.size[0],fille=(255,255,255))
+    
+    img.save(response,"JPEG")
+    return response
     
 def draw_word_wrap(img, text, font,xpos=0, ypos=0, max_width=130,
                    fill=(0,0,0)):

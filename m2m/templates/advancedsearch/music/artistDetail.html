@@ -10,7 +10,7 @@
 <ul>
 {% for album in artist.album_set.all %}
 <li>
-<img src="{{album.appleCover}}" valign="middle"/>{{ album }}, released {{album.releaseDate|date:"M d, Y"}}<br />
+<a name="{{album.id}}"></a><img src="{{album.appleCover}}" valign="middle"/>{{ album }}, released {{album.releaseDate|date:"M d, Y"}}<br />
 <ol>
 {% for song in album.song_set.all|order_by:"tracknum" %}
 {% if song.files.count > 0 %}

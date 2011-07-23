@@ -382,6 +382,7 @@ def crawlForMusic(count=0):
             # wrap this in a try...except because FUCK YOU
             try:
                 print "  This is a WOPR file, that rat bastard. Making changes."
+                # Album - # - Artist - Song.mp3
                 probablyTitle = titlecopy
                 print "  Cutting out artist name from title."
                 probablyTitle = unicode(re.sub(u'{}'.format(probablyArtist.replace('(',r'\(').replace(')',r'\)')),'',probablyTitle))
@@ -418,10 +419,11 @@ def crawlForMusic(count=0):
             except UnicodeEncodeError:
                 print u"Can't print some part of the result. OH WELL"
                 
-            if result['artistName'] == probablyArtist \
-                and (result['collectionName'] == probablyAlbum or \
-                result['collectionCensoredName'] == probablyAlbum) and \
-                (result['trackName'] == probablyTitle or result['trackCensoredName'] == probablyTitle):
+            if result['artistName'].lower() == probablyArtist.lower() \
+                and (result['collectionName'].lower() == probablyAlbum.lower() or \
+                    result['collectionCensoredName'].lower() == probablyAlbum).lower() \
+                and (result['trackName'].lower() == probablyTitle.lower() or \
+                    result['trackCensoredName'].lower() == probablyTitle.lower()):
                 # an exact match! yessss
                 try:
                     artist,new = Artist.objects.get_or_create(name=probablyArtist,
@@ -431,6 +433,8 @@ def crawlForMusic(count=0):
                     
                 if new:
                     print u"New artist added to database: {}".format(artist)
+                    artist.dateadded = datetime.datetime.now()
+                    artist.save()
                 else:
                     print u"Already have artist: {}".format(artist)
                     
@@ -446,6 +450,8 @@ def crawlForMusic(count=0):
                     album.appleCover = result['artworkUrl100']
                     album.explicit = True if result['collectionExplicitness'] != 'notExplicit' else False
                     album.releaseDate = datetime.datetime.strptime(result['releaseDate'], "%Y-%m-%dT%I:%M:%SZ")
+                    album.dateadded = datetime.datetime.now()
+                    album.no_cover = u"/imaging/music/album/no_cover/{}".format(album.id)
                     album.save()
                     print u"Adding {} to {}'s album set...".format(album,artist)
                     artist.album_set.add(album)
@@ -467,6 +473,8 @@ def crawlForMusic(count=0):
                                                        matchtype = 1)
                 if new:
                     print u"New Song - {}".format(track)
+                    track.dateadded = datetime.datetime.now()
+                    track.save()
                     print u"Adding to {}'s song set...".format(album)
                     album.song_set.add(track)
                     print u"Adding to {}'s song_set...".format(artist)
