@@ -117,7 +117,10 @@ def host(object):
     try:
         return object.hid
     except AttributeError:
-        return object.path.hid
+        try:
+            return object.path.hid
+        except:
+            return '??'
     except:
         return '??'
     
