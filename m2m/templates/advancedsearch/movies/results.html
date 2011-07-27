@@ -84,7 +84,7 @@ $(document).ready(function(){
 </table>
 </div>
 <br>
-{% if paginator.count > 1 %}
+{% if paginator.num_pages > 1 %}
     <div style="text-align:center;">
     {%if page.has_previous %}
         <a href="{%url advancedsearch.views.movieSearch page.previous_page_number %}">Prev</a>

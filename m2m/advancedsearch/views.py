@@ -9,7 +9,11 @@ from models import MovieGenre,MovieCert,Movie,\
                     MusicGenre,Artist,Song,Album
 # Create your views here.
 
-PERPAGE = 50
+PERPAGE_MOV = 50
+PERPAGE_MUS = 20
+PERPAGE_MUS_SONG = 50
+PERPAGE_SHO = 50
+
 escape_chars = {
                     '!':r'\!',
                     '<':r'\<',
@@ -73,7 +77,7 @@ def movieRandom(request):
     newest = Log(time=time.mktime(time.localtime()),
                  client=client,
                  hits=p.count,
-                 position=page*PERPAGE,
+                 position=page*PERPAGE_MOV,
                  searchstring="Search [MOVIE - RANDOM]")
     newest.save()
 ######################################################
@@ -178,7 +182,7 @@ def movieSearch(request, page=1):
         optionsUp = '1' if request.GET['optionsUp'] == '1' else '0'
     except KeyError:
         optionsUp='0'
-    p = Paginator(movieList,PERPAGE)
+    p = Paginator(movieList,PERPAGE_MOV)
     
 ##############################################################
 # ---- Log results of the search ---- #
@@ -193,7 +197,7 @@ def movieSearch(request, page=1):
     newest = Log(time=time.mktime(time.localtime()),
                  client=client,
                  hits=p.count,
-                 position=page*PERPAGE,
+                 position=page*PERPAGE_MOV,
                  searchstring=u"Search [MOVIE]: {}".format(q))
     newest.save()
 ######################################################
@@ -239,7 +243,8 @@ def musicSplash(request):
     )
 
 def musicSearch(request):  
-
+    ''' Wrapper for the more detailed searching required by the nature
+        of music searching. '''
 ##############################################################
 # ---- Log results of the search ---- #
 #
@@ -335,46 +340,91 @@ def musicSearch_Song(request=None,page=0):
             q = q.replace(char,escape_chars[char])
         
     except KeyError:
-        q = ""  
+        q = ""
+    
+    try:
+        page = int(page) - 1 if int(page) > 1 else 0
+    except Exception:
+        page = 0
     
     songset = Song.objects.filter(name__icontains=q)
     
-    p = Paginator(songset,PERPAGE)    
+    p = Paginator(songset,PERPAGE_MUS_SONG)    
     return render_to_response('advancedsearch/music/subresults.html',
         {'p':p,
-         'type':'Song'}
+         'q':q,
+         'type':'Song',
+         'object_list':p.page(page+1).object_list,
+         'page':p.page(page+1),
+         }
     )
     
 def musicSearch_Album(request=None, q='',page=0):
     from django.core.paginator import Paginator
-    
-    if request == None:
-        # used as helper method, not ajaxified
+    try:
+        q = request.GET['q']
         
-        # don't search for file-less files
-        albumset = Album.objects.annotate(num_f = Count('files')).filter(num_f__gte=1)
-        if q != '':
-            albumset = albumset.filter(name__icontains=q)
+        # april fools queries
+        if datetime.now().day == 1 and datetime.now().month==4:
+            from aprilfools.views import resultcaller
+            q = resultcaller()
+        searchstring = q
+        for char in escape_chars:
+            # get rid of the bullshit
+            q = q.replace(char,escape_chars[char])
+        
+    except KeyError:
+        q = ""
     
-    p = Paginator(albumset,PERPAGE)
+    try:
+        page = int(page) - 1 if int(page) > 1 else 0
+    except Exception:
+        page = 0
+        
+    albumset = Album.objects.filter(name__icontains=q)
+    
+    p = Paginator(albumset,PERPAGE_MUS)
     return render_to_response('advancedsearch/music/subresults.html',
-        {'p':p,}
+        {'p':p,
+         'q':q,
+         'type':'Album',
+         'object_list':p.page(page+1).object_list,
+         'page':p.page(page+1),}
     )
     
 def musicSearch_Artist(request=None, q='',page=0):
     from django.core.paginator import Paginator
     
-    if request == None:
-        # used as helper method, not ajaxified
+    try:
+        q = request.GET['q']
         
-        # don't search for file-less files
-        artistset = Artist.objects.annotate(num_f = Count('files')).filter(num_f__gte=1)
-        if q != '':
-            artistset = artistset.filter(name__icontains=q)
+        # april fools queries
+        if datetime.now().day == 1 and datetime.now().month==4:
+            from aprilfools.views import resultcaller
+            q = resultcaller()
+        searchstring = q
+        for char in escape_chars:
+            # get rid of the bullshit
+            q = q.replace(char,escape_chars[char])
+        
+    except KeyError:
+        q = ""
+    
+    try:
+        page = int(page) - 1 if int(page) > 1 else 0
+    except Exception:
+        page = 0
+    
+    artistset = Artist.objects.filter(name__icontains=q)
 
-    p = Paginator(artistset,PERPAGE)            
+    p = Paginator(artistset,PERPAGE_MUS)            
     return render_to_response('advancedsearch/music/subresults.html',
-        {'p':p,}
+        {'p':p,
+         'q':q,
+         'type':'Artist',
+         'object_list':p.page(page+1).object_list,
+         'page':p.page(page+1),
+        }
     )
     
 def artistDetail(request,id="Q"):

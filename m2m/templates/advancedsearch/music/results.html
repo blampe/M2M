@@ -4,9 +4,12 @@
 {% load advancedsearch_extras %}
 
 {% block scriptin %}
+{% with q|urlencode as q %}
 <script>
 $(document).ready(function(){
     bindSongHandler();
+    bindAlbumHandler();
+    bindArtistHandler();
     });
     
 function bindSongHandler(){
@@ -16,27 +19,57 @@ function bindSongHandler(){
         url: '/advanced/music/subresult/song?',
         dataType: "html",
         success: function(html,textStatus){
-            $('#songs').load("/advanced/music/subresult/song?q={{q}} #results");
+            $('#songs').load("/advanced/music/subresult/song?q={{q}} .results");
         },
         error: function(XMLHttpRequest,textStatus,errorThrown){
             $('#songs').replaceWith("Couldn't get songs.");
         }
     });
 }
+function bindAlbumHandler(){
+    $.ajax({
+        type:"GET",
+        data: 'q={{q}}',
+        url: '/advanced/music/subresult/album?',
+        dataType: "html",
+        success: function(html,textStatus){
+            $('#albums').load("/advanced/music/subresult/album?q={{q}} .results");
+        },
+        error: function(XMLHttpRequest,textStatus,errorThrown){
+            $('#albums').replaceWith("Couldn't get albums.");
+        }
+    });
+}
+function bindArtistHandler(){
+    $.ajax({
+        type:"GET",
+        data: 'q={{q}}',
+        url: '/advanced/music/subresult/artist?',
+        dataType: "html",
+        success: function(html,textStatus){
+            $('#artists').load("/advanced/music/subresult/artist?q={{q}} .results");
+        },
+        error: function(XMLHttpRequest,textStatus,errorThrown){
+            $('#artists').replaceWith("Couldn't get artists.");
+        }
+    });
+}
 </script>
+{% endwith %}
 {% endblock %}
 
 {% block content %}
+<h2>Songs</h2>
 <section id="songs">
-
+<div style="margin-right: auto;margin-left:auto;"><img src="/media/images/ajax-loader.gif"/></div>
 </section>
-
+<h2>Albums</h2>
 <section id="albums">
-
+<div style="margin-right: auto;margin-left:auto;"><img src="/media/images/ajax-loader.gif"/></div>
 </section>
-
+<h2>Artists</h2>
 <section id="artists">
-
+<div style="margin-right: auto;margin-left:auto;"><img src="/media/images/ajax-loader.gif"/></div>
 </section>
 {% endblock %}
 
