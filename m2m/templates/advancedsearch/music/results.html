@@ -59,18 +59,25 @@ function bindArtistHandler(){
 {% endblock %}
 
 {% block content %}
+{% if params.type == 'all' or params.type == 'Song' %}
 <h2>Songs</h2>
 <section id="songs">
 <div style="margin-right: auto;margin-left:auto;"><img src="/media/images/ajax-loader.gif"/></div>
 </section>
+{% endif %}
+
+{% if params.type == 'all' or params.type == 'Album' %}
 <h2>Albums</h2>
 <section id="albums">
 <div style="margin-right: auto;margin-left:auto;"><img src="/media/images/ajax-loader.gif"/></div>
 </section>
+{% endif %}
+{% if params.type == 'all' or params.type == 'Artist' %}
 <h2>Artists</h2>
 <section id="artists">
 <div style="margin-right: auto;margin-left:auto;"><img src="/media/images/ajax-loader.gif"/></div>
 </section>
+{% endif %}
 {% endblock %}
 
 {% block extraContent %}

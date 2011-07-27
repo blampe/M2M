@@ -13,10 +13,10 @@
     
     <select name="type">
         <option value="message" disabled="1">Type: </option>
-        <option value="all">All</option>
-        <option value="Song">Songs</option>
-        <option value="Album">Albums</option>
-        <option value="Artist">Artists</option>
+        <option value="all" {% if params.type != 'all'%}{%else%}selected="selected"{%endif%}>All</option>
+        <option value="Song" {% if params.type != 'Song'%}{%else%}selected="selected"{%endif%}>Songs</option>
+        <option value="Album" {% if params.type != 'Album'%}{%else%}selected="selected"{%endif%}>Albums</option>
+        <option value="Artist" {% if params.type != 'Artist'%}{%else%}selected="selected"{%endif%}>Artists</option>
     </select>
     
     <select name="order">

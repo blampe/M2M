@@ -373,11 +373,8 @@ def musicSearch_Song(request=None,page=0):
     paramList = [
                 'genre',
                 'order',
-                'type',
                 ]   
     genres = [x.name for x in MusicGenre.objects.all()]
-    
-    allowedTypes = ['Song','Album','Artist']
     
     allowedOrders = ['none',
             'name', '-name',
@@ -387,7 +384,6 @@ def musicSearch_Song(request=None,page=0):
     ALLOWED_VALUES = {
         'genre':genres,
         'order':allowedOrders,
-        'type':allowedTypes,
     }
     
     defaults = {
@@ -447,9 +443,40 @@ def musicSearch_Album(request=None, q='',page=0):
         page = int(page) - 1 if int(page) > 1 else 0
     except Exception:
         page = 0
-        
+    paramList = [
+                'order',
+                ]       
+    allowedOrders = ['none',
+            'name', '-name',
+            'dateadded','-dateadded',]
+    
+    ALLOWED_VALUES = {
+        'order':allowedOrders,
+    }
+    
+    defaults = {
+        'order':'none',
+    }
+    params = {}
+    
+    # fill in params from GET
+    for param in paramList:
+        try:
+            if request.GET[param] in ALLOWED_VALUES[param] and request.GET[param] != "":
+                params.update({param:request.GET[param]})
+                
+            else:
+                params.update({param:defaults[param]})
+        except KeyError:
+            # some options weren't chosen - we set them here.
+            params.update({param:defaults[param]})
+            
     albumset = Album.objects.filter(name__icontains=q)
     
+    if params['order'] != 'none':
+        albumset = albumset.order_by(params['order'])
+        
+        
     p = Paginator(albumset,PERPAGE_MUS)
     return render_to_response('advancedsearch/music/subresults.html',
         {'p':p,
@@ -481,8 +508,39 @@ def musicSearch_Artist(request=None, q='',page=0):
         page = int(page) - 1 if int(page) > 1 else 0
     except Exception:
         page = 0
+    paramList = [
+                'order',
+                ]       
+    allowedOrders = ['none',
+            'name', '-name',
+            'dateadded','-dateadded',]
     
+    ALLOWED_VALUES = {
+        'order':allowedOrders,
+    }
+    
+    defaults = {
+        'order':'none',
+    }
+    params = {}
+    
+    # fill in params from GET
+    for param in paramList:
+        try:
+            if request.GET[param] in ALLOWED_VALUES[param] and request.GET[param] != "":
+                params.update({param:request.GET[param]})
+                
+            else:
+                params.update({param:defaults[param]})
+        except KeyError:
+            # some options weren't chosen - we set them here.
+            params.update({param:defaults[param]})
+            
     artistset = Artist.objects.filter(name__icontains=q)
+    
+    if params['order'] != 'none':
+        artistset = artistset.order_by(params['order'])    
+    
 
     p = Paginator(artistset,PERPAGE_MUS)            
     return render_to_response('advancedsearch/music/subresults.html',
