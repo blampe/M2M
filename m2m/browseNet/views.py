@@ -165,6 +165,7 @@ def deepBrowse(request,type="Q",id=-1):
         
         folderList = Path.objects.filter(ppid=id, pid__gte=1)
         fileList = File.objects.filter(path=id)
+        host = folder.hid
         
     else:
         return HttpResponseRedirect(reverse('browseNet.views.listAll',args=(1,)))

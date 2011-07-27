@@ -130,7 +130,10 @@ def host(object):
     try:
         return object.hid
     except AttributeError:
-        return object.path.hid
+        try:
+            return object.path.hid
+        except:
+            return '??'
     except:
         return '??'
     
@@ -161,7 +164,9 @@ def status(object):
             value = img % {'img':'badfile.gif','alt':'File is bad.'}
         else:
             value = img % {'img':'goodfile.gif','alt':'File is contested.'}
-    return mark_safe(value)
+        return mark_safe(value)
+    except:
+        return ''
 status.is_safe=True
         
 ################################################################
