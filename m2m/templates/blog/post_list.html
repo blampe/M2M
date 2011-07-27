@@ -45,7 +45,7 @@ Page:
 <div class="postWrap"><article>
     <header>
         <div class="postDate">
-            <time datetime="{{post.publish|timeTag}}" pubdate>{{post.publish}}</time><br />{{post.author}}
+            <time datetime="{{post.publish|timeTag}}" pubdate>{{post.publish|date:"M j, Y G:i"|linebreaksbr}}</time><br />{{post.author}}
         </div>
         <h1><div class="postTitle"><a href="{{post.get_absolute_url}}">{{post.title}}</a></div></h1>
     </header>
