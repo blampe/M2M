@@ -26,9 +26,7 @@
         <option  value="name" {% if params.order == 'name'%}selected="selected"{%endif%}>Name (A)</option>
         <option  value="-dateadded" {% if params.order == '-dateddded'%}selected="selected"{%endif%}>Date Added (D)</option>
         <option  value="dateadded" {% if params.order == 'dateadded'%}selected="selected"{%endif%}>Date Added (A)</option>
-        <option  value="-rating" {% if params.order == '-rating'%}selected="selected"{%endif%}>Rating (D)</option>
-        <option  value="rating" {% if params.order == 'rating'%}selected="selected"{%endif%}>Rating (A)</option>
-        <option  value="-popularity" {% if params.order == '-popularity'%}selected="selected"{%endif%}>Popularity (D)</option>
-        <option  value="popularity" {% if params.order == 'popularity'%}selected="selected"{%endif%}>Popularity (A)</option>
+        <option  value="-time" {% if params.order == '-time'%}selected="selected"{%endif%}>Duration (D)</option>
+        <option  value="time" {% if params.order == 'time'%}selected="selected"{%endif%}>Duration (A)</option>
     </select>
 {% endblock %}

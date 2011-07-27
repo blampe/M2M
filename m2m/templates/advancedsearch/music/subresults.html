@@ -52,15 +52,15 @@
 {% if p.num_pages > 1 %}
     <div style="text-align:center;">
     {%if page.has_previous %}
-        <a style="cursor:pointer" onclick='$("#songs").load("/advanced/music/subresult/song/{{page.previous_page_number}}?q={{q}} .results")'>Prev</a>
+        <a style="cursor:pointer" onclick='$("#songs").load("/advanced/music/subresult/song/{{page.previous_page_number}}?q={{q}}&{{params}} .results")'>Prev</a>
     {%endif %}
     {% for pager in p.page_range %}
-        {% if pager != page.number %}<a style="cursor:pointer" onclick='$("#songs").load("/advanced/music/subresult/song/{{pager}}?q={{q}} .results")'>{{pager}}</a>
+        {% if pager != page.number %}<a style="cursor:pointer" onclick='$("#songs").load("/advanced/music/subresult/song/{{pager}}?q={{q}}&{{params}} .results")'>{{pager}}</a>
         {% else %} {{pager}}
         {% endif %}
     {% endfor %}
     {% if page.has_next %}
-        <a style="cursor:pointer" onclick='$("#songs").load("/advanced/music/subresult/song/{{page.next_page_number}}?q={{q}} .results")'>Next</a>
+        <a style="cursor:pointer" onclick='$("#songs").load("/advanced/music/subresult/song/{{page.next_page_number}}?q={{q}}&{{params}} .results")'>Next</a>
     {% endif %}    
     </div>
 {% endif %}

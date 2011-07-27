@@ -19,7 +19,7 @@ function bindSongHandler(){
         url: '/advanced/music/subresult/song?',
         dataType: "html",
         success: function(html,textStatus){
-            $('#songs').load("/advanced/music/subresult/song?q={{q}} .results");
+            $('#songs').load("/advanced/music/subresult/song?q={{q}}&{{urlparams}} .results");
         },
         error: function(XMLHttpRequest,textStatus,errorThrown){
             $('#songs').replaceWith("Couldn't get songs.");
@@ -33,7 +33,7 @@ function bindAlbumHandler(){
         url: '/advanced/music/subresult/album?',
         dataType: "html",
         success: function(html,textStatus){
-            $('#albums').load("/advanced/music/subresult/album?q={{q}} .results");
+            $('#albums').load("/advanced/music/subresult/album?q={{q}}&{{urlparams}} .results");
         },
         error: function(XMLHttpRequest,textStatus,errorThrown){
             $('#albums').replaceWith("Couldn't get albums.");
@@ -47,7 +47,7 @@ function bindArtistHandler(){
         url: '/advanced/music/subresult/artist?',
         dataType: "html",
         success: function(html,textStatus){
-            $('#artists').load("/advanced/music/subresult/artist?q={{q}} .results");
+            $('#artists').load("/advanced/music/subresult/artist?q={{q}}&{{urlparams}} .results");
         },
         error: function(XMLHttpRequest,textStatus,errorThrown){
             $('#artists').replaceWith("Couldn't get artists.");

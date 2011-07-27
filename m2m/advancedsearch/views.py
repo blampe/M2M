@@ -266,6 +266,7 @@ def musicBrowse(request,page=0):
 def musicSearch(request):  
     ''' Wrapper for the more detailed searching required by the nature
         of music searching. '''
+    from urllib import urlencode
 ##############################################################
 # ---- Log results of the search ---- #
 #
@@ -341,13 +342,14 @@ def musicSearch(request):
         'genres':MusicGenre.objects.all(),
         'q':request.GET['q'],
         'params':params,
+        'urlparams':urlencode(params),
         'optionsUp':optionsUp,
         }
     )
     
 def musicSearch_Song(request=None,page=0):
     from django.core.paginator import Paginator
-    
+    from urllib import urlencode
     try:
         q = request.GET['q']
         
@@ -367,8 +369,51 @@ def musicSearch_Song(request=None,page=0):
         page = int(page) - 1 if int(page) > 1 else 0
     except Exception:
         page = 0
+
+    paramList = [
+                'genre',
+                'order',
+                'type',
+                ]   
+    genres = [x.name for x in MusicGenre.objects.all()]
     
+    allowedTypes = ['Song','Album','Artist']
+    
+    allowedOrders = ['none',
+            'name', '-name',
+            'dateadded','-dateadded',
+            'time', '-time']
+    
+    ALLOWED_VALUES = {
+        'genre':genres,
+        'order':allowedOrders,
+        'type':allowedTypes,
+    }
+    
+    defaults = {
+        'genre':'all',
+        'order':'none',
+        'type':'all',
+    }
+    params = {}
+    
+    # fill in params from GET
+    for param in paramList:
+        try:
+            if request.GET[param] in ALLOWED_VALUES[param] and request.GET[param] != "":
+                params.update({param:request.GET[param]})
+                
+            else:
+                params.update({param:defaults[param]})
+        except KeyError:
+            # some options weren't chosen - we set them here.
+            params.update({param:defaults[param]})            
     songset = Song.objects.filter(name__icontains=q)
+    
+    if params['genre'] != 'all':
+        songset = songset.filter(genres__name=params['genre'])
+    if params['order'] != 'none':
+        songset = songset.order_by(params['order'])
     
     p = Paginator(songset,PERPAGE_MUS_SONG)    
     return render_to_response('advancedsearch/music/subresults.html',
@@ -377,6 +422,7 @@ def musicSearch_Song(request=None,page=0):
          'type':'Song',
          'object_list':p.page(page+1).object_list,
          'page':p.page(page+1),
+         'params':urlencode(params),
          }
     )
     
