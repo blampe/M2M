@@ -3,6 +3,7 @@ from django.utils.safestring import mark_safe
 from django.core.exceptions import ObjectDoesNotExist
 
 from advancedsearch.models import *
+from problems.models import *
 from browseNet.models import Path
 
 

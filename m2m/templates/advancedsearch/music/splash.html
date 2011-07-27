@@ -17,7 +17,7 @@ code {background-color:#caf;padding:2px 2px 2px 2px}
 
 <h1>Latest Albums</h1>
 
-{% for album in latest %}<a href="{% url advancedsearch.views.artistDetail album.artist.id%}#{{album.id}}"><img style="margin-left:2px;" src="{% firstof album.appleCover album.cover album.no_cover %}"/></a>{% empty %}
+{% for album in latest %}<a href="{% url advancedsearch.views.albumDetail album.id%}#{{album.id}}"><img style="margin-left:2px;" src="{% firstof album.appleCover album.cover album.no_cover %}"/></a>{% empty %}
 No albums!
 {% endfor %}
 {% endblock %}

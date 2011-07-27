@@ -34,10 +34,10 @@
 <header><h1><a href="{{movie.url}}">{{movie}}</a></h1>
 <h3>{{movie.rating}}/10</h3>
 
-<div style="display:inline;">Directed by {{movie.director}}<br />
+Directed by {{movie.director}}<br />
 
 Rated {% if movie.cert.cert == "None" %} NR {%else%}{{movie.cert}}{%endif%}<br />
-Released {{movie.released}}<br /></div>
+Released {{movie.released}}<br />
 </header>
 <p id="overview">
  {{movie.overview}}

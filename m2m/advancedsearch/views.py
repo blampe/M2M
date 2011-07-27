@@ -390,13 +390,17 @@ def artistDetail(request,id="Q"):
     )
 
 def albumDetail(request,id="Q"):
+    album = get_object_or_404(Album,pk=id)
+
+    return artistDetail(request,album.artist.id)
+    '''
     return render_to_response('404.html',
         {
         'search':'current',
         'shows':'current',
         }
     )
-
+    '''
 def songDetail(request,id="Q"):
     return render_to_response('404.html',
         {

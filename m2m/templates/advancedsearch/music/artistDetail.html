@@ -49,7 +49,7 @@ li.lightrow {
 <ol class="songlist">
 {% for song in album.song_set.all|order_by:"tracknum" %}
 {% if song.files.count > 0 %}
-<li  class="song{% cycle ' darkrow' ' lightrow'%}" ><span onclick="$('ul#{{song.id}}').slideToggle('normal');">{{song}} {{song.time|time:"i:s"}} [{% for genre in song.genres.all %} {{genre.name}} {% endfor %}]</span>
+<li  class="song{% cycle ' darkrow' ' lightrow'%}" ><div onclick="$('ul#{{song.id}}').slideToggle('normal');">{{song}} {{song.time|time:"i:s"}} [{% for genre in song.genres.all %} {{genre.name}} {% endfor %}]</div>
 <ul id="{{song.id}}" class="filelist" style="display:none;">
 {% for file in song.files.all|order_by:"path__hid" %}
 <li style="background-color:#fff"><a href="smb://{{file.path.hid}}{{file.path}}/"> {{file}} </a> {{file.filesize|sizeToReadable}}</li>

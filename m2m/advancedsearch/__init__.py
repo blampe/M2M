@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 
 from themoviedb.tmdb import search, getMovieInfo, TmdHttpError
 
@@ -18,37 +19,37 @@ def cleanHouse():
     print("Movies:")
     empties = Movie.objects.annotate(num_f=Count('files')).filter(num_f__lt=1)
     for movie in empties:
-        print("  cleaning out #{:d} {}".format(movie.id,movie.name))
+        print(u"  cleaning out #{:d} {}".format(movie.id,movie.name))
         try:
             movie.delete()
         except Exception, e:
-            print("    Exception: {}".format(e))
+            print(u"    Exception: {}".format(e))
     
     # music models without files
     print("Songs:")
     empties = Song.objects.annotate(num_f=Count('files')).filter(num_f__lt=1)
     for song in empties:
-        print("    cleaning out #{:d} {}".format(song.id,song.name))
+        print(u"    cleaning out #{:d} {}".format(song.id,song.name))
         try:
             song.delete()
         except Exception, e:
-            print("  Exception: {}".format(e))
+            print(u"  Exception: {}".format(e))
     print("Albums:")
     empties = Album.objects.annotate(num_s=Count('song')).filter(num_s__lt=1)
     for album in empties:
-        print("  cleaning out #{:d} {}".format(album.id,album.name))
+        print(u"  cleaning out #{:d} {}".format(album.id,album.name))
         try:
             album.delete()
         except Exception, e:
-            print("    Exception: {}".format(e))
+            print(u"    Exception: {}".format(e))
     print("Artists:")
     empties = Artist.objects.annotate(num_a=Count('album')).filter(num_a__lt=1)
     for artist in empties:
-        print("  cleaning out #{:d} {}".format(artist.id,artist.name))
+        print(u"  cleaning out #{:d} {}".format(artist.id,artist.name))
         try:
             artist.delete()
         except Exception, e:
-            print("    Exception: {}".format(e))
+            print(u"    Exception: {}".format(e))
         
     return
 
@@ -149,7 +150,7 @@ def crawlForMovies(count=0):
         
         
         # also '_'
-        probablyTitle = info[0].rstrip().replace('_',' ')
+        probablyTitle = info[0].rstrip().replace('_',' ').replace('-',' ')
         
         # ignore anything between {}
         
@@ -459,11 +460,11 @@ def crawlForMusic(count=0):
             except UnicodeEncodeError:
                 print u"Can't print some part of the result. OH WELL"
                 
-            if result['artistName'].lower() == probablyArtist.lower() \
-                and (result['collectionName'].lower() == probablyAlbum.lower() or \
-                    result['collectionCensoredName'].lower() == probablyAlbum).lower() \
-                and (result['trackName'].lower() == probablyTitle.lower() or \
-                    result['trackCensoredName'].lower() == probablyTitle.lower()):
+            if unicode(result['artistName']).lower() == probablyArtist.lower() \
+                and (unicode(result['collectionName']).lower() == probablyAlbum.lower() or \
+                    unicode(result['collectionCensoredName']).lower() == probablyAlbum.lower()) \
+                and (unicode(result['trackName'].lower()) == probablyTitle.lower() or \
+                    unicode(result['trackCensoredName']).lower() == probablyTitle.lower()):
                 # an exact match! yessss
                 try:
                     artist,new = Artist.objects.get_or_create(name=probablyArtist,
@@ -505,12 +506,16 @@ def crawlForMusic(count=0):
                 
                 duration = datetime.timedelta(0,0,0,result['trackTimeMillis'])
                 print u"Duration: {}".format(duration)
-                track,new = Song.objects.get_or_create(name=probablyTitle,artist=artist,album=album,
+                try:
+                    track,new = Song.objects.get_or_create(name=probablyTitle,artist=artist,album=album,
                                                        appleID=result['trackId'],
                                                        tracknum=result['trackNumber'],
                                                        applePreview=result['previewUrl'],
                                                        time = str(datetime.timedelta(milliseconds=result['trackTimeMillis'])),
                                                        matchtype = 1)
+                except IntegrityError: # this is BULLSHIT
+                    track = Song.objects.get(appleID=result['trackId'])
+                    new = False
                 if new:
                     print u"New Song - {}".format(track)
                     track.dateadded = datetime.datetime.now()
