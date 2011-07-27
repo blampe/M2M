@@ -242,6 +242,27 @@ def musicSplash(request):
         }
     )
 
+def musicBrowse(request,page=0):
+    from django.core.paginator import Paginator
+    try:
+        page = int(page) - 1 if int(page) > 1 else 0
+    except Exception:
+        page = 0
+    artists = Artist.objects.all().order_by('name')
+    
+    p = Paginator(artists,PERPAGE_MUS)
+    return render_to_response('advancedsearch/music/browse.html',
+    {
+    'search':'current',
+    'music':'current',
+    'genres':MusicGenre.objects.all(),
+    'p':p,
+    'object_list':p.page(page+1).object_list,
+    'page':p.page(page+1),
+    })
+    
+    
+    
 def musicSearch(request):  
     ''' Wrapper for the more detailed searching required by the nature
         of music searching. '''

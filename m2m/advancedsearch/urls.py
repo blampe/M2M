@@ -13,6 +13,8 @@ urlpatterns = patterns('advancedsearch.views',
     (r'^shows$', 'showSplash'),
     
     (r'^music$', 'musicSplash'),
+    (r'^music/browse/(?P<page>\d+)','musicBrowse'),
+    (r'^music/browse/','musicBrowse'),
     (r'^music/results/?$','musicSearch'),
     (r'music/results/(?P<page>\d+)','musicSearch'),
     (r'^music/artist/(?P<id>\d+)','artistDetail'),
