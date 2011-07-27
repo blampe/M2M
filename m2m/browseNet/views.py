@@ -135,7 +135,7 @@ def deepBrowse(request,type="Q",id=-1):
         folderList = host.share_set.filter(totalfilesize__gte=1)
         
         #likewise, only files at the root
-        rootPID = Path.objects.filter(hid=id,parent.pid=0).order_by('-pid')[0].pid # a host's root PID is gotten by matching its HID to a path with PPID = 0.
+        rootPID = Path.objects.filter(hid=id,parent=0).order_by('-pid')[0].pid # a host's root PID is gotten by matching its HID to a path with PPID = 0.
         fileList = File.objects.filter(path=rootPID)
     
     elif type == "S":
@@ -151,7 +151,7 @@ def deepBrowse(request,type="Q",id=-1):
             sharepath = Path.objects.get(hid=hid,sid=id,fullname=path)
             pid = sharepath.pid # phew
             fileList = File.objects.filter(path=pid)
-            folderList = Path.objects.filter(parent.pid=pid, pid__gte=1)
+            folderList = Path.objects.filter(parent=pid, pid__gte=1)
         except: # sometimes a share has no path, due to permissions and shit
             folderList = ""
             fileList = ""
