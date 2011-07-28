@@ -18,7 +18,7 @@ class Path(models.Model):
     
     
     def __unicode__(self):
-        return self.fullname.decode('raw_unicode_escape').decode('utf-8')
+        return u"{}".format(self.fullname)
     
     class Meta:
         db_table = u'path'
