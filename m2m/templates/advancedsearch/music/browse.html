@@ -1,0 +1,36 @@
+{% extends "advancedsearch/music/splash.html" %}
+
+
+{% block title %} M2M Music - Browse {% endblock %}
+
+{% block content %}
+{% for artist in object_list %}
+<section id="{{artist.id}}">
+<header>
+<h1><a href="{% url advancedsearch.views.artistDetail artist.id %}">{{artist.name}}</a></h1>
+</header>
+<p>{{artist.album_set.count}} album{{artist.song_set.count|pluralize}}</p>
+<p>{{artist.song_set.count}} song{{artist.song_set.count|pluralize}}</p>
+<hr>
+</section>
+{% empty %}
+<h1>Shit, we don't have any music!</h1>
+{% endfor %}
+
+{% if p.num_pages > 1 %}
+    <div style="text-align:center;">
+    {%if page.has_previous %}
+        <a href="{%url advancedsearch.views.musicBrowse page.previous_page_number %}">Prev</a>
+    {%endif %}
+    {% for pager in p.page_range %}
+        {% if pager != page.number %}<a href="{% url advancedsearch.views.musicBrowse pager %}">{{pager}}</a>
+        {% else %} {{pager}}
+        {% endif %}
+    {% endfor %}
+    {% if page.has_next %}
+        <a href="{%url advancedsearch.views.musicBrowse page.next_page_number %}">Next</a>
+    {% endif %}    
+    </div>
+{% endif %}
+
+{% endblock %}
