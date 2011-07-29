@@ -25,6 +25,41 @@
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
           })();
 
+		$(document).ready(function () {
+		    if (typeof pageTracker != 'undefined') {
+		        pageTracker._trackEvent(
+		            'Browser Dimensions',
+		            'load',
+		            $(window).width()
+		                + 'x'
+		                + $(window).height(),
+		            $(window).width()
+		        );
+
+		        $(window).resize(function () {
+		            if ($(this).data('gatimer')) {
+		                clearTimeout($(this).data('gatimer'));
+		                $(this).data('gatimer', null);
+		            }
+
+		            $(this).data(
+		                'gatimer',
+		                setTimeout(function () {
+		                    pageTracker._trackEvent(
+		                        'Browser Dimensions',
+		                        'resize',
+		                        $(window).width()
+		                            + 'x'
+		                            + $(window).height(),
+		                        $(window).width()
+		                        );
+		                    },
+		                    500
+		                )
+		            );
+		        });
+		    }
+		});
         </script>
 
         

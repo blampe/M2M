@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block content %}
-<img id='poster' style='position:fixed;margin-right:25px;' src="{{movie.poster}}"/>
+<img id='poster' style='z-index:10000;position:fixed;margin-right:25px;' src="{{movie.poster}}"/>
 
 <div>
 <header><h1><a href="{{movie.url}}">{{movie}}</a></h1>
