@@ -56,7 +56,7 @@
             <td valign="top">
                 <a href="{% url browseNet.views.deepBrowse 'H' server.hid.hid|default:-1%}">{{server}}</a><br/>
                 {{server.hid.ip}}
-                {% if server.hid.hasProblems %}<br/>
+                {% if server.hid.problems.count > 0 %}<br/>
                 <a href="{% url problems.views.host server.hid.hid%}"> see problem files </a>
                 {% endif %}
             </td>

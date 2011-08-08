@@ -31,7 +31,15 @@ class ProblemSet(models.Model):
             for p in self.undefproblem_set.all():
                 Story = p.render(Story)
         return Story
-    
+    def count(self, *args, **kwargs):
+        count = 0
+        if self.savingproblem_set.all():
+            count += self.savingproblem_set.count()
+        if self.dneproblem_set:
+            count += self.dneproblem_set.count()
+        if self.undefproblem_set:
+            count += self.dneproblem_set.count()
+        return count
     def save(self, *args, **kwargs):
         if self.savingproblem_set.all() or self.dneproblem_set.all() or self.undefproblem_set.all():
             self.host.hasProblems = True
