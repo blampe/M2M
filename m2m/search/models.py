@@ -73,7 +73,7 @@ class File(models.Model):
     
     def __unicode__(self):
         #-*-coding:iso-8859-1-*-
-        return self.filename
+        return u'{}'.format(self.filename)
     
     class Meta:
         db_table = u'file'
