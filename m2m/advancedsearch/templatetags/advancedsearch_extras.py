@@ -23,8 +23,8 @@ class DeleteNode(template.Node):
             self.target = globals()[self.model].objects.get(pk=int(target))
         except:
             raise ObjectDoesNotExist("Could not find a %r with id %r" % (globals()[self.model],self.id_var.resolve(context)))
-        
-        self.target.delete()
+        #delete the target, saving me the fucking hassle
+        #self.target.delete()
         
         return ''
         
