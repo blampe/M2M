@@ -64,7 +64,7 @@ MEDIA_URL = ''
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/static/"
-STATICFILES_ROOT = '/home/haak/M2M/m2m/media/'
+STATIC_ROOT = '/home/haak/M2M/m2m/media/'
 
 # URL that handles the static files served from STATICFILES_ROOT.
 # Example: "http://static.lawrence.com/", "http://example.com/static/"
