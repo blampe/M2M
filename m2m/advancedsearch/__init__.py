@@ -19,7 +19,11 @@ def cleanHouse():
     print("Movies:")
     empties = Movie.objects.annotate(num_f=Count('files')).filter(num_f__lt=1)
     for movie in empties:
-        print(u"  cleaning out #{:d} {}".format(movie.id,movie.name))
+        try:
+            print(u"  cleaning out #{:d} {}".format(movie.id,movie.name))
+        except:
+            pass
+
         try:
             movie.delete()
         except Exception, e:
@@ -29,7 +33,11 @@ def cleanHouse():
     print("Songs:")
     empties = Song.objects.annotate(num_f=Count('files')).filter(num_f__lt=1)
     for song in empties:
-        print(u"    cleaning out #{:d} {}".format(song.id,song.name))
+        try:
+            print(u"    cleaning out #{:d} {}".format(song.id,song.name))
+        except:
+            pass
+
         try:
             song.delete()
         except Exception, e:
@@ -37,7 +45,11 @@ def cleanHouse():
     print("Albums:")
     empties = Album.objects.annotate(num_s=Count('song')).filter(num_s__lt=1)
     for album in empties:
-        print(u"  cleaning out #{:d} {}".format(album.id,album.name))
+        try:
+            print(u"  cleaning out #{:d} {}".format(album.id,album.name))
+        except:
+            pass
+
         try:
             album.delete()
         except Exception, e:
@@ -45,7 +57,11 @@ def cleanHouse():
     print("Artists:")
     empties = Artist.objects.annotate(num_a=Count('album')).filter(num_a__lt=1)
     for artist in empties:
-        print(u"  cleaning out #{:d} {}".format(artist.id,artist.name))
+        try:
+            print(u"  cleaning out #{:d} {}".format(artist.id,artist.name))
+        except:
+            pass
+
         try:
             artist.delete()
         except Exception, e:
