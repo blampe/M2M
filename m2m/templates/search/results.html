@@ -88,7 +88,7 @@ cursor:pointer;
                         <img src="/media/images/arrowBlueDown2.png" width="15px" id="directImg"/></a>
                         {%endif%}
                         <a href="{{file|makeLink}}"
-                           title="{{file.oldname}}"
+                           title="{{file.filename}}"
                            class="fileLink" rel="nofollow">
                             {% if mode == 'filesSubstr' or mode == 'filesdirsSubstr' %}{{file|highlight:words}}</a> 
                             {{file|status}} <div style="background-color:white;

@@ -80,7 +80,9 @@ def highlight(object,words, autoescape=None):
     except:
         return object
     
-    value = value[:37] + "..." + value[-35:]
+    if len(value) > 40: 
+        value = value[:35] + "..." + value[-35:]
+
     
     # REGULAR EXPRESSION MATCHING FOR HIGHLIGHTING SHIT
     for word in words:
