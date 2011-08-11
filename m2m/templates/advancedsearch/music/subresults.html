@@ -24,7 +24,7 @@
 {% endif %}
 
 <tr class="{%cycle '' 'darkrow' %}">
-<td> {{result.name}} </td>
+        <td> {% if type == 'Artist' %}<a href="{% url advancedsearch.views.artistDetail result.id %}">{{result.name}}</a> {% else %} {{result.name}}{%endif%}</td>
 <td style="padding-left:10px"> {% if type == 'Song' %} {{result.time|time:"i:s"}}{% else %} {{result.song_set.count}} {%endif%}</td>
 <td style="padding-left:10px" align=right> 
     {% if type == 'Artist'%} 
