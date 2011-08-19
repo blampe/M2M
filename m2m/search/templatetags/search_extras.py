@@ -91,7 +91,7 @@ def highlight(object,words, autoescape=None):
         expl2 = []
         for piece in explosion: # oh gods please work
             if re.match(regexps,piece):
-                piece = "<b>"+piece+"</b>" # this doesn't change the piece inside of explosion...
+                piece = "<strong>"+piece+"</strong>" # this doesn't change the piece inside of explosion...
             expl2 += [piece]               # so fuck it. we'll just populate a new list!
         value = ''.join(expl2)
         

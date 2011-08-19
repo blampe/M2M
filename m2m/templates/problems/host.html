@@ -24,8 +24,8 @@ These files have been marked as bad by users:
     {% endif %}
     {% if problem.file %}
     <tr class="{% cycle 'darkrow' '' %}">
-        <td><a href="{{problem.file|makeLink}}">{{problem.file.path|sanitize|lenlimit:"40"}}</a></td>
-        <td><strong>{{problem.file|lenlimit:"70"}}</strong></td>
+        <td><a href="{{problem.file|makeLink}}">{{problem.file.path|lenlimit:"40"}}</a></td>
+        <td><strong>{{problem.file|sanitize|lenlimit:"70"}}</strong></td>
     </tr>
     {% else %}
     {# get rid of file-less problems #}
@@ -56,7 +56,7 @@ These files have been marked as bad by users:
     {% if problem.file %}
     <tr class="{% cycle 'darkrow' '' %}">
         <td><a href="{{problem.file|makeLink}}">{{problem.file.path|lenlimit:"40"}}</a></td>
-        <td><strong>{{problem.file|lenlimit:"70"}}</strong></td>
+        <td><strong>{{problem.file|sanitize|lenlimit:"70"}}</strong></td>
     </tr>
     {% else %}
     {# get rid of file-less problems #}
@@ -86,7 +86,7 @@ These files have been marked as bad by users:
    {% if problem.file %}
     <tr class="{% cycle 'darkrow' '' %}">
         <td><a href="{{problem.file|makeLink}}">{{problem.file.path|lenlimit:"40"}}</a></td>
-        <td><strong>{{problem.file|lenlimit:"70"}}</strong></td>
+        <td><strong>{{problem.file|sanitize|lenlimit:"70"}}</strong></td>
     </tr>
     {% else %}
     {# get rid of file-less problems #}
@@ -115,7 +115,7 @@ These files have been marked as bad by users:
    {% if problem.file %}
     <tr class="{% cycle 'darkrow' '' %}">
         <td><a href="{{problem.file|makeLink}}">{{problem.file.path|lenlimit:"40"}}</a></td>
-        <td><strong>{{problem.file|lenlimit:"70"}}</strong></td>
+        <td><strong>{{problem.file|sanitize|lenlimit:"70"}}</strong></td>
     </tr>
     {% else %}
     {# get rid of file-less problems #}
