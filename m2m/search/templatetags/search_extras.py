@@ -125,11 +125,11 @@ def makeLink(object, directServe=False):
         return "??"
 
 @register.filter
-def sanitize(filename):
+def sanitize(file):
     ''' Returns a UnicodeEncodeError safe string. Fuck these template errors.'''
     
     try:
-        string = filename.encode('ascii','replace')
+        string = file.filename.encode('ascii','replace')
     except:
         string = "??"
     return string
