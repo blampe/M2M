@@ -125,6 +125,16 @@ def makeLink(object, directServe=False):
         return "??"
 
 @register.filter
+def sanitize(filename):
+    ''' Returns a UnicodeEncodeError safe string. Fuck these template errors.'''
+    
+    try:
+        string = filename.encode('ascii','replace')
+    except:
+        string = "??"
+    return string
+        
+@register.filter
 def host(object):
     '''
     Returns the :model:`browseNet.Host` of a :model:`browseNet.Path` or :model:`search.File`, or '??' if it can't for any reason.
