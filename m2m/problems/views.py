@@ -60,10 +60,15 @@ def host(request,id):
     from browseNet.models import Host
     
     host = get_object_or_404(Host, pk=id)
-    
+    try:
+        problems = host.problems
+    except:
+        from browseNet.views import listAll
+        return listAll(request)
+
     return render_to_response("problems/host.html",
                                 {
                                 'host':host,
-                                'pset':host.problems,
+                                'pset':problems,
                                 'servers':'current'
                                 })
