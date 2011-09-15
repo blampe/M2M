@@ -196,14 +196,7 @@ class LogoNode(template.Node):
     arrows = ['Arrowmath'] * 10 # also the old arrow
     
     styling = "<a class='logolink' href=\"%s\">\
-                <div id='modlogo' style=\"\
-                              position:relative;\
-                              display: inline;\
-                              margin-left:3px;\
-                              line-height:.8em;\
-                              font-weight:bold;\
-                              font-size:8em;\
-                              \">%s</div>\
+                <div id='modlogo' style=\"\">%s</div>\
                 </a>"
     
     extras = {
@@ -224,11 +217,11 @@ class LogoNode(template.Node):
             self.extra = self.extras[module]
     def render(self, context):
         try:
-            return "<a class='logolink' href=\"%(index)s\">\
-                    <div style='display:inline;float:left;margin-left:30px;margin-right:px;'>\
+            return "\
+            <a href=\"%(index)s\"><span>\
                         <img  id='leftlogo' src='/media/images/%(left)s.png'/>\
                         <img  id='arrowlogo' src='/media/images/%(arrow)s.png'/>\
-                        <img  id='rightlogo' src='/media/images/%(right)s.png'/></div></a>%(extra)s" % {
+                        <img  id='rightlogo' src='/media/images/%(right)s.png'/></span></a>%(extra)s" % {
                                                                                     'left':self.left,
                                                                                     'right':self.right,
                                                                                     'arrow':self.arrow,

@@ -60,6 +60,7 @@ def index(request):
                               {
                                 'title':"M2M - Search",
                                 'search':'current',
+                                'files':'current',
                                 'debug':DEBUG,
                                })
     
@@ -466,6 +467,7 @@ def results(request,page='1'):
                               {
                                 'title':'M2M - Results: page '+str(page+1),
                                 'search':'current',
+                                'files':'current',
                                 'q': searchstring, #so it displays all pretty-like
                                 'filesfound':filesFound,
                                 #'searchmeta':searchMeta,
