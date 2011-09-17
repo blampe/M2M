@@ -7,6 +7,8 @@
     border-spacing: 0px;
 }
 
+h1 { font-size: 2em;}
+
 li {
     list-style-type: none;
 

@@ -1,11 +1,44 @@
-h1 {
-    text-shadow: 1px 1px 1px #1e3042;
+#content {
+    width: 800px;
+    margin: 0 auto;
+}
+
+blockquote {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 40px;
+    margin-right: 40px;
+
 }
 
 p {
+    padding-bottom: 2px;
     text-indent: 10px;
-    line-height:1.5em;
-    margin-bottom: 1.2em;
-    
 }
 
+h1 {
+    text-indent: -35px;
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+
+h2 {
+    margin-bottom: 5px;
+    text-indent: -25px;
+    font-sizee: 1.5em;
+}
+ol, ol li {
+    list-style-type: decimal;
+}
+ul, ul li {
+    list-style-type: square;
+}
+ol,ul{
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.questionWrap {
+    width: 800px;
+    margin: 0 auto;
+}

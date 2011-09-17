@@ -1,7 +1,7 @@
 {% extends "base_page.html" %}
 {% load blog %}
 {% load comments %}
-{%block title%} M2M - News {%endblock%}
+{%block title%} M2M - News: {{object.title}}{%endblock%}
 {% block stylin %} <link rel="stylesheet" type="text/css" href="/media/styles/news.css" /> {% endblock %}
 
 {% block scriptin %}
@@ -49,7 +49,7 @@ $(document).ready(function(){
 
 
 </script>
-
+<script src="/media/scripts/news.js"></script>
 {%endblock%}
 
 {%block news%}current{%endblock%}
@@ -57,15 +57,18 @@ $(document).ready(function(){
 {%block content%}
 {%with object as post%}
 {% if post.status == 2 %}
-<section>
-<div class="postWrap" style="border-bottom: 3px groove;"><article>
+<section id="posts">
+<div class="detailwrap" style="border-bottom: 3px groove;"><article>
     
     <header>
-        <div class="postDate">
-            <time datetime="{{post.publish|timeTag}}" pubdate> {{post.publish}}</time><br />
-            {{post.author}}
+
+        <div class="postTitle"><h1>{{post.title}}</h1></div>
+        <div class="postmeta">
+            <div class="postDate">
+                <time datetime="{{post.publish|timeTag}}" pubdate> {{post.publish|date:"M j, Y G:i"}}</time>
+            </div>
+            <div class="author">{{post.author}}</div>
         </div>
-        <h1><div class="postTitle">{{post.title}}</div></h1>
     </header>
     
     <div class="postBody">{{post.body|formatBody}}</div>
@@ -110,7 +113,7 @@ $(document).ready(function(){
     {{comment_count}} comments have been posted.
     {% get_comment_list for post as comment_list%}
     {% for comment in comment_list %}
-        <div class="postCommentWrap" style="{% cycle 'background-color:#ECF3FE;' '' %}">
+        <div class="postCommentWrap">
             <a name="c{{comment.id}}"></a>
             <div class="postCommentHead" ">
             Posted by: {{ comment.user_name }} on {{comment.submit_date }}<br />

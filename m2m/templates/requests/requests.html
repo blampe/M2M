@@ -9,6 +9,10 @@
 {% endblock %}
 
 {% block externalContent %}
+{% if openReq %}<a id="tabform"><div id="followTab">
+Request!
+</div></a>
+<div id="simpleModal"><a class="green button" id="closeSimple"><span>close</span></a></div>{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -180,7 +184,7 @@
                         {{form.email}}
                         </li>
                     </ul><div id="requestSub">
-                    <a id="submitrequest"><span>Submit</span></a>
+                    <a class="green button" id="submitrequest"><span>Submit</span></a>
                     </div></div>
                     
 
