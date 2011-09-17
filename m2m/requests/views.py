@@ -100,7 +100,7 @@ def open(request,page=1,error=''):
                                 'requests':'current',
                                 'openReq':'current', 
                                 'displaySet':displaySet,
-                                'toprequests': Comment.objects.filter(Likes__gt=0).order_by('-Likes')[:PERPAGE+10],
+                                'toprequests': Comment.objects..filter(isDeleted=0,completed=0,Likes__gt=0).order_by('-Likes')[:PERPAGE+10],
                                 'page':page+1,
                                 'linkPages':linkPages,
                                 'setLen':setLen,
