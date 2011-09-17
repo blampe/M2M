@@ -11,32 +11,30 @@
 {%endblock%}
 
 {% if folderList or fileList %}
-Browsing <strong><a href="{% url browseNet.views.deepBrowse 'H' host.hid%}">{{host}}</a></strong> (<a href="">what's new?</a>):<br />
+Browsing <strong><a href="{% url browseNet.views.deepBrowse 'H' host.hid%}">{{host}}</a></strong>{# (<a href="">what's new?</a>) #}:<br />
 <img src="/media/images/{% if host.flags == 24 %}online.gif{%else%}offline.gif{%endif%}"/>
     <strong><a href="smb://{{folder|pathLink}}">smb://{{folder|pathLink}}</a></strong>
 <div class="tablewrap">
 <table style="width:100%">
     {%if folderList%}
-        <tr class="info">
+        <thead><tr class="info">
             <td  style="width:60%"> Directory Name </td>
-            <td  style="text-align:right;"> Size </td>
-            <td  style="text-align:right;"> File Date</td>
-        </tr>
+            <td  style="text-align:right;" colspan=2>Total Size </td>
+        </tr></thead><tbody>
         {% for folder in folderList|all:ordering%}
             <tr class="{%cycle '' 'darkrow'%}">
                 <td><a href="{% url browseNet.views.deepBrowse 'P' folder|findPID%}"> {{folder|getName}}</a></td>
-                <td style="text-align:right;">{{folder|sizeToReadable}}</td>
-                <td></td>
+                <td  colspan="2"style="text-align:right;">{{folder|sizeToReadable}}</td>
             </tr>
-        {%endfor%}
+        {%endfor%}</tbody>
     {%endif%}
 
     {%if fileList %}
-        <tr class="info">
+        <thead><tr class="info">
             <td  style="width:60%"> File Name </td>
             <td  style="text-align:right;"> Size </td>
             <td  style="text-align:right;"> File Date </td>
-        </tr>
+        </tr></thead><tbody>
         {% for file in fileList|all:ordering %}
             <tr class="{%cycle '' 'darkrow' %}">
                 <td><a {%if host.servesDirect%}
@@ -48,7 +46,7 @@ Browsing <strong><a href="{% url browseNet.views.deepBrowse 'H' host.hid%}">{{ho
                 <td style="text-align:right;">{{file|sizeToReadable}}</td>
                 <td style="text-align:right;">{{file.filedate|dateForm}}</td>
             </tr>
-        {%endfor%}
+        {%endfor%}</tbody>
     {%endif%}
 
 </table>

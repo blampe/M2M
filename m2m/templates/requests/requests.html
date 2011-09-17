@@ -4,107 +4,18 @@
 {%block stylin %} <link rel="stylesheet" type="text/css" media="screen" href="/media/styles/requests.css" /> {% endblock %}
 
 {% block scriptin %}
-
-<script>
-
-$(document).ready(function(){ 
-    likeHandler();
-    extraRequestHandler();
-});
-function likeHandler(){
-    $('.likeform').submit(function(){
-        cid = $(this).attr('id');
-        $.ajax({
-            type: "POST",
-            data: $(this).serialize(),
-            url: "/requests/like/"+cid+"/{{page}}",
-            cache: false,
-            dataType:'html',
-            success: function(html,textStatus){
-                $('#'+cid+" em").load('{% url requests.views.open page%} #'+cid+' em');
-				$('#'+cid+" button").replaceWith("Thanks!");
-            },
-            error: function( XMLHttpRequest, textStatus, errorThrown){
-                $('#'+cid+" button").replaceWith("Sorry, no");
-            }
-        
-        });
-        return false;
-    });
-}
-
-function extraRequestHandler(){
-    $('#miniRequester').click(function(){
-        $('#extraForm').slideToggle("slow");
-		$('#requestForm').slideToggle("slow");
-    });
-	
-	// if they click out, get rid of it:
-	$('#container').click(function(){
-		$('#extraForm').slideUp("slow");
-		$('#requestForm').slideDown("slow");
-		});
-}
-</script>
+<script src="/media/scripts/requests.js"></script>
 
 {% endblock %}
 
-{% block externalContent %}<div id='extraContainer'>
-<div id="extraForm" class="tablewrap">
-        <form id="extraRequester" action='{% url requests.views.open %}' method="POST">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            <table>
-            <tr>
-                <td rowspan="4">
-                    <label>Your comment/request/idea:<br />
-                    {{form.request}}
-                    </label>
-                    <br />
-                    {% if form.request.errors %}
-                    <span class="error">
-                        {% for error in form.request.errors %}
-                            {{ error|escape}}<br/>
-                            {%endfor%}
-                    </span>
-                    {%endif%}
-                </td>
-                <td>
-                    <label>Your name: <br />
-                    {{ form.name }}
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Your server (optional):<br />
-                    {{form.server}}
-                    
-                    </label>
-                </td>
-            </tr>
-                <td>
-                    <label>Your email (optional):<br />
-                    {{form.email}}
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input  type="submit" />
-                </td>
-            </tr>
-            </table>
-        </form>
-</div>
-<div id="miniRequester">Request!</div>
-</div>
+{% block externalContent %}
 {% endblock %}
 
 {% block content %}
-
+    
 <section>
 <div style="text-align:center;">
+<div class="error"><ul>{% for error in form.non_field_errors %}<li>{{error|escape}}</li>{%endfor%}</ul></div>
     There {{setLen|pluralize:"is,are"}} {{setLen|default:0}}
     {% if openReq %}open{% endif %}{% if closedReq %}completed{%endif%}{% if delReq %} deleted {% endif %}
     request{{setLen|pluralize}}.
@@ -117,26 +28,54 @@ function extraRequestHandler(){
 {% if displaySet %}
 
 <div style="position:relative;"><strong>Page:
-    {% for number in linkPages %}{%spaceless%}
-        {% if number == page %}
-            {{number|default:'1'}}
-        {% else %}
-            {%if openReq %}<a href="{% url requests.views.open number%}">{{number}}</a>{%endif%}
-            {%if closedReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%} {# why won't {% url %} work for these two!? #}
-            {%if delReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%}
-        {% endif %}
-    {%endspaceless%}
-    {% endfor %}</strong>
-    </div>
+{% for number in linkPages %}{%spaceless%}
+    {% if number == page %}
+        {{number|default:'1'}}
+    {% else %}
+        {%if openReq %}<a href="{% url requests.views.open number%}">{{number}}</a>{%endif%}
+        {%if closedReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%} {# why won't {% url %} work for these two!? #}
+        {%if delReq%}<a href="/requests{{modifier}}/{{number}}">{{number}}</a>{%endif%}
+    {% endif %}
+{%endspaceless%}
+{% endfor %}</strong>
+</div>
 
+{% if openReq %} 
+<div class="requeststop">
+<table class="requestWrap">
+    <thead>
+        <tr><td colspan=3 style="text-align: center;">Top Requests</td></tr>
+    </thead>
+    <tbody>
+    {% for request in toprequests %}
+        <tr>
+        <td style="padding-right: 5px;padding-left: 2px;">{{request.request|toHTML}}</td>
+        <td style="text-align: center; padding-right: 5px;"> 
+            <form class="likeform" action="" id="{{entry.CID}}" method="POST">
+                        {% csrf_token %}
+                        <input type=hidden name="id" value="{{entry.CID}}"/>
+                        <input type=hidden name="page" value="{{page}}"/>
+                        <button class="as_link" title="like this" type=" name="liker" onclick="doLike({{request.CID}})">
+                            {{request.Likes}} like{{request.Likes|pluralize}}
+                        </button>
+                    </form>
+        </td>
+        <td class="actions"><a  href="{% url requests.views.complete request.CID %}">Complete</a></td>
+        </tr>    
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endif %}
 
-    <div class="tablewrap">
-        <table>
-        {% for entry in displaySet %}
-            <tr class="{% cycle 'darkrow' '' %}" style="font-size:12px;line-height:18px;height:24px;">
-                <td>
-                    <span style="filter:alpha(opacity=50);-moz-opacity:.50;opacity:.50;">{%if entry.server%}
-                        <a href="{% url browseNet.views.deepBrowse 'H' entry.server|hid %}"><strong>\\{{entry.server}}</strong></a>
+<div class="chronrequests{% if openReq %} open{%endif%}">
+    {% for entry in displaySet %}
+    
+        <table class="requestWrap">
+            <tr class="requestmeta" style="">
+                <td class="requestername">
+                    {%if entry.server%}
+                        <a href="{% url browseNet.views.deepBrowse 'H' entry.server|hid %}">\\{{entry.server}}</a>
                     {%endif%}
                     {% if entry.server and entry.name%}
                         {%if entry.name != 'Anonymous' %}
@@ -151,29 +90,24 @@ function extraRequestHandler(){
                     {%endif%}
                     {% if entry.completed == 1 %}
                         {% if entry.completingName != 'Anonymous' and entry.completingName != None and entry.completingName != ''%}
-                            - completed by {{entry.completingName}} (<a href="{% url browseNet.views.deepBrowse 'H' entry.completingServer|hid %}"><strong>\\{% firstof entry.completingServer %}</strong></a>)
+                            - completed by {{entry.completingName}} (<a href="{% url browseNet.views.deepBrowse 'H' entry.completingServer|hid %}">\\{% firstof entry.completingServer %}</a>)
                         {%else%}
-                            - completed by <a href="{% url browseNet.views.deepBrowse 'H' entry.completingServer|hid %}"><strong>\\{{entry.completingServer}}</strong></a>
+                            - completed by <a href="{% url browseNet.views.deepBrowse 'H' entry.completingServer|hid %}">\\{{entry.completingServer}}</a>
                         {%endif%}
                     {%endif%}
-                    </span>
                 </td>
-                <td align="right">
-                    <span style="filter:alpha(opacity=50);-moz-opacity:.50;opacity:.50;">
-                    {%if closedReq%}Completed:{{entry.completedTime|dateSlice}}, Requested:{%endif%}
+                <td align="right" class="actions">
+                    {%if closedReq%}Completed: {{entry.completedTime|date:"m/d/Y"}}, Requested:{%endif%}
                     {%if delReq%}Requested:{%endif%}
-                        {{entry.requestTime|dateSlice}}
+                        {{entry.requestTime|date:"m/d/Y"}}
                     {%if openReq%}
-                        <strong>
                             <a  href="{% url requests.views.edit entry.CID %}">Edit</a>
                             <a  href="{% url requests.views.complete entry.CID %}">Complete</a>
                             <a href="{% url requests.views.delete entry.CID %}">Delete</a>
-                        </strong>
                     {% endif %}
-                    </span>
                 </td>
             </tr>
-            <tr class="{% cycle 'darkrow' '' %}" style="font-size:12px;line-height:18px;height:24px;">
+            <tr class="requestbody">
                 <td class="commentCell" colspan="2"><p>{{entry.request|toHTML}}</p>
                 {%if closedReq and entry.completerComment %}
                     <strong>{{entry.completingServer|default:"Completer"}}'s Comment:</strong><br />
@@ -181,24 +115,23 @@ function extraRequestHandler(){
                 {% endif %}
                 {% if openReq or closedReq %}
                     <div class="likes">
-                    
+                    {% if openReq %}
                     <form class="likeform" action="" id="{{entry.CID}}" method="POST">
                         {% csrf_token %}
                         <input type=hidden name="id" value="{{entry.CID}}"/>
-                        <input type=hidden name="page" value="{{page}}"/>
-                        <em>{{entry.Likes}} like{{entry.Likes|pluralize}}</em>{%endif%}{% if openReq %};
+                        <input type=hidden name="page" value="{{page}}"/>{%endif%}
+                        <em>{{entry.Likes}} like{{entry.Likes|pluralize}}</em>{%endif%}
+                        {% if openReq %}-
                         <button class="as_link" title="like this" type=" name="liker" onclick="doLike({{entry.CID}})"><strong><span>like this</span></strong></button>
                     </form>
                     
                     </div>
-                {% endif %}
+                        {% endif %}
                 </td>
             </tr>
-        {% endfor %}
         </table>
+    {% endfor %} 
     </div>
-
-
     
 <div style="position:relative;"><strong>Page:
     {% for number in linkPages %}
@@ -221,65 +154,44 @@ function extraRequestHandler(){
 
 {% if openReq %}
     <script>
-        $(document).ready(
-            
-            $("form :input[title]").tooltip({
-                position:"center",
-                offset: [-2,10],
-                effect: "fade",
-                opacity: 0.7
-            });
-        );
-        
+
     </script>
     
     <br />
-    <div id="requestForm" class="tablewrap">
+    <div id="requestForm">
         <form id="requester" action='' method="POST">
             {% csrf_token %}
-            {{ form.non_field_errors }}
-            <table>
-            <tr>
-                <td rowspan="4">
-                    <label>Your comment/request/idea:<br />
+            
+                    <div id="requestComment"><label for="id_request">Your comment/request/idea:</label><br />
                     {{form.request}}
-                    </label>
-                    <br />
-                    {% if form.request.errors %}
-                    <span class="error">
+                    </div>
+                    
+                    <div id="noncommentrequest">
+                    <ul >
+                        <li><label for="id_name" class="required">Your name:</label>
+                        {{ form.name }}
+                        </li>
+
+                        <li id="requestServer">
+                        <label for="id_server">Your server:</label>{{form.server}}
+                        </li>
+
+                        <li id="requestEmail"><label for="id_email">Your email:</label>
+                        {{form.email}}
+                        </li>
+                    </ul><div id="requestSub">
+                    <a id="submitrequest"><span>Submit</span></a>
+                    </div></div>
+                    
+
+        </form>
+        {% if form.request.errors %}
+                    <div class="error">
                         {% for error in form.request.errors %}
                             {{ error|escape}}<br/>
                             {%endfor%}
-                    </span>
+                    </div>
                     {%endif%}
-                </td>
-                <td>
-                    <label>Your name: <br />
-                    {{ form.name }}
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Your server (optional):<br />
-                    {{form.server}}
-                    
-                    </label>
-                </td>
-            </tr>
-                <td>
-                    <label>Your email (optional):<br />
-                    {{form.email}}
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input  type="submit" />
-                </td>
-            </tr>
-            </table>
-        </form>
     </div>
 {% endif %}
 

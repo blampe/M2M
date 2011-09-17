@@ -37,4 +37,6 @@ $(function(){
             $('#sitewide').css('backgroundColor','rgba(70, 130, 180,'+(0.5+$(window).scrollTop()/700)+')');
         }
     });
+    
+    
 });

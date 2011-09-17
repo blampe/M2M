@@ -80,7 +80,7 @@ def highlight(object,words, autoescape=None):
     except:
         return object
     
-    if len(value) > 40: 
+    if len(value) > 105: 
         value = value[:35] + "..." + value[-35:]
 
     

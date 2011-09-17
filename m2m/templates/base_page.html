@@ -10,6 +10,7 @@
         <![endif]-->
         <link rel="stylesheet" media="screen" href="/media/styles/cleaned.css" />
         <link rel="stylesheet" media="screen" href="/media/styles/searchbar.css" />
+        <link rel="stylesheet" media="screen" href="/media/styles/tables.css" />
         {% block stylin %}{% endblock %}
         
         <script type="text/javascript">
@@ -37,44 +38,89 @@
         {% block externalContent %} {% endblock %}
         <nav id="sitewide"><!-- Start Navigation -->
                       <ul>
-                        <li><a href="{% url search.views.index %}" id="search" rel="self" class="{{search|default:""}}">Search</a></li>
-                          {% if search %}
+                        <a href="{% url search.views.index %}" 
+                        id="search" rel="self" 
+                        class="{{search|default:""}}">
+                            <li>Search</li></a>
                             <ul id="modifiers">{% block modifiers %}
-                                <li><a href="{%url search.views.index %}" id="fsearch" title="files" alt="files" rel="self" class="active {{files|default:""}}">Files</a></li>
-                                <li><a href="{%url advancedsearch.views.movieSplash %}" title="movies" alt="movies" id="msearch" rel="self" class="active {{movies|default:""}}">Movies</a></li>
-                                <li><a title="shows" alt="shows" id="ssearch" rel="self" class="disabled {{shows|default:""}}"><!-- href="{%url advancedsearch.views.showSplash %}" > -->Shows</a></li>
-                                <li><a href="{%url advancedsearch.views.musicSplash %}" title="music" alt="music" id="musearch" rel="self" class="active {{music|default:""}}">Music</a></li>
+                                <li>
+                                    <a href="{%url search.views.index %}" 
+                                    id="fsearch" title="files" alt="files" 
+                                    rel="self" class="active {{files|default:""}}">Files</a>
+                                </li>
+                                <li>
+                                    <a href="{%url advancedsearch.views.movieSplash %}" 
+                                    title="movies" alt="movies" id="msearch" rel="self" 
+                                    class="active {{movies|default:""}}">Movies</a>
+                                </li>
+                                <li>
+                                    <a title="shows" alt="shows" id="ssearch" rel="self" 
+                                    class="disabled {{shows|default:""}}"><!-- 
+                                    href="{%url advancedsearch.views.showSplash %}" > -->Shows</a>
+                                </li>
+                                <li>
+                                    <a href="{%url advancedsearch.views.musicSplash %}" title="music" 
+                                    alt="music" id="musearch" rel="self" 
+                                    class="active {{music|default:""}}">Music</a>
+                                </li>
                                 {% endblock %}
                             </ul>
-                          {% endif %}
-                        <li><a href="{% url requests.views.open %}" id="requests"  rel="self" class="{{requests|default:""}}">Requests</a></li>
+                        <a href="{% url requests.views.open %}" 
+                        id="requests"  rel="self" 
+                        class="{{requests|default:""}}"><li>Requests</li></a>
 
                         {% if requests %}
                         <ul id="subset">
-                            <li class="{{openReq|default:""}}"><a href="{% url requests.views.open %}" id="oreq"  rel="self">Open Requests</a></li>
-                            <li class="{{closedReq|default:""}}"><a href="{% url requests.views.completed %}" id="creq"  rel="self">Completed Requests</a></li>
-                            <li class="{{delReq|default:""}}"><a href="{% url requests.views.deleted %}" id="dreq" rel="self">Deleted Requests</a></li>
+                            <a href="{% url requests.views.open %}" 
+                                id="oreq"  rel="self"><li class="{{openReq|default:""}}">
+                                Open Requests
+                            </li></a>
+                            <a href="{% url requests.views.completed %}" 
+                                id="creq"  rel="self"><li class="{{closedReq|default:""}}">
+                                Completed Requests
+                            </li></a>
+                            <a href="{% url requests.views.deleted %}" 
+                                id="dreq" rel="self"><li class="{{delReq|default:""}}">
+                                Deleted Requests
+                            </li></a>
                         </ul>
                         {% endif %}
-                        <li><a href="{% url browseNet.views.listAll 1 %}" id="servers"  rel="self" class="{{servers|default:""}}">Servers</a></li>
+                        <a href="{% url browseNet.views.listAll 1 %}" 
+                        id="servers"  rel="self" 
+                        class="{{servers|default:""}}"><li>Servers</li></a>
                         <!--<li><a href="/polls" rel="self" id="polls" class="{{polls|default:""}}">POLLS</a></li>-->
-                        <li><a href="{% url basic.blog.views.post_list %}" id="news"  rel="self" class="{%block news%}{%endblock%}">News</a></li>
-                        <li><a href="{% url stats.views.display %}" rel="self" id="stats"  class="{{stats|default:""}}">Stats</a></li>
+                        <a href="{% url basic.blog.views.post_list %}" 
+                        id="news"  rel="self" 
+                        class="{%block news%}{%endblock%}"><li>News</li></a>
+                        <a href="{% url stats.views.display %}" 
+                        rel="self" id="stats"  
+                        class="{{stats|default:""}}"><li>Stats</li></a>
                         {% comment %}{% if stats %}
                             <ul id="subset">
-                                <li><a href="" id="sstat"  class="{{siteStat|default:""}}">Sitewide</a></li>
-                                <li><a href="" id="rstat"  class="{{reqStat|default:""}}">Requests</a></li>
-                                <li><a href="" id="pstat"  class="{{pollStat|default:""}}">Polls</a></li>
+                                <li>
+                                    <a href="" id="sstat" 
+                                    class="{{siteStat|default:""}}">Sitewide</a>
+                                </li>
+                                <li>
+                                    <a href="" id="rstat" 
+                                    class="{{reqStat|default:""}}">Requests</a>
+                                </li>
+                                <li>
+                                    <a href="" id="pstat" 
+                                    class="{{pollStat|default:""}}">Polls</a>
+                                </li>
                             </ul>
                         {%endif%}{%endcomment%}
-                        <li><a href="{% url faq.views.basic %}" id="faq" class ="{{faq|default:""}}"> FAQ </a>
+                        <a href="{% url faq.views.basic %}" 
+                        id="faq" class ="{{faq|default:""}}"><li>FAQ</li></a>
                             {% if faq %}
                             <ul id="subset">
-                                <li><a href="{%url faq.views.basic %}" id="bfaq" class="{{basic|default:""}}">General</a></li>
-                                <li><a href="{%url faq.views.servers%}" id="sfaq" class="{{server|default:""}}">Server</a></li>
+                                <a href="{%url faq.views.basic %}" 
+                                id="bfaq" class="{{basic|default:""}}"><li>General</li></a>
+                                <a href="{%url faq.views.servers%}" 
+                                id="sfaq" class="{{server|default:""}}"><li>Server</li></a>
                             </ul>
                             {% endif %}
-                        </li>
                       </ul>
                     </nav>
                     <!-- End navigation -->
@@ -130,7 +176,8 @@
                                     <br />
                                     <script type=\"text/javascript\">
                                         if(navigator.appName.match(/Microsoft/)){
-                                            document.write("I see you're using IE. Let me <a href='http://tinyurl.com/ca653h'>help you with that.</a><br />");
+                                            document.write("I see you're using IE. Let me " +
+                                            "<a href='http://tinyurl.com/ca653h'>help you with that.</a><br />");
                                             }
                                     </script>
                                     <noscript>
@@ -144,7 +191,7 @@
                     
                     <section id="endContent">
                     {% block endContent %}
-                    
+                        
                     {%endblock%}
                     </section>
             </div><!-- end main content wrapper -->
