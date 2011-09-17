@@ -1,7 +1,7 @@
 // Setup for the pages
 
 $(function(){
-    // set min-height of container
+    // set min-height of container, attach newscounter
     $('#container').css('min-height',$(window).height()-25);
     $(window).resize(function(){
         $('#container').css('min-height',$(window).height()-25)

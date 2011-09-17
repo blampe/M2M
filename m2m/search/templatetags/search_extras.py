@@ -7,6 +7,8 @@ import re
 from search.models import File
 from browseNet.models import Path
 
+from basic.blog.models import Post
+
 import urllib2
 
 register = template.Library()
@@ -230,6 +232,7 @@ class LogoNode(template.Node):
                                                                                     }
         except:
             return '<span style="font-size:6em;">Logo Unavailable</span>'
+            
 @register.tag(name="logo")
 def do_logo(parser,token):
     try:
@@ -239,3 +242,24 @@ def do_logo(parser,token):
     return LogoNode(module)
 #
 ################################################################
+from datetime import date, timedelta
+
+class NewNewsNode(template.Node):
+    string = "<div id=\"newNews\"><p>+{:d}</p></div>"
+    
+    def __init__(self, *args, **kwargs):
+        self.number = Post.objects.filter(publish__gt=date.today()-timedelta(days=4)).count()
+        
+    def render(self, context):
+        try:
+            return self.string.format(self.number)
+        except:
+            return ""
+            
+@register.tag(name="latestnews")
+def do_newNews(parser,token):
+    try:
+        tag_name = token.split_contents()
+    except:
+        return ""
+    return NewNewsNode()

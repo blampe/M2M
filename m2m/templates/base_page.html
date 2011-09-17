@@ -91,7 +91,8 @@
                         <!--<li><a href="/polls" rel="self" id="polls" class="{{polls|default:""}}">POLLS</a></li>-->
                         <a href="{% url basic.blog.views.post_list %}" 
                         id="news"  rel="self" 
-                        class="{%block news%}{%endblock%}"><li>News</li></a>
+                        class="{%block news%}{%endblock%}"><li>News
+                        {% latestnews %}</li></a>
                         <a href="{% url stats.views.display %}" 
                         rel="self" id="stats"  
                         class="{{stats|default:""}}"><li>Stats</li></a>
