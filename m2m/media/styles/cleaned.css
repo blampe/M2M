@@ -27,6 +27,30 @@ a:visited {
     color: #7f9db9;
 }
 
+a.green.button {
+    -webkit-box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 3px 0px;
+    background-color: rgb(145, 189, 9);
+    background-image: url(/media/images/super-button-overlay.png);
+    border-radius: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+    text-shadow: rgba(0, 0, 0, 0.25) 0px -1px 1px;
+    width: auto;
+    height: 24px;
+}
+
+a.green.button span{
+    padding: 4px 15px 6px;
+}
+
+a.green.button:hover {
+    background-color: rgba(116, 154, 2,1);
+    text-decoration: none;
+}
+
 a.current img {
     -mox-box-shadow: 0 0 6px rgba(255,255,255,0.5);
     -khtml-box-shadow: 0 0 6px rgba(255,255,255,0.5);

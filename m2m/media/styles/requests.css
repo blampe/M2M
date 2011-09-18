@@ -138,30 +138,6 @@ margin-top: 25px;
     margin-top: 15px;
 }
 
-a.green.button {
-    -webkit-box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 3px 0px;
-    background-color: rgb(145, 189, 9);
-    background-image: url(/media/images/super-button-overlay.png);
-    border-radius: 15px;
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    font-size: 13px;
-    text-shadow: rgba(0, 0, 0, 0.25) 0px -1px 1px;
-    width: auto;
-    height: 24px;
-}
-
-#requestSub a span{
-    padding: 4px 15px 6px;
-}
-
-a.green.button:hover {
-    background-color: rgba(116, 154, 2,1);
-    text-decoration: none;
-}
-
 #followTab {
     text-align: center;
     position: fixed;

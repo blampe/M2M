@@ -24,7 +24,6 @@ div.postTitle h1{
 }
 .postDate{
     font-size: 9pt;
-
 }
 
 .author {
@@ -32,9 +31,6 @@ div.postTitle h1{
     overflow: visible;
 }
 
-.postTease{
-
-}
 .postBody{
     padding-bottom: 15px;
 }
@@ -50,16 +46,13 @@ div.postTitle h1{
 #commentContainer{
     max-width: 550px;
     font-size: 10pt;
-    
+    min-height: 200px;
 }
 
 #commentLister div.postCommentWrap:nth-child(odd){
     background-color: #ECF3FE;
 }
 
-.comments{
-
-}
 .postCommentWrap{
     border-left: 1px solid rgba(0,0,0,.25);
     padding: 2px;

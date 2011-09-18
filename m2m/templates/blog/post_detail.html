@@ -6,49 +6,6 @@
 
 {% block scriptin %}
 {%get_comment_form for object as form %}
-<script type="text/javascript">
-function bindPostCommentHandler(){
-    $('#commentForm form').submit(function(){
-       $.ajax({
-            type: "POST",
-            data: $('#commentForm form').serialize(),
-            url: "{%comment_form_target%}",
-            cache: false,
-            dataType: "html",
-            success: function(html, textStatus){
-                $('#commentForm form').replaceWith("Thanks for your comment!");
-                bindPostCommentHandler();
-                $('#commentContainer').load('{{object.get_absolute_url}} #commentLister')
-            },
-            error: function( XMLHttpRequest,textStatus,errorThrown){
-                if($('#commentForm form #id_comment').value == ''){
-                    $('#commentForm form #id_comment').value = "Please write a comment!";
-                }
-            }
-        });
-       return false;
-    });
-}
-
-var edited = false;
-    function toggleText(id){
-        if($(id)){
-            var $target = $(id);
-            if($target.attr('value') == "Anonymous" && edited == false){
-                $target.attr('value', "");
-            } else if(edited == false){
-                $target.attr('value',"Anonymous");
-            }
-        }
-    }
-
-$(document).ready(function(){
-    bindPostCommentHandler();
-});
-
-
-
-</script>
 <script src="/media/scripts/news.js"></script>
 {%endblock%}
 
@@ -86,19 +43,19 @@ $(document).ready(function(){
         {{form.timestamp}}
         {{form.security_hash}}
     <table>
-        <tr> <td>
-            <span style="display:none;"><label> Honeypot(Entering text here will flag your comment as spam):
-            {{ form.honeypot }}</label></span>
-        <label for=id_name>Name:</label> <div style='float:right;'><input type="text" onfocus="toggleText('#id_name');"
+        <tr>
+            <td valign="top" colspan=2><label for="id_comment">Comment:</label>{{form.comment}}
+        </td></tr>
+        <tr>
+            <td>
+                <span style="display:none;"><label> Honeypot(Entering text here will flag your comment as spam):
+                {{ form.honeypot }}</label></span>
+                <label for=id_name>Name: </label><input type="text" onfocus="toggleText('#id_name');"
                               onblur="toggleText('#id_name');"
                               name="name" id="id_name" value="Anonymous"
-                              onchange="if(this.value != ''){edited = true;}else{edited=false;}"/></div></td>
-        </tr>
-        <tr>
-            <td valign="top"><label for=id_comment>Comment:</label>{{form.comment}}
-        </td></tr>
-        <tr><td align='right'>
-    <input type="submit" name="submit" class="submit-post" value="Post!" />
+                              onchange="if(this.value != ''){edited = true;}else{edited=false;}"/></td>
+                <td align='center'>
+    <a class="green button" type="submit" name="submit" id="submitcomment"><span>"Post!"</span></a>
     </td></tr>
     </table>
     
