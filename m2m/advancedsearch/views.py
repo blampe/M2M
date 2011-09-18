@@ -204,9 +204,9 @@ def movieDetail(request,id):
     
 def musicSplash(request):
     import random
-    latestAlbums = list(Album.objects.all().annotate(num_files=Count('song_set'))\
+    latestAlbums = list(Album.objects.all().annotate(num_files=Count('song__files'))\
                                            .filter(num_files__gte=1)\
-                                           .order_by('-dateadded')[:48])
+                                           .order_by('-dateadded')[:45])
     random.shuffle(latestAlbums)
     
     return render_to_response('advancedsearch/music/splash.html',
