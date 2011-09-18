@@ -252,7 +252,10 @@ class NewNewsNode(template.Node):
         
     def render(self, context):
         try:
-            return self.string.format(self.number)
+            if self.number > 0:
+                return self.string.format(self.number)
+            else:
+                return ""
         except:
             return ""
             

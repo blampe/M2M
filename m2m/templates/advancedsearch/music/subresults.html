@@ -3,6 +3,7 @@
 {% if forloop.first %}
 <div class='tablewrap'>
 <table>
+<thead>
 <tr class="info">
     <td>Name</td>
     <td>
@@ -20,7 +21,7 @@
         {% endif %}
     </td>
     {% if type == 'Song' %}<td align=right>Album</td><td align=right>Genre</td>{% endif %}
-</tr>
+</tr></thead><tbody>
 {% endif %}
 
 <tr class="{%cycle '' 'darkrow' %}">
@@ -45,6 +46,7 @@
 </tr>
 
 {% if forloop.last %}
+</tbody>
 </table>
 </div>
 {% with q|urlencode as q %}
@@ -55,12 +57,16 @@
         <a style="cursor:pointer" onclick='$("#songs").load("/advanced/music/subresult/song/{{page.previous_page_number}}?q={{q}}&{{params}} .results")'>Prev</a>
     {%endif %}
     {% for pager in p.page_range %}
-        {% if pager != page.number %}<a style="cursor:pointer" onclick='$("#songs").load("/advanced/music/subresult/song/{{pager}}?q={{q}}&{{params}} .results")'>{{pager}}</a>
+        {% if pager != page.number %}<a style="cursor:pointer" 
+        onclick='$("#songs").load("/advanced/music/subresult/song/{{pager}}?q={{q}}&{{params}} .results")'>{{pager}}</a>
         {% else %} {{pager}}
         {% endif %}
     {% endfor %}
     {% if page.has_next %}
-        <a style="cursor:pointer" onclick='$("#songs").load("/advanced/music/subresult/song/{{page.next_page_number}}?q={{q}}&{{params}} .results")'>Next</a>
+        <a style="cursor:pointer" 
+        onclick='{% if type == 'Song' %}$("#songs div").load("/advanced/music/subresult/song/{%endif%}
+                 {%if type == 'Album' %}$("#albums div").load("/advanced/music/subresult/album/{%endif%}
+                 {%if type == 'Artist' %}$("#artists div").load("/advanced/music/subresult/artist/{%endif%}{{page.next_page_number}}?q={{q}}&{{params}} .results")'>Next</a>
     {% endif %}    
     </div>
 {% endif %}
