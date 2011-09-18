@@ -116,6 +116,8 @@ def makeLink(object, directServe=False):
             if object.hid.servesDirect == True and directServe != False:
             #do nothing
                 return "smb://%s%s" % (object.hid, object)
+            else:
+                return "smb://%s%s" % (object.hid, object)
         except AttributeError:
             try:
                 # no HID - shouldn't exist anymore anyway.
