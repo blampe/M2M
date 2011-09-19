@@ -3,7 +3,6 @@ from django.utils.safestring import mark_safe
 from django.db import transaction
 
 from djangosphinx.apis.api278 import *
-#from djangosphinx.manager import SphinxQuerySet
 
 from search.models import File
 from browseNet.models import Path
