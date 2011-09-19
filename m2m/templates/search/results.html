@@ -31,143 +31,145 @@ cursor:pointer;
 {% block externalContent %}
 
 {% endblock %}
+
+{% block content %}
+{{errorids}}
+{% endblock %}
+
 {% block extraContent %}
 
-    {%if  filesfound %}
-    <div class="tablewrap">
-        <table>
-            {# Table Headings #}
-            <thead>
-            <tr class="info">
-                <td width="2.5%"> </td>
-                <td width="72%" align="left">
-                    <a href="{% url search.views.results %}?q={{q}}&order={%spaceless%}
-        {%if params.order == 'Name'%}-Name{%else%}{%if params.order == '-Name'%}{%else%}Name{%endif%}{%endif%}{%for key,value in params.items%}{%if key != 'order' %}&{{key}}={{value}}{%endif%}{%endfor%}{%endspaceless%}">
-                        File Name
-                        {%if params.order == 'Name'%}<img src="/media/images/asc.gif"/>
-                        {%else%}{%if params.order == '-Name'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
+{# start spitting out results #}
+
+
+{% for file in filesfound %}
+{% if forloop.first %}
+<div class="tablewrap">
+    <table>
+    {# Table Headings #}
+        <thead>
+        <tr class="info">
+            <td width="2.5%"> </td>
+            <td width="72%" align="left">
+            <a href="{% url search.views.results %}?q={{q}}&order={%spaceless%}
+            {%if params.order == 'Name'%}-Name{%else%}{%if params.order == '-Name'%}{%else%}Name{%endif%}{%endif%}{%for key,value in params.items%}{%if key != 'order' %}&{{key}}={{value}}{%endif%}{%endfor%}{%endspaceless%}">
+            File Name
+            {%if params.order == 'Name'%}<img src="/media/images/asc.gif"/>
+            {%else%}{%if params.order == '-Name'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
+            </a>
+            </td>
+            <td width="9%" align="center">
+            <a href="{% url search.views.results %}?q={{q}}&order={%spaceless%}
+            {%if params.order == 'FileSize'%}-FileSize{%else%}{%if params.order == '-FileSize'%}{%else%}-FileSize{%endif%}{%endif%}{%for key,value in params.items%}{%if key != 'order' %}&{{key}}={{value}}{%endif%}{%endfor%}{%endspaceless%}">
+            Size
+            {%if params.order == 'FileSize'%}<img src="/media/images/desc.gif"/>
+            {%else%}{%if params.order == '-FileSize'%}<img src="/media/images/asc.gif"/>{%endif%}{%endif%}
+            </a>
+            </td>
+
+            <td width="7%" align="center">
+            <a href="{% url search.views.results %}?q={{q}}&order={%spaceless%}
+            {%if params.order == 'DateAdded'%}-DateAdded{%else%}{%if params.order == '-DateAdded'%}{%else%}-DateAdded{%endif%}{%endif%}{%for key,value in params.items%}{%if key != 'order' %}&{{key}}={{value}}{%endif%}{%endfor%}{%endspaceless%}">
+            Date
+            {%if params.order == '-DateAdded'%}<img src="/media/images/asc.gif"/>
+            {%else%}{%if params.order == 'DateAdded'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
+            </a>
+            </td>
+            <td width="11%" align="left" style="padding-left:10px;">
+            <a href="{% url search.views.results %}?q={{q}}&order={%spaceless%}
+            {%if params.order == 'HostName'%}-HostName{%else%}{%if params.order == '-HostName'%}{%else%}HostName{%endif%}{%endif%}{%for key,value in params.items%}{%if key != 'order' %}&{{key}}={{value}}{%endif%}{%endfor%}{%endspaceless%}">
+            {%if params.order == 'HostName'%}<img src="/media/images/asc.gif"/>
+            {%else%}{%if params.order == '-HostName'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
+            Host
+            </a>
+            </td>
+        </tr>
+        </thead>
+        <tbody> 
+        {% endif %}
+            <tr style="font-size:12px;line-height:18px;height:24px;">
+                <td style="padding-left:3px;;"><a href="">
+                    <img src="/media/images/{% if file.path.hid.flags == 24 %}online.gif{%else%}offline.gif{%endif%}" />
                     </a>
                 </td>
-                <td width="9%" align="center">
-                    <a href="{% url search.views.results %}?q={{q}}&order={%spaceless%}
-        {%if params.order == 'FileSize'%}-FileSize{%else%}{%if params.order == '-FileSize'%}{%else%}-FileSize{%endif%}{%endif%}{%for key,value in params.items%}{%if key != 'order' %}&{{key}}={{value}}{%endif%}{%endfor%}{%endspaceless%}">
-                        Size
-                        {%if params.order == 'FileSize'%}<img src="/media/images/desc.gif"/>
-                        {%else%}{%if params.order == '-FileSize'%}<img src="/media/images/asc.gif"/>{%endif%}{%endif%}
-                    </a>
+                <td>
+                    {%if file.path.hid.servesDirect %}<a href="{{file|makeLink:'True'}}" title="direct download!">
+                    <img src="/media/images/arrowBlueDown2.png" width="15px" id="directImg"/></a>
+                    {%endif%}
+                    <a href="{{file|makeLink}}"
+                    title="{{file.filename}}"
+                    class="fileLink" rel="nofollow">
+                    {% if mode == 'filesSubstr' or mode == 'filesdirsSubstr' %}{{file|highlight:words}}</a> 
+                    {{file|status}} <div style="background-color:white;
+                                    text-align:center;
+                                    padding-top:5px;" class="tooltip">
+                        <img valign="top" src="/media/images/goodfile.gif"><img src="/media/images/unclearfile.gif"><img src="/media/images/badfile.gif">
+                        </div>
+                    {%else%}{{file|highlight:words}}</a>{%endif%}
+
                 </td>
-                
-                <td width="7%" align="center">
-                    <a href="{% url search.views.results %}?q={{q}}&order={%spaceless%}
-        {%if params.order == 'DateAdded'%}-DateAdded{%else%}{%if params.order == '-DateAdded'%}{%else%}-DateAdded{%endif%}{%endif%}{%for key,value in params.items%}{%if key != 'order' %}&{{key}}={{value}}{%endif%}{%endfor%}{%endspaceless%}">
-                        Date
-                        {%if params.order == '-DateAdded'%}<img src="/media/images/asc.gif"/>
-                        {%else%}{%if params.order == 'DateAdded'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
-                    </a>
+                <td align="center">
+                    {% with file|size as size %}
+                    {{size|filesizeformat}}
+                    {% endwith %}
                 </td>
-                <td width="11%" align="left" style="padding-left:10px;">
-                    <a href="{% url search.views.results %}?q={{q}}&order={%spaceless%}
-        {%if params.order == 'HostName'%}-HostName{%else%}{%if params.order == '-HostName'%}{%else%}HostName{%endif%}{%endif%}{%for key,value in params.items%}{%if key != 'order' %}&{{key}}={{value}}{%endif%}{%endfor%}{%endspaceless%}">
-                        {%if params.order == 'HostName'%}<img src="/media/images/asc.gif"/>
-                        {%else%}{%if params.order == '-HostName'%}<img src="/media/images/desc.gif"/>{%endif%}{%endif%}
-                        Host
-                    </a>
+                <td align="center">
+                    {{file.dateadded|date:"n/d"}}
+                </td>
+                <td align="left" style="padding-left:10px;">
+                    {% with file|host as host %}
+                    <a href="smb://{{host}}">{{host.smb}}</a>
+                    {% endwith %}
                 </td>
             </tr>
-            </thead>
-            
-            
-            {# start spitting out results #}
-            
-            <tbody>
-            {% for file in filesfound %}
-            
-                <tr style="font-size:12px;line-height:18px;height:24px;">
-                    <td style="padding-left:3px;;"><a href="">
-                        <img src="/media/images/{% if file.path.hid.flags == 24 %}online.gif{%else%}offline.gif{%endif%}" />
-                    </a>
-                    </td>
-                    <td>
-                        {%if file.path.hid.servesDirect %}<a href="{{file|makeLink:'True'}}" title="direct download!">
-                        <img src="/media/images/arrowBlueDown2.png" width="15px" id="directImg"/></a>
-                        {%endif%}
-                        <a href="{{file|makeLink}}"
-                           title="{{file.filename}}"
-                           class="fileLink" rel="nofollow">
-                            {% if mode == 'filesSubstr' or mode == 'filesdirsSubstr' %}{{file|highlight:words}}</a> 
-                            {{file|status}} <div style="background-color:white;
-                                                        text-align:center;
-                                                        padding-top:5px;" class="tooltip">
-                                            <img valign="top" src="/media/images/goodfile.gif"><img src="/media/images/unclearfile.gif"><img src="/media/images/badfile.gif">
-                                            </div>
-                            {%else%}{{file|highlight:words}}</a>{%endif%}
-                        
-                    </td>
-                    <td align="center">
-                        {% with file|size as size %}
-                        {{size|filesizeformat}}
-                        {% endwith %}
-                    </td>
-                    <td align="center">
-                        {{file.dateadded|date:"n/d"}}
-                    </td>
-                    <td align="left" style="padding-left:10px;">
-                        {% with file|host as host %}
-                        <a href="smb://{{host}}">{{host.smb}}</a>
-                        {% endwith %}
-                    </td>
-                </tr>
-                {# <tr> <td></td><td>{{file.id}}</td></tr>#}
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    
-    {# result pages - this is ugly, and needs to not be tables eventually #}
-    
-    <div class="paginatorWrap">
-            {% if total > 50  and paginator > 0%}
-            <div align="center" class="pagelinks">
-                
-                        
-                        {% for number in paginator %}
-                            {% if forloop.first %}
-                                <div class="ender">
-                                    <a href="{% url search.views.results %}{{prev}}/?q={{q}}&optionsUp={{optionsUp}}&mode={{mode}}&order={{params.order}}&type={{params.type}}"><img src="/media/images/left.gif" /></a>
-                                </div>
-                                <div class = "pagenumbers">
-                            {%endif%}
-                                <div class="paginator">
-                                    {% if number == page%}
-                                        {{number}}
-                                    {%else%}
-                                        <a href="{% url search.views.results %}{{number}}/?q={{q}}&optionsUp={{optionsUp}}&mode={{mode}}&order={{params.order}}&type={{params.type}}">{{number}}</a>
-                                    {%endif%}
-                                </div>
-                                
-                            {% if forloop.last %}</div>
-                                <div class="ender" align="right">
-                                    <a href="{% url search.views.results %}{{next}}/?q={{q}}&optionsUp={{optionsUp}}&mode={{mode}}&order={{params.order}}&type={{params.type}}"><img src="/media/images/right.gif" /></a>
-                                </div>
-                            {%endif%}
-                        {% endfor%}
+            {# <tr> <td></td><td>{{file.id}}</td></tr>#}
+        {% if forloop.last %}
+        </tbody>
+    </table>
+</div>
+<div class="paginatorWrap">
+    {% if total > 50  and paginator > 0%}
+        <div align="center" class="pagelinks">
+
+
+        {% for number in paginator %}
+            {% if forloop.first %}
+                <div class="ender">
+                <a href="{% url search.views.results %}{{prev}}/?q={{q}}&optionsUp={{optionsUp}}&mode={{mode}}&order={{params.order}}&type={{params.type}}"><img src="/media/images/left.gif" /></a>
+                </div>
+                <div class = "pagenumbers">
+            {%endif%}
+            <div class="paginator">
+                {% if number == page%}
+                    {{number}}
+                {%else%}
+                    <a href="{% url search.views.results %}{{number}}/?q={{q}}&optionsUp={{optionsUp}}&mode={{mode}}&order={{params.order}}&type={{params.type}}">{{number}}</a>
+                {%endif%}
             </div>
-        {% endif%}
-        <br />
-        Found {{ total }} match{{total|pluralize:" ,es"}}.<br>
-        search took {{time}}s<br>
-        {% if fileErrors > 0 %} Encountered {{fileErrors}} error{{fileErrors|pluralize}}<!--{{errorids}} -->{%endif%}
-    </div>
-    {% else %}
+
+            {% if forloop.last %}
+                </div>
+                <div class="ender" align="right">
+                <a href="{% url search.views.results %}{{next}}/?q={{q}}&optionsUp={{optionsUp}}&mode={{mode}}&order={{params.order}}&type={{params.type}}"><img src="/media/images/right.gif" /></a>
+                </div>
+                <br />{% if debug %}{{filesfoundtest}}, {{words}},{{filesfinder}},<br>{{filesfound}}{%endif%}
+            {%endif%}
+        {% endfor%}
+        </div>
+    {% endif%}
+<br />
+Found {{ total }} match{{total|pluralize:" ,es"}}.<br />
+search took {{time}}s<br />
+{% if fileErrors > 0 %} Encountered {{fileErrors}} error{{fileErrors|pluralize}}<!--{{errorids}} -->{%endif%}
+</div>                
+{% endif %}
+{% empty %}                
     <div style="margin:0 auto;text-align:center;">
         {% if error %}
             {{error|safe}}<br/>
-            <br />
+                        <br />
         {%else%}
-        <span>Sorry, we couldn't find anything that matched. Try making a <a href="{%url requests.views.open %}">request</a>.</span>
+            <span>Sorry, we couldn't find anything that matched. Try making a <a href="{%url requests.views.open %}">request</a>.</span>
         {%endif%}
     </div>
-    {%endif%}
-    <br />{% if debug %}{{filesfoundtest}}, {{words}},{{filesfinder}},<br>{{filesfound}}{%endif%}
-
+{% endfor %}
 {% endblock %}
