@@ -76,7 +76,7 @@ Request!
     <tbody>
     {% for request in toprequests %}
         <tr>
-        <td style="padding-right: 5px;padding-left: 2px;">{{request.request|toHTML}}</td>
+        <td style="padding-right: 5px;padding-left: 2px;">{{request.request|toHTML|truncatewords_html:20}}</td>
         <td style="text-align: center; padding-right: 5px;"> 
             <form class="likeform" action="" id="{{entry.CID}}" method="POST">
                         {% csrf_token %}
