@@ -197,8 +197,9 @@ class LogoNode(template.Node):
                 'Mvivaldi',
                 'Mcurlz',
                 'Mmagneto',
-                'M_andrew_ho']
-    arrows = ['Arrowmath'] * 10 # also the old arrow
+                'M_andrew_ho',
+                'Mcompass',]
+    arrows = ['Arrowmath',] * 10 # also the old arrow
     
     styling = "<a class='logolink' href=\"%s\">\
                 <div id='modlogo' style=\"\">%s</div>\
