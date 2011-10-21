@@ -105,7 +105,7 @@ border-color: rgba(0,0,0,0.1);
     background-color:rgba(70, 130, 180,0.5);
     margin-left: -15px;
     margin-bottom: 10px;
-    font-family: "Vivaldi", "Lucida Handwriting", Garamond, serif;
+    font-family: "Vivaldi", Garamond, "Lucida Handwriting", serif;
     font-size: 2em;
 }
 #searchParams select {
