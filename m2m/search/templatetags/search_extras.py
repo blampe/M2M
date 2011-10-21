@@ -213,9 +213,20 @@ class LogoNode(template.Node):
     
     def __init__(self, module):
         
-        self.left = random.choice(self.mChoices)
-        self.right = random.choice(self.mChoices)
-        self.arrow = random.choice(self.arrows)
+        # halloween!
+        if (datetime.now().day in [29,30,31] and datetime.now().month==10):
+            self.left = 'mPunkin'
+            self.right = 'mHalCat'
+            self.arrow = 'Arrowmath'
+        else:
+            self.left = random.choice(self.mChoices)
+            self.right = random.choice(self.mChoices)
+            self.arrow = random.choice(self.arrows)
+        
+        # jessi peck's birthday
+        if (datetime.now().day == 25 and datetime.now().month == 10):
+            self.left = 'M_jessi_peck'
+            
         if module not in self.extras:
             raise ValueError("logo tag could not recognize module: %r" % module)
         else:
@@ -245,6 +256,25 @@ def do_logo(parser,token):
     return LogoNode(module)
 #
 ################################################################
+
+@register.tag(name="extra_styles")
+def do_extra_styles(parser,token):
+    return ExtraStyles()
+    
+class ExtraStyles(template.Node):
+    def __init__(self):
+        # halloween!
+        self.stylesheet = []
+        if (datetime.now().day in [29,30,31] and datetime.now().month == 10):
+            self.stylesheet += ['halloween']
+    
+    def render(self, context):
+        if self.stylesheet == []:
+            return ''
+        else:
+            return '\n'.join(["<link rel=\"stylesheet\" type=\"text/css\" href=\"/media/styles/{}.css\" />".format(x) for x in self.stylesheet])
+
+
 from datetime import date, timedelta
 
 class NewNewsNode(template.Node):

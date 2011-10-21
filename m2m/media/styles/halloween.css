@@ -1,0 +1,59 @@
+body {
+    background-color: rgba(0,0,0,1);
+    color: white;
+}
+
+a {
+    color: orange;
+}
+
+a:visited {
+    color: grey;
+}
+
+#container {
+    background-color: rgba(48,43,43,.8)!important;
+}
+
+#logoContainer, #footer {
+    background-color: rgba(218,120,40,1)!important;
+}
+
+.triangle-l-top {
+    border-color: transparent rgba(218,120,40,.7) transparent transparent
+}
+
+.triangle-r-top{
+    border-color: transparent transparent transparent rgba(218,120,40,.7);
+}
+
+.triangle-l-bottom {
+    border-color: transparent rgba(218,120,40,.7) transparent transparent;
+}
+
+.triangle-r-bottom {
+    border-color: transparent transparent transparent rgba(218,120,40,.7);
+}
+nav#sitewide {
+    background-color: rgba(218,120,40,0.5)!important;
+}
+
+#searchbarWrap,.optionheading {
+    background-color: rgba(255,102,0,.57)!important;
+}
+
+#searchParams {
+    background-color: rgba(86,75,75,.5)!important;
+}
+
+.announce {
+    background-color: rgba(125,38,38,.38)!important;
+}
+
+thead {
+    background-color: rgba(218,120,40,1);
+}
+
+button.as_link {
+    color: orange!important;
+}

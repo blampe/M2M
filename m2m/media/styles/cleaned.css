@@ -118,6 +118,7 @@ div#container{
     margin: 0 auto;
     padding: 25px;
     padding-top: 0px;
+    
     background-color: rgba(255,255,255,1);
     -mox-box-shadow: 0 0 4px rgba(0,0,0,0.5);
     -khtml-box-shadow: 0 0 4px rgba(0,0,0,0.5);
@@ -128,6 +129,7 @@ header#pageHeader {
     position:relative;
     display: block;
     padding-top: 50px;
+   
     overflow-x: visible;
     white-space: nowrap;
     margin-bottom: 80px;
@@ -140,18 +142,27 @@ div#logoContainer{
     float: left;
     width: 1100px;
     height: 118px;
+    padding-bottom: 10px;
+    max-height: 200px;
     background-color: rgba(127,157,185,1);/*rgba(70,130,180,1);*/
     -mox-box-shadow: 0 0 4px rgba(0,0,0,0.5);
     -khtml-box-shadow: 0 0 4px rgba(0,0,0,0.5);
     -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.5);
 }
 #logo img{
-    vertical-align: baseline;
+    vertical-align: middle;
+}
+
+#leftlogo, #rightlogo {
+    height: 100px;
+    vertical-align: middle;
+    
 }
 
 #arrowlogo {
     margin-left: 10px;
     margin-bottom: 15px;
+    margin-right: 10px;
 }
 
 div#logo{
@@ -180,7 +191,7 @@ div#logo{
     width: 0;
     position: relative;
     left: -75px;
-    top: 123px;
+    top: 133px;
     z-index: -1;
 }
 .triangle-r-top{
@@ -191,7 +202,7 @@ div#logo{
     width: 0;
     position: relative;
     left: 1025px;
-    top: 73px;
+    top: 83px;
     z-index: -1;
 }
 
@@ -371,4 +382,8 @@ div#newNews {
 div#newNews p {
     margin-top: 3px;
     margin-left: -3px;
+}
+
+tbody tr:nth-child(even){
+    background-color: rgba(255,255,255,0.2)!important;
 }
