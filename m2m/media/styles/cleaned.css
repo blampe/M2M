@@ -166,7 +166,7 @@ div#logoContainer{
 }
 
 div#logo{
-    width:400px;
+    text-align: center;;
     margin: 0 auto; /* centers the M->M part */
     padding-top:15px;
     padding-bottom: 20px;
