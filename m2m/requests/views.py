@@ -30,8 +30,8 @@ def open(request,page=1,error=''):
             try:
                 from django.db import connection
     
-                cursor = connection.cursor()
-                cursor.execute('LOCK TABLES requests_comment WRITE')
+                #cursor = connection.cursor()
+                #cursor.execute('LOCK TABLES requests_comment WRITE')
                 
                 newRequest = Comment(
                                 request=form.cleaned_data['request'],
@@ -43,7 +43,7 @@ def open(request,page=1,error=''):
                                 )
                 
                 newRequest.save()
-                cursor.execute('UNLOCK TABLES')
+                #cursor.execute('UNLOCK TABLES')
                 # successful post, return to requests page to see the result
                 
                 '''
