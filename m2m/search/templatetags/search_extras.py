@@ -4,9 +4,6 @@ from django.utils.safestring import mark_safe
 from datetime import datetime
 import re
 
-from search.models import File
-from browseNet.models import Path
-
 from basic.blog.models import Post
 
 import urllib2
@@ -198,7 +195,8 @@ class LogoNode(template.Node):
                 'Mcurlz',
                 'Mmagneto',
                 'M_andrew_ho',
-                'Mcompass',]
+                'Mcompass',
+                'Mdoctor',]
     arrows = ['Arrowmath',] * 10 # also the old arrow
     
     styling = "<a class='logolink' href=\"%s\">\
@@ -214,15 +212,16 @@ class LogoNode(template.Node):
     
     def __init__(self, module):
         
+    
+        self.left = random.choice(self.mChoices)
+        self.right = random.choice(self.mChoices)
+        self.arrow = random.choice(self.arrows)
+
         # halloween!
         if (datetime.now().day in [29,30,31] and datetime.now().month==10):
             self.left = 'mPunkin'
             self.right = 'mHalCat'
             self.arrow = 'Arrowmath'
-        else:
-            self.left = random.choice(self.mChoices)
-            self.right = random.choice(self.mChoices)
-            self.arrow = random.choice(self.arrows)
         
         # jessi peck's birthday
         if (datetime.now().day == 25 and datetime.now().month == 10):
