@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     #(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', {'packages': ('fiber',),}),
     (r'^flat', include('django.contrib.flatpages.urls')),
     (r'^tos', 'faq.views.serviceTerms'),
+    (r'^privacy.html', 'faq.views.privacy'),
     (r'^dmca', 'faq.views.dmca'),
     #(r'^', 'problems.views.sitewide'), # for maintenance, etc
     (r'^imaging/',include('imaging.urls')),
