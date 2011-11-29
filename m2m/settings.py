@@ -136,6 +136,13 @@ SPHINX_SERVER = 'labrain.st.hmc.edu'
 SPHINX_API_VERSION = 0x116
 SPHINX_PORT = 3312
 
+LAST_FM_INFO = {
+    "api_key": None,
+    "api_secret" None:
+    "username": None,
+    "password_hash": None
+}
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',

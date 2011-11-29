@@ -338,10 +338,6 @@ def crawlForMusic(count=0):
     # last.fm stuff; it's faster to use iTunes searching, for crawling.
     # maybe last.fm can be included to pages? for streaming - i like this idea
     import pylast
-    API_KEY = "283c7b1312dc8cbfc2f87c5295eaf1a4"
-    API_SECRET = "9039c6513dd4a9598a6925c44db1b24a"
-    username = 'm2mmusic'
-    password_hash = pylast.md5("skynet")
     network = pylast.LastFMNetwork(api_key=API_KEY,api_secret=API_SECRET,
                                    username=username, password_hash=password_hash)
     '''
