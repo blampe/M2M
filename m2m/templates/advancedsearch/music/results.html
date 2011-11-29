@@ -7,50 +7,22 @@
 {% with q|urlencode as q %}
 <script>
 $(document).ready(function(){
-    bindSongHandler();
-    bindAlbumHandler();
-    bindArtistHandler();
+    bindResultHandler('song');
+    bindResultHandler('album');
+    bindResultHandler('artist');
     });
     
-function bindSongHandler(){
-    $.ajax({
+function bindResultHandler(type){
+        $.ajax({
         type:"GET",
         data: 'q={{q}}',
-        url: '/advanced/music/subresult/song?',
+        url: '/advanced/music/subresult/'+type+'?',
         dataType: "html",
         success: function(html,textStatus){
-            $('#songs').load("/advanced/music/subresult/song?q={{q}}&{{urlparams}} .results");
+            $('#'+type+'s div').load("/advanced/music/subresult/"+type+"?q={{q}}&{{urlparams}} .results");
         },
         error: function(XMLHttpRequest,textStatus,errorThrown){
-            $('#songs').replaceWith("Couldn't get songs.");
-        }
-    });
-}
-function bindAlbumHandler(){
-    $.ajax({
-        type:"GET",
-        data: 'q={{q}}',
-        url: '/advanced/music/subresult/album?',
-        dataType: "html",
-        success: function(html,textStatus){
-            $('#albums').load("/advanced/music/subresult/album?q={{q}}&{{urlparams}} .results");
-        },
-        error: function(XMLHttpRequest,textStatus,errorThrown){
-            $('#albums').replaceWith("Couldn't get albums.");
-        }
-    });
-}
-function bindArtistHandler(){
-    $.ajax({
-        type:"GET",
-        data: 'q={{q}}',
-        url: '/advanced/music/subresult/artist?',
-        dataType: "html",
-        success: function(html,textStatus){
-            $('#artists').load("/advanced/music/subresult/artist?q={{q}}&{{urlparams}} .results");
-        },
-        error: function(XMLHttpRequest,textStatus,errorThrown){
-            $('#artists').replaceWith("Couldn't get artists.");
+            $('#'+type+'s div').replaceWith("Couldn't get"+type+"s.");
         }
     });
 }
@@ -60,26 +32,27 @@ function bindArtistHandler(){
 
 {% block content %}
 {% if params.type == 'all' or params.type == 'Song' %}
-<h2>Songs</h2>
-<section id="songs">
-<div style="margin-right: auto;margin-left:auto;"><img src="/media/images/ajax-loader.gif"/></div>
-</section>
-{% endif %}
 
-{% if params.type == 'all' or params.type == 'Album' %}
-<h2>Albums</h2>
-<section id="albums">
-<div style="margin-right: auto;margin-left:auto;"><img src="/media/images/ajax-loader.gif"/></div>
-</section>
-{% endif %}
-{% if params.type == 'all' or params.type == 'Artist' %}
-<h2>Artists</h2>
-<section id="artists">
-<div style="margin-right: auto;margin-left:auto;"><img src="/media/images/ajax-loader.gif"/></div>
+<section id="songs"><h2>Songs</h2><div>
+<div style="width: 50px;margin-right: auto;margin-left:auto;text-align:center;"><img src="/media/images/ajax-loader.gif"/></div></div>
 </section>
 {% endif %}
 {% endblock %}
 
 {% block extraContent %}
+{% if params.type == 'all' or params.type == 'Album' %}
+<div id="aawrap">
+<section id="albums"><h2>Albums</h2>
+<div>
+<div style="width: 50px;margin-right: auto;margin-left:auto;text-align:center;"><img src="/media/images/ajax-loader.gif"/></div></div>
+</section>
+{% endif %}
+{% if params.type == 'all' or params.type == 'Artist' %}
 
+<section id="artists"><h2>Artists</h2>
+<div>
+<div style="width: 50px;margin-right: auto;margin-left:auto;text-align:center;"><img src="/media/images/ajax-loader.gif"/></div></div>
+</section>
+{% endif %}
+</div>
 {% endblock %}

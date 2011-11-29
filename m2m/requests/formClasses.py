@@ -1,5 +1,5 @@
 from django import forms
-from requests.models import Comment
+from m2m.requests.models import Comment
 
 class RequestForm(forms.Form):
     error_css_class='error'

@@ -8,18 +8,17 @@
 {% endblock %}
 
 {% block stylin %}
-<style>
-code {background-color:#caf;padding:2px 2px 2px 2px}
-</style>
+<link rel="stylesheet" media="screen" href="/media/styles/music.css">
 {% endblock %}
 
 {% block content %}
 <a href="{% url advancedsearch.views.musicBrowse %}">(BROWSE)</a>
 <h1>Latest Albums</h1>
-
+<div style="width: 950px;margin: 0 auto; text-align: center; margin-top: 10px; margin-bottom: 10px;">
 {% for album in latest %}<a href="{% url advancedsearch.views.albumDetail album.id%}#{{album.id}}"><img style="margin-left:2px;" src="{% firstof album.appleCover album.cover album.no_cover %}"/></a>{% empty %}
 No albums!
 {% endfor %}
+</div>
 {% endblock %}
 
 {% block extraContent %}

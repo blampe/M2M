@@ -2,48 +2,12 @@
 {% load search_extras %}
 {% load advancedsearch_extras %}
 {% block title %} M2M - {{artist}} {%endblock %}
-
-{% block stylin %}
-<style>
-li.song {
-    padding-left:2px;
-}
-li.song span{
-    cursor:pointer;
-    width: 100%;
-}
-li.song ul {
-    background-color:white;
-}
-li.song:hover {
-    background-color:#ccd;
-    color:black;
-}
-li.song:hover ul {
-    background-color:white;
-    color:black;
-
-}
-li.song:hover ul li {
-    text-decoration: none;
-}
-
-li.darkrow {
-    background-color: #ccc;
-}
-
-li.lightrow {
-    background-color: #E8E8E8   
-}
-</style>
-{% endblock %}
-
 {% block content %}
 
 <h1> {{artist}} </h1>
 
 <ul class="albumlist">
-{% for album in artist.album_set.all %}
+{% for album in artist.albums %}
 <li>
 <a name="{{album.id}}"></a><img src="{{album.appleCover}}" valign="middle"/>{{ album }}, released {{album.releaseDate|date:"M d, Y"}}<br />
 <ol class="songlist">

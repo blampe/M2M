@@ -1,37 +1,56 @@
+p{
+    padding: 2px;
+}
+
 .poem {
-	font-size:1.5em;
-	margin-left:auto;
-	margin-right:auto;
-	max-width: 500px;
-	padding-left: 10px;
+    font-size:1.5em;
+    margin-top: 15px;
+    margin-left:auto;
+    margin-right:auto;
+    max-width: 500px;
+    padding-left: 10px;
+    text-align: justify;
 }
-
 .poem:first-letter {
-	font-size: 3em;
+    font-size:2.5em;
+    font-style:italic;
+    display:block;
+    float:left;
+    background:#333;
+    color:#fb9c39 !important;
+    border:1px solid white;
+    margin-right:5px;
+    line-height:.8em;
 }
 .poem:first-line{
-	margin-top: 2em;
-	padding-left: 0px;
-	line-height: 1.5em;
+    margin-top: 2em;
+    padding-left: 0px;
+    
 }
-
-.poem:first-line{
-	margin-top: 2em;
-	padding-left: 0px;
-	line-height: 1.5em;
+.poem:nth-child(odd){
+    margin-left: 0;
+}
+.poem:nth-child(even){
+    margin-right: 0;
 }
 
 .poem:last-of-type{
-	margin-right: 0;
+    margin-right: 0;
 }
 .poem:last-of-type em {
-	padding-left: 0px;
+    padding-left: 0px;
 }
 .poem:last-of-type{
-	margin-right: 0;
+    margin-right: 0;
 }
 .poem:last-of-type em {
-	padding-left: 0px;
-	font-size: 2em;
-	color: red;
+    padding-left: 0px;
+    font-size: 5em;
+    color: red;
+    display: block;
+}
+
+#content {
+    width: 800px;
+    margin: 0 auto;
 }

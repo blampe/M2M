@@ -3,7 +3,6 @@ from django.utils.safestring import mark_safe
 from django.db import transaction
 
 from djangosphinx.apis.api278 import *
-#from djangosphinx.manager import SphinxQuerySet
 
 from search.models import File
 from browseNet.models import Path
@@ -60,6 +59,7 @@ def index(request):
                               {
                                 'title':"M2M - Search",
                                 'search':'current',
+                                'files':'current',
                                 'debug':DEBUG,
                                })
     
@@ -234,17 +234,17 @@ def results(request,page='1'):
     
     # set the index and the appropriate model for later
     if params['mode']=="filesSubstr":
-        indexing ='files,files-delta'
+        indexing ='files'
         model = File
         
     elif params['mode']=='dirsSubstr':
-        indexing='directories,directories-delta'
+        indexing='directories'
         model = Path
     else:
-        indexing='filesdirs,filesdirs-delta'
+        indexing='filesdirs'
         model = File
     # type of file not specified? or searching directories
-    if params['type'] == 'none' or indexing == 'directories,directories-delta':
+    if params['type'] == 'none' or indexing == 'directories':
         moding = SPH_MATCH_EXTENDED
         q2 = q
         params['type'] = 'none'
@@ -254,7 +254,7 @@ def results(request,page='1'):
         typeSpec = allowedTypes.index(params['type'])
         
         # type specified -> dirs are not type.
-        indexing = 'files, files-delta'
+        indexing = 'files'
         # now 'switch' through them:
         
 # N.B. -- these indices are on line ~100
@@ -310,9 +310,10 @@ def results(request,page='1'):
         sorting = SPH_SORT_ATTR_DESC
         sortby = "DateAdded"
         params['order'] = '-DateAdded'
+        
     # create client instances, filling in required attrs 
     client = SphinxClient()
-    client.SetServer('labrain.st.hmc.edu',3312)
+    client.SetServer('laview.st.hmc.edu',9312)
     client.SetMatchMode(moding)
     client.SetSortMode(sorting,sortby)
     # this pre-slices the results:
@@ -339,11 +340,14 @@ def results(request,page='1'):
     # N.B. -- we have to 'try' this, because sometimes the sphinx indices have
     #         records that no longer exist in the actual database.
                 try:
-                    filesFound += [model.objects.get(pk=fileThing['id'])]
+                    filesFound += [File.objects.get(pk=fileThing['id'])]
                 except:
-                    # count the error hits
-                    fileErrors += 1
-                    errorids += [fileThing['id']]
+                    try:
+                        filesFound += [Path.objects.get(pk=fileThing['id'])]
+                    except:
+                        # count the error hits
+                        fileErrors += 1
+                        errorids += [fileThing['id']]
             # something wierd happened - lots of errors
             if len(filesFound) < 1:
                 multiplier += 1
@@ -466,6 +470,7 @@ def results(request,page='1'):
                               {
                                 'title':'M2M - Results: page '+str(page+1),
                                 'search':'current',
+                                'files':'current',
                                 'q': searchstring, #so it displays all pretty-like
                                 'filesfound':filesFound,
                                 #'searchmeta':searchMeta,

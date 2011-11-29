@@ -8,9 +8,10 @@
             <script src ="http://html5shim.googlecode.com/svn/trunk/html5.js">
             </script>
         <![endif]-->
-        <link rel="stylesheet" media="screen" href="/media/styles/styles.css" />
-        <link rel="stylesheet" media="screen" href="/media/styles/blue.css" />
-        <link rel="stylesheet" media="screen" href="/media/styles/845.css" />
+        <link rel="stylesheet" media="screen" href="/media/styles/cleaned.css" />
+        <link rel="stylesheet" media="screen" href="/media/styles/searchbar.css" />
+        <link rel="stylesheet" media="screen" href="/media/styles/tables.css" />
+        {% extra_styles %}
         {% block stylin %}{% endblock %}
         
         <script type="text/javascript">
@@ -24,45 +25,8 @@
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
           })();
-
-		$(document).ready(function () {
-		    if (typeof pageTracker != 'undefined') {
-		        pageTracker._trackEvent(
-		            'Browser Dimensions',
-		            'load',
-		            $(window).width()
-		                + 'x'
-		                + $(window).height(),
-		            $(window).width()
-		        );
-
-		        $(window).resize(function () {
-		            if ($(this).data('gatimer')) {
-		                clearTimeout($(this).data('gatimer'));
-		                $(this).data('gatimer', null);
-		            }
-
-		            $(this).data(
-		                'gatimer',
-		                setTimeout(function () {
-		                    pageTracker._trackEvent(
-		                        'Browser Dimensions',
-		                        'resize',
-		                        $(window).width()
-		                            + 'x'
-		                            + $(window).height(),
-		                        $(window).width()
-		                        );
-		                    },
-		                    500
-		                )
-		            );
-		        });
-		    }
-		});
         </script>
-
-        
+       
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="robots" content="all" />
         
@@ -73,57 +37,105 @@
     </head>
     <body>
         {% block externalContent %} {% endblock %}
+        <nav id="sitewide"><!-- Start Navigation -->
+                      <ul>
+                        <a href="{% url search.views.index %}" 
+                        id="search" rel="self" 
+                        class="{{search|default:""}}">
+                            <li>Search</li></a>
+                            <ul id="modifiers">{% block modifiers %}
+                                <li>
+                                    <a href="{%url search.views.index %}" 
+                                    id="fsearch" title="files" alt="files" 
+                                    rel="self" class="active {{files|default:""}}">Files</a>
+                                </li>
+                                <li>
+                                    <a href="{%url advancedsearch.views.movieSplash %}" 
+                                    title="movies" alt="movies" id="msearch" rel="self" 
+                                    class="active {{movies|default:""}}">Movies</a>
+                                </li>
+                                <li>
+                                    <a title="shows" alt="shows" id="ssearch" rel="self" 
+                                    class="disabled {{shows|default:""}}"><!-- 
+                                    href="{%url advancedsearch.views.showSplash %}" > -->Shows</a>
+                                </li>
+                                <li>
+                                    <a href="{%url advancedsearch.views.musicSplash %}" title="music" 
+                                    alt="music" id="musearch" rel="self" 
+                                    class="active {{music|default:""}}">Music</a>
+                                </li>
+                                {% endblock %}
+                            </ul>
+                        <a href="{% url requests.views.open %}" 
+                        id="requests"  rel="self" 
+                        class="{{requests|default:""}}"><li>Requests</li></a>
+
+                        {% if requests %}
+                        <ul id="subset">
+                            <a href="{% url requests.views.open %}" 
+                                id="oreq"  rel="self"><li class="{{openReq|default:""}}">
+                                Open Requests
+                            </li></a>
+                            <a href="{% url requests.views.completed %}" 
+                                id="creq"  rel="self"><li class="{{closedReq|default:""}}">
+                                Completed Requests
+                            </li></a>
+                            <a href="{% url requests.views.deleted %}" 
+                                id="dreq" rel="self"><li class="{{delReq|default:""}}">
+                                Deleted Requests
+                            </li></a>
+                        </ul>
+                        {% endif %}
+                        <a href="{% url browseNet.views.listAll 1 %}" 
+                        id="servers"  rel="self" 
+                        class="{{servers|default:""}}"><li>Servers</li></a>
+                        <!--<li><a href="/polls" rel="self" id="polls" class="{{polls|default:""}}">POLLS</a></li>-->
+                        <a href="{% url basic.blog.views.post_list %}" 
+                        id="news"  rel="self" 
+                        class="{%block news%}{%endblock%}"><li>News
+                        {% latestnews %}</li></a>
+                        <a href="{% url stats.views.display %}" 
+                        rel="self" id="stats"  
+                        class="{{stats|default:""}}"><li>Stats</li></a>
+                        {% comment %}{% if stats %}
+                            <ul id="subset">
+                                <li>
+                                    <a href="" id="sstat" 
+                                    class="{{siteStat|default:""}}">Sitewide</a>
+                                </li>
+                                <li>
+                                    <a href="" id="rstat" 
+                                    class="{{reqStat|default:""}}">Requests</a>
+                                </li>
+                                <li>
+                                    <a href="" id="pstat" 
+                                    class="{{pollStat|default:""}}">Polls</a>
+                                </li>
+                            </ul>
+                        {%endif%}{%endcomment%}
+                        <a href="{% url faq.views.basic %}" 
+                        id="faq" class ="{{faq|default:""}}"><li>FAQ</li></a>
+                            {% if faq %}
+                            <ul id="subset">
+                                <a href="{%url faq.views.basic %}" 
+                                id="bfaq" class="{{basic|default:""}}"><li>General</li></a>
+                                <a href="{%url faq.views.servers%}" 
+                                id="sfaq" class="{{server|default:""}}"><li>Server</li></a>
+                            </ul>
+                            {% endif %}
+                      </ul>
+                    </nav>
+                    <!-- End navigation -->
         <div id="container">
             
             <header id="pageHeader"><!-- Start page header -->
             
                     <div id="logoContainer">
-                        {%block logohold%}{% logo None %}{%endblock %}
-                    </div>
+                        <div id="logo">{%block logohold%}{% logo None %}{%endblock %}</div>
+                    </div><div class="triangle-l-top"></div><div class="triangle-r-top"></div>
                     <div id="koi"></div>
                     {% block navigator %}
-                    <nav id="navcontainer"><!-- Start Navigation -->
-                      <ul>
-                        <li><a href="{% url search.views.index %}" id="search" rel="self" class="{{search|default:""}}">SEARCH</a></li>
-                          {% if search %}
-                            <ul>
-                                <li><a href="{%url advancedsearch.views.movieSplash %}" id="msearch" rel="self" class="{{movies|default:""}}">Movies</a></li>
-                                <!--<li><a href="{%url advancedsearch.views.showSplash %}" id="ssearch" rel="self" class="{{shows|default:""}}">Shows</a></li>-->
-                                <li><a href="{%url advancedsearch.views.musicSplash %}" id="musearch" rel="self" class="{{music|default:""}}">Music</a></li>
-
-                            </ul>
-                          {% endif %}
-                        <li><a href="{% url requests.views.open %}" id="requests"  rel="self" class="{{requests|default:""}}">REQUESTS</a></li>
-
-                        {% if requests %}
-                        <ul>
-                            <li><a href="{% url requests.views.open %}" id="oreq"  rel="self" class="{{openReq|default:""}}">Open Requests</a></li>
-                            <li><a href="{% url requests.views.completed %}" id="creq"  rel="self" class="{{closedReq|default:""}}">Completed Requests</a></li>
-                            <li><a href="{% url requests.views.deleted %}" id="dreq" rel="self" class="{{delReq|default:""}}">Deleted Requests</a></li>
-                        </ul>
-                        {% endif %}
-                        <li><a href="{% url browseNet.views.listAll 1 %}" id="servers"  rel="self" class="{{servers|default:""}}">SERVERS</a></li>
-                        <!--<li><a href="/polls" rel="self" id="polls" class="{{polls|default:""}}">POLLS</a></li>-->
-                        <li><a href="{% url basic.blog.views.post_list %}" id="news"  rel="self" class="{%block news%}{%endblock%}">NEWS</a></li>
-                        <li><a href="{% url stats.views.display %}" rel="self" id="stats"  class="{{stats|default:""}}">STATISTICS</a></li>
-                        {% comment %}{% if stats %}
-                            <ul>
-                                <li><a href="" id="sstat"  class="{{siteStat|default:""}}">Sitewide</a></li>
-                                <li><a href="" id="rstat"  class="{{reqStat|default:""}}">Requests</a></li>
-                                <li><a href="" id="pstat"  class="{{pollStat|default:""}}">Polls</a></li>
-                            </ul>
-                        {%endif%}{%endcomment%}
-						<li><a href="{% url faq.views.basic %}" id="faq" class ="{{faq|default:""}}"> FAQ </a>
-							{% if faq %}
-							<ul style="left:auto;width:10em">
-								<li><a href="{%url faq.views.basic %}" id="bfaq" class="{{basic|default:""}}">General</a></li>
-								<li><a href="{%url faq.views.servers%}" id="sfaq" class="{{server|default:""}}">Server</a></li>
-							</ul>
-							{% endif %}
-						</li>
-                      </ul>
-                    </nav>
-                    <!-- End navigation --> 
+                     
             {% endblock %}
             </header><!-- End page header -->
             
@@ -132,6 +144,7 @@
 
             <div id="contentContainer"><!-- Start main content wrapper -->
                     <section id="content"><!-- Start content -->
+                        <div id="subsetHold"></div>
                         {% block content %}
                             
                                 
@@ -141,11 +154,25 @@
                         {% endblock %}
                         <br />
                         <br />
-					</section> <!-- end content -->
+                    </section> <!-- end content -->
                         <section id="extraContent">
                             {%block extraContent %}
+                                <div class="announce">
+                                    <p>Do you use M2M? Make your own M! It'll 
+                                    be used in the logo, for all to 
+                                   (probabilistically) see! Only one M per person, 
+                                   though - if you send me more than one, it'll
+                                   replace whatever M you had before. Please 
+                                   make them recognizable as M's! They should 
+                                   also fit in a 120px wide and 80px long box 
+                                   (exceptions can be made for <em>ultracool
+                                   </em> ones), and look good in flat white. It
+                                   would also be good for them to have transparent
+                                   backgrounds - in case there are future changes
+                                   planned for M2M's look...</p>
+                                </div>
                                 <div style='text-align:center;'>
-									<br />
+                                    <br />
                                     Servers: check out <a href="news/2011/feb/27/direct-serving/"> this page</a>.
                                     <br />
                                     <br />
@@ -154,12 +181,14 @@
                                     <br />
                                     <script type=\"text/javascript\">
                                         if(navigator.appName.match(/Microsoft/)){
-                                            document.write("I see you're using IE. Let me <a href='http://tinyurl.com/ca653h'>help you with that.</a><br />");
+                                            document.write("I see you're using IE. Let me " +
+                                            "<a href='http://tinyurl.com/ca653h'>help you with that.</a><br />");
                                             }
                                     </script>
                                     <noscript>
                                     You really ought to have javascript turned on.
                                     </noscript>
+                                    
                                 </div>
                             {%endblock%}
                         </section>
@@ -167,33 +196,81 @@
                     
                     <section id="endContent">
                     {% block endContent %}
-					<hr style="width: 300px;"/>
-                    <p style='text-align:center'>M2M - Because We're Family&trade; </p>
+                        
                     {%endblock%}
                     </section>
             </div><!-- end main content wrapper -->
         
         
             <div class="clearer"></div>
-            
+            <div class="triangle-l-bottom"></div><div class="triangle-r-bottom"></div>
             <div id="footer"><!-- Start Footer -->
             <footer>
             {% block footer %}
-                <div id="contact">//<a href="mailto:hsaxberg@hmc.edu">Contact</a></div>
             
-                <div id="breadcrumbcontainer"><!-- Start the breadcrumb wrapper -->
-                            
-                </div><!-- End breadcrumb -->
+                    <p id="tagline">M2M - Because We're Family&trade; </p>
+                <ul id="footlist">
+                    <li><a href="{%url faq.views.serviceTerms%}">TOS</a></li>
+                    <li><a href="/flat/privacy.html">Privacy</a></li>
+                    <li><a href="{%url faq.views.about %}">History</a></li>
+                    <li><a href="mailto:hsaxberg@hmc.edu"> Contact </a></li>
+                </ul>
+                
+                
+
             {% endblock %}
             </footer>
             </div><!-- End Footer -->
         </div>
-		
-		{# scripts at the end, just in case #}
-	    <script type="text/javascript" src="/media/jquery-1.4.4.js"></script>
+        
+        {# scripts at the end, just in case #}
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+        <script type="text/javascript" src="http://ui.jquery.com/latest/ui/jquery.effects.core.js"></script>
+        <script src="http://ui.jquery.com/latest/ui/jquery.effects.slide.js"></script>
         <script type="text/javascript" src="/media/styles/javascript.js"></script>
         <script type="text/javascript" src="/media/scripts/jquery.tools.min.js"></script>
-        {%block scriptin %}{%endblock%}
+        <script type="text/javascript" src="/media/scripts/cleaned.js"></script>
+        <script type="text/javascript">
+         $(document).ready(function () {
+            if (typeof pageTracker != 'undefined') {
+                pageTracker._trackEvent(
+                    'Browser Dimensions',
+                    'load',
+                    $(window).width()
+                        + 'x'
+                        + $(window).height(),
+                    $(window).width()
+                );
 
+                $(window).resize(function () {
+                    if ($(this).data('gatimer')) {
+                        clearTimeout($(this).data('gatimer'));
+                        $(this).data('gatimer', null);
+                    }
+
+                    $(this).data(
+                        'gatimer',
+                        setTimeout(function () {
+                            pageTracker._trackEvent(
+                                'Browser Dimensions',
+                                'resize',
+                                $(window).width()
+                                    + 'x'
+                                    + $(window).height(),
+                                $(window).width()
+                                );
+                            },
+                            500
+                        )
+                    );
+                });
+            }
+            
+            
+            
+        });
+        </script>
+        {%block scriptin %}{%endblock%}
+<div id="hiddenkoi"></div>
     </body>
 </html>

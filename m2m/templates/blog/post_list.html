@@ -5,25 +5,7 @@
 {%block title%} M2M - News {%endblock%}
 {% block stylin %} <link rel="stylesheet" type="text/css" href="/media/styles/news.css" /> {% endblock %}
 {%block scriptin%}
-<script type="text/javascript">
-
-function dispToggle(id){
-    teaser = document.getElementById(id+'t');
-    body = document.getElementById(id);
-    hider = document.getElementById(id+'h');
-    
-    if(body.style.display == "none"){
-        teaser.style.display = 'none';
-        body.style.display = 'block';
-        hider.style.display = 'block';
-    } else {
-        body.style.display = 'none';
-        hider.style.display = 'none';
-        teaser.style.display = 'block';
-    }
-}
-
-</script>
+<script type="text/javascript" src="/media/scripts/news.js"></script>
 {%endblock%}
 
 {%block news%}current{%endblock%}
@@ -44,16 +26,19 @@ Page:
 {% if post.status == 2 %}
 <div class="postWrap"><article>
     <header>
-        <div class="postDate">
-            <time datetime="{{post.publish|timeTag}}" pubdate>{{post.publish|date:"M j, Y G:i"|linebreaksbr}}</time><br />{{post.author}}
+        <div class="postTitle"><h1><a href="{{post.get_absolute_url}}">{{post.title}}</a></h1></div>
+        <div class="postmeta">
+            <div class="postDate">
+                <time datetime="{{post.publish|timeTag}}" pubdate>{{post.publish|date:"M j, Y G:i"|linebreaksbr}}</time>
+            </div>
+            <div class="author">{{post.author}}</div>
         </div>
-        <h1><div class="postTitle"><a href="{{post.get_absolute_url}}">{{post.title}}</a></div></h1>
     </header>
     {% if post.body|length > 5000 %}
-    <h3 class="postgSlug"><a class="togglebot" id="{{post.id}}t"onclick="dispToggle('{{post.id}}');">
+    <h3 class="postgSlug"><a class="togglebot" id="{{post.id}}t">
         {{post.tease}}</a></h3>
     <div style="display:none;" class="postBody" id="{{post.id}}">{{post.body|formatBody}}</div>
-    <div class="postHider"><a class="togglebot" id="{{post.id}}h" onclick="dispToggle('{{post.id}}');" style="display:none;">
+    <div class="postHider"><a class="togglebot" id="{{post.id}}h" style="display:none;">
         close this post</a></div>
     
     {% else %}
@@ -69,15 +54,15 @@ Page:
 </article></div>
 {%endif%}
 {%endfor%}
+</div>
 {% if is_paginated %}
 Page:
 {% for pager in paginator.page_range %}
-	{% if pager != page %}<a href="{% url basic.blog.views.post_list pager %}">{{pager}}</a>
-	{% else %} {{pager}}
-	{% endif %}
+    {% if pager != page %}<a href="{% url basic.blog.views.post_list pager %}">{{pager}}</a>
+    {% else %} {{pager}}
+    {% endif %}
 {% endfor %}
 {% endif %}
-</div>
 {%endblock%}
 
 {%block extraContent%}

@@ -62,7 +62,7 @@ def movieSplash(request):
 
 def movieRandom(request):
     
-    movieId = Movie.objects.order_by('?')[:1][0].id
+    movieId = Movie.objects.annotate(num_files=Count('files')).filter(num_files__gte=1).order_by('?')[:1][0].id
     return movieDetail(request,movieId)
     
     
@@ -138,7 +138,7 @@ def movieSearch(request, page=1):
             params.update({param:defaults[param]})
             
     # don't search movies without files - these will get cleared out of database later
-    movieList = Movie.objects.all().annotate(num_files=Count('files')).filter(num_files__gte=1)
+    movieList = Movie.objects.all()
     
     if q != "":
         movieList = movieList.filter(name__icontains=q)
@@ -156,7 +156,7 @@ def movieSearch(request, page=1):
         optionsUp = '1' if request.GET['optionsUp'] == '1' else '0'
     except KeyError:
         optionsUp='0'
-    p = Paginator(movieList,PERPAGE_MOV)
+    p = Paginator(movieList.annotate(num_files=Count('files')).filter(num_files__gte=1),PERPAGE_MOV)
     
 ##############################################################
 # ---- Log results of the search ---- #
@@ -204,7 +204,9 @@ def movieDetail(request,id):
     
 def musicSplash(request):
     import random
-    latestAlbums = list(Album.objects.all().order_by('-dateadded')[:48])
+    latestAlbums = list(Album.objects.all().annotate(num_files=Count('song__files'))\
+                                           .filter(num_files__gte=1)\
+                                           .order_by('-dateadded')[:45])
     random.shuffle(latestAlbums)
     
     return render_to_response('advancedsearch/music/splash.html',
@@ -378,7 +380,7 @@ def musicSearch_Song(request=None,page=0):
         except KeyError:
             # some options weren't chosen - we set them here.
             params.update({param:defaults[param]})            
-    songset = Song.objects.filter(name__icontains=q)
+    songset = Song.objects.filter(name__icontains=q).annotate(num_files=Count('files')).filter(num_files__gte=1)
     
     if params['genre'] != 'all':
         songset = songset.filter(genres__name=params['genre'])
@@ -445,7 +447,7 @@ def musicSearch_Album(request=None, q='',page=0):
             # some options weren't chosen - we set them here.
             params.update({param:defaults[param]})
             
-    albumset = Album.objects.filter(name__icontains=q)
+    albumset = Album.objects.filter(name__icontains=q).annotate(num_files=Count('song__files')).filter(num_files__gte=1)
     
     if params['order'] != 'none':
         albumset = albumset.order_by(params['order'])
@@ -510,7 +512,7 @@ def musicSearch_Artist(request=None, q='',page=0):
             # some options weren't chosen - we set them here.
             params.update({param:defaults[param]})
             
-    artistset = Artist.objects.filter(name__icontains=q)
+    artistset = Artist.objects.filter(name__icontains=q).annotate(num_files=Count('song__files')).filter(num_files__gte=1)
     
     if params['order'] != 'none':
         artistset = artistset.order_by(params['order'])    
@@ -529,7 +531,7 @@ def musicSearch_Artist(request=None, q='',page=0):
 def artistDetail(request,id="Q"):
 
     artist = get_object_or_404(Artist,pk=id)
-
+    artist.albums = artist.album_set.all().annotate(num_files=Count('song__files')).filter(num_files__gt=0)
     return render_to_response('advancedsearch/music/artistDetail.html',
         {
         'search':'current',

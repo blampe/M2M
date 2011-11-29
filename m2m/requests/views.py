@@ -2,10 +2,10 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.db import transaction
+#from django.db import transaction
 
-from requests.models import Comment
-from requests.formClasses import RequestForm, ModifyForm
+from m2m.requests.models import Comment
+from m2m.requests.formClasses import RequestForm, ModifyForm
 
 from datetime import datetime
 # Set some nice globals here
@@ -28,10 +28,10 @@ def open(request,page=1,error=''):
         form = RequestForm(request.POST)
         if form.is_valid():
             try:
-                from django.db import connection
+                #from django.db import connection
     
-                cursor = connection.cursor()
-                cursor.execute('LOCK TABLES requests_comment WRITE')
+                #cursor = connection.cursor()
+                #cursor.execute('LOCK TABLES requests_comment WRITE')
                 
                 newRequest = Comment(
                                 request=form.cleaned_data['request'],
@@ -43,7 +43,7 @@ def open(request,page=1,error=''):
                                 )
                 
                 newRequest.save()
-                cursor.execute('UNLOCK TABLES')
+                #cursor.execute('UNLOCK TABLES')
                 # successful post, return to requests page to see the result
                 
                 '''
@@ -98,8 +98,9 @@ def open(request,page=1,error=''):
                               {
                                 'title':'M2M - Requests',
                                 'requests':'current',
-                                'openReq':'current',
+                                'openReq':'current', 
                                 'displaySet':displaySet,
+                                'toprequests': Comment.objects.filter(isDeleted=0,completed=0,Likes__gt=0).order_by('-Likes')[:PERPAGE+10],
                                 'page':page+1,
                                 'linkPages':linkPages,
                                 'setLen':setLen,
@@ -182,10 +183,10 @@ def edit(request,id):
         form.completingServer = ""
         if form.is_valid():
             test = 0
-            from django.db import connection
+            #from django.db import connection
     
-            cursor = connection.cursor()
-            cursor.execute('LOCK TABLES requests_comment WRITE')
+            #cursor = connection.cursor()
+            #cursor.execute('LOCK TABLES requests_comment WRITE')
             
             entry.request = form.cleaned_data['request']
             entry.name = form.cleaned_data['name']
@@ -194,7 +195,7 @@ def edit(request,id):
             entry.requestTime=datetime.now()
             
             entry.save()
-            cursor.execute('UNLOCK TABLES')
+            #cursor.execute('UNLOCK TABLES')
             return HttpResponseRedirect(reverse('requests.views.open',args=(1,)))
         test = form.errors
     else:
@@ -271,10 +272,10 @@ def complete(request,id):
     
 def delete(request,id):
     try:
-        from django.db import connection
+        #from django.db import connection
     
-        cursor = connection.cursor()
-        cursor.execute('LOCK TABLES requests_comment WRITE')
+        #cursor = connection.cursor()
+        #cursor.execute('LOCK TABLES requests_comment WRITE')
         
         entry = Comment.objects.get(pk=id)
         entry.isDeleted = True
@@ -282,7 +283,7 @@ def delete(request,id):
         entry.deletedTime = datetime.now()
         
         entry.save() 
-        cursor.execute('UNLOCK TABLES')
+        #cursor.execute('UNLOCK TABLES')
         return HttpResponseRedirect(reverse('requests.views.open',current_app='requests'))
     except SyntaxError:
         

@@ -1,22 +1,21 @@
 <div style="text-align:center;">
 <form action="{%block url%}{% url search.views.results %}{%endblock%}" method="GET" charset="UTF-8">
-<div class="tablewrap" style="margin-left:25px;margin-right:25px">
-    <div class = "info" style="padding:5px;width:auto" style="border:1px solid">
+    <div id="searchbarWrap">
+    
     <div id="searchbarActual" style="">
+
         <input type="text" name="q"
                style=""
                value="{{q|default:""}}"
                onFocus=""
                size="40"
                TABINDEX = 1
+               placeholder="What are you looking for?"
                autofocus="true" />
-        <input type="submit" style="" value="Search">&nbsp;&nbsp;&nbsp;
-        <input type="hidden" id="optionUp" name="optionsUp" value={{optionsUp|default:"0"}}>
-        <span class="togglebot" onClick="javascript:visToggle('options','searchParams',['Close','Options']);bitFlip('optionUp');" id="options">Options</span>
-    </div>
-    </div>
-</div>
-<div style="{% if optionsUp == "1" %} visibility:visible;{%else%}visibility:hidden;{%endif%}margin-top:5px;" id="searchParams">
+    <input type="submit" id="searchbarsubmit" value="" /></div></div>
+<div style="" id="searchParams">
+<div class="optionheading">Options</div>
+
     {%block options %}
     <select name="type" TABINDEX = 2>
         <option value="message" disabled="1">Type...</option>

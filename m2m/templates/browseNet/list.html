@@ -9,7 +9,6 @@
 {% block scriptin %}
 <script type="text/javascript" src="/media/scripts/servers.js"></script>
 {%endblock%}
-{%block searchbar %}{%endblock%}
 {% block content %}
 
 {% if serverListing %}
@@ -26,9 +25,9 @@
         {%endfor%}
         </strong>
     {% endif %}
-<div class="tablewrap">
-    <table>
-        <tr class="info">
+    <table class="serverlist">
+        <thead>
+            <tr class="info">
             <td >{# column for isOnline gif #}</td>
             <td >
                 {% if ordering != 'hostname'%}<a href="{% url browseNet.views.listAll 1%}?order=hostname">{%endif%}
@@ -42,16 +41,15 @@
             <td  align="center">
                 {% if ordering != '-hid__lastscan'%}<a href="{% url browseNet.views.listAll 1%}?order=-hid__lastscan">{%endif%}
                 Last Crawl</a></td>
-            <td  align="center">
-                Action</td>
             <td >
                 Share</td>
             <td  align="right">
                 Size</td>
         </tr>
-        
+        </thead>
+        <tbody>
         {% for server in serverListing %}
-        <tr class="{%cycle '' 'darkrow'%}">
+        <tr>
             <td valign="top"><img src="/media/images/{%if server.hid.flags == 24%}online{%else%}offline{%endif%}.gif"/></td>
             <td valign="top">
                 <a href="{% url browseNet.views.deepBrowse 'H' server.hid.hid|default:-1%}">{{server}}</a><br/>
@@ -63,7 +61,6 @@
             <td valign="top">{{server.workgroup}}</td>
             <td valign="top">{{server.hid|sizeToReadable}}</td>
             <td valign="top" align="center">{{server.hid.lastscan|dateForm}}</td>
-            <td></td>
             <td valign="top">
                 {%for share in server.hid.share_set|all%}
                     <a href="{% url browseNet.views.deepBrowse 'S' share.shareid|default:-1%}">{{share.sharename|nameControl}}</a><br />
@@ -91,19 +88,19 @@
             </td>
         </tr>
         {%endfor%}
-        
+        </tbody>
     </table>
-</div>
-        {% if linkPages %}
-        <strong> Servers:
-        {% for number in linkPages %}
-            {% if number == page %}
-                {{number}}
-            {%else%}
-                <a href="{% url browseNet.views.listAll number%}">{{number}}</a>
-            {%endif%}
-        {%endfor%}
-        </strong>
+    
+    {% if linkPages %}
+    <strong> Servers:
+    {% for number in linkPages %}
+        {% if number == page %}
+            {{number}}
+        {%else%}
+            <a href="{% url browseNet.views.listAll number%}">{{number}}</a>
+        {%endif%}
+    {%endfor%}
+    </strong>
     {% endif %}
 
 

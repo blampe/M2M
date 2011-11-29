@@ -4,8 +4,7 @@ from django.utils.safestring import mark_safe
 from datetime import datetime
 import re
 
-from search.models import File
-from browseNet.models import Path
+from basic.blog.models import Post
 
 import urllib2
 
@@ -80,7 +79,7 @@ def highlight(object,words, autoescape=None):
     except:
         return object
     
-    if len(value) > 40: 
+    if len(value) > 105: 
         value = value[:35] + "..." + value[-35:]
 
     
@@ -113,6 +112,8 @@ def makeLink(object, directServe=False):
         try:
             if object.hid.servesDirect == True and directServe != False:
             #do nothing
+                return "smb://%s%s" % (object.hid, object)
+            else:
                 return "smb://%s%s" % (object.hid, object)
         except AttributeError:
             try:
@@ -192,18 +193,14 @@ class LogoNode(template.Node):
     mChoices += ['Moldenglish',
                 'Mvivaldi',
                 'Mcurlz',
-                'Mmagneto']
-    arrows = ['Arrowmath'] * 10 # also the old arrow
+                'Mmagneto',
+                'M_andrew_ho',
+                'Mcompass',
+                'Mdoctor',]
+    arrows = ['Arrowmath',] * 10 # also the old arrow
     
     styling = "<a class='logolink' href=\"%s\">\
-                <div id='modlogo' style=\"\
-                              position:relative;\
-                              display: inline;\
-                              margin-left:3px;\
-                              line-height:.8em;\
-                              font-weight:bold;\
-                              font-size:8em;\
-                              \">%s</div>\
+                <div id='modlogo' style=\"\">%s</div>\
                 </a>"
     
     extras = {
@@ -215,20 +212,32 @@ class LogoNode(template.Node):
     
     def __init__(self, module):
         
+    
         self.left = random.choice(self.mChoices)
         self.right = random.choice(self.mChoices)
         self.arrow = random.choice(self.arrows)
+
+        # halloween!
+        if (datetime.now().day in [29,30,31] and datetime.now().month==10):
+            self.left = 'mPunkin'
+            self.right = 'mHalCat'
+            self.arrow = 'Arrowmath'
+        
+        # jessi peck's birthday
+        if (datetime.now().day == 25 and datetime.now().month == 10):
+            self.left = 'M_jessi_peck'
+            
         if module not in self.extras:
             raise ValueError("logo tag could not recognize module: %r" % module)
         else:
             self.extra = self.extras[module]
     def render(self, context):
         try:
-            return "<a class='logolink' href=\"%(index)s\">\
-                    <div style='display:inline;float:left;margin-left:30px;margin-right:px;'>\
+            return "\
+            <a href=\"%(index)s\"><span>\
                         <img  id='leftlogo' src='/media/images/%(left)s.png'/>\
                         <img  id='arrowlogo' src='/media/images/%(arrow)s.png'/>\
-                        <img  id='rightlogo' src='/media/images/%(right)s.png'/></div></a>%(extra)s" % {
+                        <img  id='rightlogo' src='/media/images/%(right)s.png'/></span></a>%(extra)s" % {
                                                                                     'left':self.left,
                                                                                     'right':self.right,
                                                                                     'arrow':self.arrow,
@@ -237,6 +246,7 @@ class LogoNode(template.Node):
                                                                                     }
         except:
             return '<span style="font-size:6em;">Logo Unavailable</span>'
+            
 @register.tag(name="logo")
 def do_logo(parser,token):
     try:
@@ -246,3 +256,46 @@ def do_logo(parser,token):
     return LogoNode(module)
 #
 ################################################################
+
+@register.tag(name="extra_styles")
+def do_extra_styles(parser,token):
+    return ExtraStyles()
+    
+class ExtraStyles(template.Node):
+    def __init__(self):
+        # halloween!
+        self.stylesheet = []
+        if (datetime.now().day in [29,30,31] and datetime.now().month == 10):
+            self.stylesheet += ['halloween']
+    
+    def render(self, context):
+        if self.stylesheet == []:
+            return ''
+        else:
+            return '\n'.join(["<link rel=\"stylesheet\" type=\"text/css\" href=\"/media/styles/{}.css\" />".format(x) for x in self.stylesheet])
+
+
+from datetime import date, timedelta
+
+class NewNewsNode(template.Node):
+    string = "<div id=\"newNews\"><p>+{:d}</p></div>"
+    
+    def __init__(self, *args, **kwargs):
+        self.number = Post.objects.filter(publish__gt=date.today()-timedelta(days=4)).count()
+        
+    def render(self, context):
+        try:
+            if self.number > 0:
+                return self.string.format(self.number)
+            else:
+                return ""
+        except:
+            return ""
+            
+@register.tag(name="latestnews")
+def do_newNews(parser,token):
+    try:
+        tag_name = token.split_contents()
+    except:
+        return ""
+    return NewNewsNode()

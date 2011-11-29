@@ -18,7 +18,7 @@ def requests(request):
 def stats(request):
     
     message = " The stats page is under some heavy, heavy construction. You may\
-              have noticed that its sucked hardcore for about a month now. \
+              have noticed that it's been gone for a while now. \
               Maybe you haven't; let me tell you now: it has. It's a complicated\
               page, and alot of its old methods didn't translate very well to\
               our new set up, so it might be a little while before this is back\
