@@ -1,5 +1,5 @@
 site-packages
-m2m/*.pyc
-m2m/*/*.pyc
-m2m/*/*/*.pyc
-m2m/*/*/*/*.pyc
+*.py[co]
+.*.sw[nop]
+.ropeproject
+.DS_Store
